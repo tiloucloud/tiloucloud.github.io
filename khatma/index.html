@@ -413,6 +413,29 @@ html.big .mw{text-decoration-thickness:2px}
 .wbar>div>span{min-width:0}
 html.big .wbar .gbtn{padding:0 14px}
 html.big .wbar .wgo{padding:0 12px}
+
+/* ===== page colour themes ===== */
+.pgi{background:var(--pt-bg,var(--paper));color:var(--pt-ink,var(--ink));border-color:var(--pt-frame,var(--gold-soft));box-shadow:inset 0 0 0 4px var(--pt-bg,var(--paper)),inset 0 0 0 5px var(--pt-line,var(--paper-line)),var(--shadow)}
+.pgi .phd{border-color:var(--pt-line,var(--paper-line));color:var(--pt-acc,var(--gold))}
+.pgi .pft{border-color:var(--pt-line,var(--paper-line))}
+.pgi .pnum{background:var(--pt-bg,var(--paper));color:var(--pt-acc,var(--gold));border-color:var(--pt-frame,var(--gold-soft))}
+.pgi .cont,.pgi .more-hint{color:var(--pt-muted,var(--muted))}
+.pgi .mw{text-decoration-color:color-mix(in srgb,currentColor 45%,transparent)}
+.rd{background:var(--pt-desk,var(--bg))}
+html[data-pt="white"]{--pt-bg:#ffffff;--pt-ink:#000000;--pt-line:#e2dccb;--pt-frame:#cfb878;--pt-acc:#7d5a12;--pt-muted:#4a4a4a;--pt-desk:#e9ece8}
+html[data-pt="sepia"]{--pt-bg:#f4e9cf;--pt-ink:#2e2010;--pt-line:#dcc89a;--pt-frame:#bf9a52;--pt-acc:#7a5413;--pt-muted:#5b4a33;--pt-desk:#e6dcc4}
+html[data-pt="mint"]{--pt-bg:#e3f1e7;--pt-ink:#0b2a1d;--pt-line:#b9d6c3;--pt-frame:#8fbf9f;--pt-acc:#1f6a45;--pt-muted:#3d5a4b;--pt-desk:#d6e6db}
+html[data-pt="night"]{--pt-bg:#13221d;--pt-ink:#f3ead2;--pt-line:#2e4239;--pt-frame:#6b5a2c;--pt-acc:#e8c66f;--pt-muted:#b9c9c2;--pt-desk:#0b1512}
+html[data-pt="black"]{--pt-bg:#000000;--pt-ink:#ffffff;--pt-line:#3a3a3a;--pt-frame:#8a7434;--pt-acc:#ffd66b;--pt-muted:#d0d0d0;--pt-desk:#000000}
+html[data-pt="white"] .pgi,html[data-pt="sepia"] .pgi,html[data-pt="mint"] .pgi{--tj-g:#0f6a2c;--tj-q:#1747a0;--tj-m:#a51d15;--tj-k:#672a98;--tj-i:#8a4700;--tj-x:#5f6b66;--tj-l:#00666c}
+html[data-pt="night"] .pgi{--tj-g:#78d895;--tj-q:#93bdff;--tj-m:#ff958b;--tj-k:#d6a8f5;--tj-i:#f5b06a;--tj-x:#9db0a8;--tj-l:#6fdcdc}
+html[data-pt="black"] .pgi{--tj-g:#7cf29c;--tj-q:#9cc4ff;--tj-m:#ff9d93;--tj-k:#e0b6ff;--tj-i:#ffbe78;--tj-x:#b8b8b8;--tj-l:#7ff0f0}
+.ptwrap{display:grid;gap:8px}
+.ptrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ptb{display:grid;justify-items:center;gap:4px;padding:8px 4px;border-radius:14px;border:2px solid var(--line);background:var(--surface);font-size:12.5px;font-weight:600;color:var(--ink)}
+.ptb.on{border-color:var(--primary);box-shadow:0 0 0 2px color-mix(in srgb,var(--primary) 25%,transparent)}
+.ptsw{width:100%;height:44px;border-radius:9px;display:grid;place-items:center;font-family:var(--mushaf);font-size:22px;border:1px solid rgba(0,0,0,.12)}
+html.big .ptb{font-size:14.5px}
 </style></head><body><div id="root"></div><script>
 (function(){
 var Q={"si":[[1,1],[1,2],[3,50],[4,77],[6,106],[7,128],[8,151],[9,177],[10,187],[11,208],[11,221],[12,235],[13,249],[13,255],[14,262],[14,267],[15,282],[15,293],[16,305],[16,312],[17,322],[17,332],[18,342],[18,350],[18,359],[19,367],[19,377],[20,385],[20,396],[21,404],[21,411],[21,415],[21,418],[22,428],[22,434],[22,440],[23,446],[23,453],[23,458],[24,467],[24,477],[25,483],[25,489],[25,496],[25,499],[26,502],[26,507],[26,511],[26,515],[26,518],[26,520],[27,523],[27,526],[27,528],[27,531],[27,534],[27,537],[28,542],[28,545],[28,549],[28,551],[28,553],[28,554],[28,556],[28,558],[28,560],[29,562],[29,564],[29,566],[29,568],[29,570],[29,572],[29,574],[29,575],[29,577],[29,578],[29,580],[30,582],[30,583],[30,585],[30,586],[30,587],[30,587],[30,589],[30,590],[30,591],[30,591],[30,592],[30,593],[30,594],[30,595],[30,595],[30,596],[30,596],[30,597],[30,597],[30,598],[30,598],[30,599],[30,599],[30,600],[30,600],[30,601],[30,601],[30,601],[30,602],[30,602],[30,602],[30,603],[30,603],[30,603],[30,604],[30,604],[30,604]],"meta":[[1,21,1,1,147],[22,41,2,141,110],[42,61,2,251,125],[62,81,3,91,133],[82,101,4,24,123],[102,121,4,147,112],[121,141,5,84,150],[142,161,6,112,142],[162,181,7,87,160],[182,201,8,41,129],[201,221,9,94,151],[222,241,11,6,168],[242,261,12,53,157],[262,281,15,1,227],[282,301,17,1,183],[302,321,18,74,265],[322,341,21,1,187],[342,361,23,1,201],[362,381,25,21,340],[382,401,27,58,171],[402,421,29,46,176],[422,441,33,31,169],[442,461,36,27,354],[462,481,39,31,171],[482,502,41,46,239],[502,521,46,1,195],[522,541,51,31,397],[542,561,58,1,136],[562,581,67,1,430],[582,604,78,1,566]],"names":["الفَاتِحة","البَقَرَة","آل عِمران","النِّسَاء","المَائدة","الأنعَام","الأعرَاف","الأنفَال","التوبَة","يُونس","هُود","يُوسُف","الرَّعد","إبراهِيم","الحِجر","النَّحل","الإسرَاء","الكَهف","مَريَم","طه","الأنبيَاء","الحج","المؤمنُون","النور","الفُرقَان","الشعراء","النَّمل","القَصَص","العَنكبُوت","الرُّوم","لُقمَان","السَّجدة","الأحزَاب","سَبإ","فَاطِر","يسٓ","الصَّافَات","صٓ","الزُّمَر","غَافِر","فُصِّلَت","الشُّوري","الزُّخرُف","الدُّخان","الجاثِية","الأحقَاف","مُحمد","الفَتح","الحُجُرَات","قٓ","الذَّاريَات","الطُّور","النَّجم","القَمَر","الرَّحمٰن","الوَاقِعة","الحدِيد","المُجَادلة","الحَشر","المُمتَحنَة","الصَّف","الجُمعَة","المُنَافِقُونَ","التغَابُن","الطَّلَاق","التَّحرِيم","المُلك","القَلَم","الحَاقة","المَعَارج","نُوح","الجِن","المُزمل","المُدثر","القِيَامة","الإنسَان","المُرسَلات","النَّبَإ","النَّازعَات","عَبَسَ","التَّكوير","الانفِطَار","المُطَففين","الانشِقَاق","البُرُوج","الطَّارق","الأعلى","الغَاشِية","الفَجر","البَلَد","الشَّمس","اللَّيل","الضُّحى","الشَّرح","التِّين","العَلَق","القَدر","البَينَة","الزَّلزَلة","العَاديَات","القَارعَة","التَّكاثُر","العَصر","الهُمَزة","الفِيل","قُرَيش","المَاعُون","الكَوثر","الكافِرون","النَّصر","المَسَد","الإخلَاص","الفَلَق","النَّاس"],"bsm":"بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ","dua":"﴿رَبَّنَا تَقَبَّلْ مِنَّآ إِنَّكَ أَنتَ اَ۬لسَّمِيعُ اُ۬لْعَلِيمُ﴾","duaRef":"البقرة، الآية 126 برواية ورش"};
@@ -423,7 +446,11 @@ var root=document.getElementById('root');
 var art=null, local=false, me=null, sheet=null, copied=false, timer=null;
 var dpr=null, noInst=false, isSA=false, isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 try{isSA=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){}
-var big=false,bfs=34;
+var big=false,bfs=34,pt='auto';
+var PT=[['auto','تلقائي','var(--paper)','var(--ink)'],['white','أبيض ناصع','#ffffff','#000000'],['sepia','كريمي دافئ','#f4e9cf','#2e2010'],['mint','أخضر مريح','#e3f1e7','#0b2a1d'],['night','ليلي','#13221d','#f3ead2'],['black','أسود عالي التباين','#000000','#ffffff']];
+function applyPt(){if(pt==='auto')document.documentElement.removeAttribute('data-pt');else document.documentElement.setAttribute('data-pt',pt)}
+try{pt=localStorage.getItem('kf_pt')||'auto'}catch(e){}
+applyPt();
 try{big=localStorage.getItem('kf_big')==='1';bfs=+localStorage.getItem('kf_bfs')||34}catch(e){}
 document.documentElement.classList.toggle('big',big);
 var reading=0, JD={}, loadErr=0, fs=26, pos=null, want=null, tjOn=true, MD={}, ML={}, bm=0, sec={};
@@ -701,7 +728,7 @@ function vSheet(){
       Q.names.map(function(nm,i){return '<button class="srow" data-act="sura" data-v="'+(i+1)+'"><span class="n num"><span>'+(i+1)+'</span></span><span class="nm">'+esc(nm)+'</span><span class="sub num">ص '+Q.si[i][1]+'</span></button>'}).join('')+'</div>';
   }else if(k==='tjs'){
     var L=[['tg','غنّة'],['tk','إخفاء'],['ti','إقلاب'],['tx','مدغم لا يُنطق'],['tq','قلقلة'],['tm','مدّ مُشبَع'],['tl','لام مغلّظة']];
-    h='<h3>إعدادات القراءة</h3><button class="bigtog'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'"><span class="bt-ic">أ</span><span class="itx"><b>خط كبير لضعاف النظر</b><small>'+(big?'مفعّل: الخط لا يصغر، والصفحة تُمرَّر للأسفل':'يكبّر خط المصحف وكل نصوص التطبيق')+'</small></span><span class="sw" aria-hidden="true"></span></button><div class="leg">'+L.map(function(x){return '<span class="k '+x[0]+'">'+x[1]+'</span>'}).join('')+'</div>'+
+    h='<h3>إعدادات القراءة</h3><div class="ptwrap"><b>لون الصفحة</b><div class="ptrow">'+PT.map(function(x){return '<button class="ptb'+(pt===x[0]?' on':'')+'" data-act="pt" data-v="'+x[0]+'" aria-pressed="'+(pt===x[0])+'"><span class="ptsw" style="background:'+x[2]+';color:'+x[3]+'">بِسْمِ</span><span>'+x[1]+'</span></button>'}).join('')+'</div></div><button class="bigtog'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'"><span class="bt-ic">أ</span><span class="itx"><b>خط كبير لضعاف النظر</b><small>'+(big?'مفعّل: الخط لا يصغر، والصفحة تُمرَّر للأسفل':'يكبّر خط المصحف وكل نصوص التطبيق')+'</small></span><span class="sw" aria-hidden="true"></span></button><div class="leg">'+L.map(function(x){return '<span class="k '+x[0]+'">'+x[1]+'</span>'}).join('')+'</div>'+
       '<button class="btn" data-act="tj">'+(tjOn?'إخفاء ألوان التجويد':'إظهار ألوان التجويد')+'</button>'+
       '<div class="fsrow"><span>حجم خط المصحف</span><button class="ib fsz" data-act="fs" data-v="-2" aria-label="تصغير الخط">أ−</button><span class="num">'+(big?bfs:fs)+'</span><button class="ib fsz" data-act="fs" data-v="2" aria-label="تكبير الخط">أ+</button></div>'+
       '<p class="sub">'+(big?'في وضع الخط الكبير تبقى الصفحة بالحجم الذي تختاره، وتُكمَل بالتمرير للأسفل.':'تُصغَّر الصفحة تلقائياً لتظهر كاملة كالمصحف.')+' اضغط الكلمة المنقوطة لمعناها، ورقم الصفحة أسفلها لتسجّل أين وصلت.</p>';
@@ -893,7 +920,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand">'+STAR+'<div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+
     (code?vWird():vJoin())+vNotif()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 10</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 11</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
@@ -915,6 +942,7 @@ root.addEventListener('click',function(e){
   if(act==='sura'){goPage(Q.si[+v-1][1]);return}
   if(act==='back'){closeReader();return}
   if(act==='fs'){if(big){bfs=Math.max(28,Math.min(56,bfs+ +v));try{localStorage.setItem('kf_bfs',bfs)}catch(_){}}else{fs=Math.max(18,Math.min(40,fs+ +v));try{localStorage.setItem('kf_fs',fs)}catch(_){}}refill(true);render();return}
+  if(act==='pt'){pt=v;try{localStorage.setItem('kf_pt',pt)}catch(_){}applyPt();render();return}
   if(act==='big'){big=!big;document.documentElement.classList.toggle('big',big);try{localStorage.setItem('kf_big',big?'1':'0')}catch(_){}filledSig={};refill(true);render();return}
   if(act==='tj'){tjOn=!tjOn;try{localStorage.setItem('kf_tj',tjOn?'1':'0')}catch(_){}refill(true);render();return}
   if(act==='setp'){m=mem(me);if(m){m.p=Math.max(0,Math.min(LAST,+v));sheet=null;save()}return}
