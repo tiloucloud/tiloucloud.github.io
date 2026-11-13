@@ -499,7 +499,10 @@ applyPt();
 try{big=localStorage.getItem('kf_big')==='1';bfs=+localStorage.getItem('kf_bfs')||34}catch(e){}
 document.documentElement.classList.toggle('big',big);
 var reading=0, JD={}, loadErr=0, fs=26, pos=null, want=null, tjOn=true, MD={}, ML={}, bm=null, sec={};
-try{noInst=localStorage.getItem('kf_noinst')==='1';me=localStorage.getItem('kf_me');fs=+localStorage.getItem('kf_fs')||26;tjOn=localStorage.getItem('kf_tj')!=='0';pos=JSON.parse(localStorage.getItem('kf_pos')||'null');if(pos&&!pos.pg)pos=null;bm=JSON.parse(localStorage.getItem('kf_bm2')||'null');if(!bm){var ob=+localStorage.getItem('kf_bm')||0;bm=ob?{pg:ob}:null}}catch(e){}
+try{noInst=localStorage.getItem('kf_noinst')==='1';me=localStorage.getItem('kf_me');fs=+localStorage.getItem('kf_fs')||26;tjOn=localStorage.getItem('kf_tj')!=='0';pos=JSON.parse(localStorage.getItem('kf_pos')||'null');if(pos&&!pos.pg)pos=null;}catch(e){}
+function bmKey(){return 'kf_bm3_'+(me||'')}
+function loadBm(){bm=null;try{bm=JSON.parse(localStorage.getItem(bmKey())||'null');if(!bm&&me){var old=localStorage.getItem('kf_bm2');if(old){bm=JSON.parse(old);localStorage.setItem(bmKey(),old);localStorage.removeItem('kf_bm2')}}}catch(e){bm=null}}
+loadBm();
 
 var MSG={"start":[{"b":"السلام عليكم ورحمة الله وبركاته، أحبتي وعائلتي الكريمة والمباركة\n\nنبدأ معاً «{k}»: يختم كل واحد منا القرآن كاملاً في {d} يوماً، بوِرد يومي قدره {p} صفحة فقط.\n\nقال رسول الله ﷺ: «من قرأ حرفا من كتاب الله فله به حسنة، والحسنة بعشر أمثالها، لا أقول الم حرف، ولكن ألف حرف ولام حرف وميم حرف» (رواه الترمذي).\n\nفكم من الحسنات في صفحة واحدة؟","c":"ادخلوا من هذا الرابط واختاروا أسماءكم:"},{"b":"أحبتي، القرآن أنزله الله هدى للأحياء ودستوراً نعمل به في حياتنا، قال تعالى: ﴿إن هذا القرآن يهدي للتي هي أقوم ويبشر المؤمنين الذين يعملون الصالحات أن لهم أجرا كبيرا﴾ [الإسراء: 9].\n\nفلنجعل هذه الختمة بداية عهد جديد مع كتاب الله: قراءةً وتدبراً وعملاً.","c":"«{k}» تبدأ الآن، {p} صفحة كل يوم لكل فرد. سجّلوا من هنا:"},{"b":"تجارة رابحة لا خسارة فيها\n\nقال الله تعالى: ﴿إن الذين يتلون كتاب الله وأقاموا الصلاة وأنفقوا مما رزقناهم سرا وعلانية يرجون تجارة لن تبور﴾ [فاطر: 29].\n\nهذه دعوة لكل فرد في العائلة ليختم القرآن خلال {d} يوماً، نتابع فيها بعضنا بعضاً ونتسابق في الخير: ﴿وفي ذلك فليتنافس المتنافسون﴾ [المطففين: 26].","c":"انضموا إلى «{k}» من هنا:"},{"b":"لا يمنعنّك ضعف القراءة من المشاركة!\n\nقال رسول الله ﷺ: «الماهر بالقرآن مع السفرة الكرام البررة، والذي يقرأ القرآن ويتتعتع فيه وهو عليه شاق له أجران» (رواه مسلم).\n\nمن يقرأ بسهولة فله منزلة عالية، ومن يتعثّر فله أجران.","c":"انضم إلى «{k}»: {p} صفحة في اليوم فقط، والمصحف داخل التطبيق ملوّن بأحكام التجويد ويشرح معاني الكلمات."}],"daily":["صباح الخير يا أهلي، اليوم {day} من «{k}».\n\nوِرد اليوم {p} صفحة، أي نحو ربع ساعة.\n«أحب الأعمال إلى الله أدومها وإن قل» (متفق عليه).\n\nلا تؤجّلوه إلى الليل، اقرؤوه الآن:\n{link}","تذكير اليوم {day}: القرآن شفيعك يوم القيامة.\n\nقال رسول الله ﷺ: «اقرءوا القرآن فإنه يأتي يوم القيامة شفيعا لأصحابه» (رواه مسلم).\n\nهل قرأت وِردك اليوم؟ {p} صفحة تقرّبك من الختم.\n{link}","﴿وقال الرسول يارب إن قومي اتخذوا هذا القرآن مهجورا﴾ [الفرقان: 30].\n\nلا نريد أن يمرّ علينا يوم ونحن هاجرون لكتاب الله. وِرد اليوم {p} صفحة فقط، فلنقرأه قبل أن تشغلنا الدنيا.\n{link}","«يقال لصاحب القرآن: اقرأ وارتق ورتل كما كنت ترتل في الدنيا، فإن منزلتك عند آخر آية تقرؤها» (رواه أبو داود والترمذي).\n\nكل صفحة تقرؤها اليوم درجة ترتقيها غداً بإذن الله. وِرد اليوم {day}: {p} صفحة.\n{link}","﴿كتاب أنزلناه إليك مبارك ليدبروا آياته وليتذكر أولو الألباب﴾ [ص: 29].\n\nاقرأ وِرد اليوم بتدبّر، وإذا مررت بكلمة لا تعرف معناها فاضغطها في التطبيق ليظهر شرحها. ثم اختر آية واحدة تعمل بها اليوم.\n{link}","﴿ولقد يسرنا القرآن للذكر فهل من مدكر﴾ [القمر: 17].\n\nالقرآن ميسَّر، و{p} صفحة في اليوم أيسر مما تظن. لا تدع الكسل يسرق منك هذا الخير.\n{link}","الحمد لله، قرأت العائلة حتى الآن {fam} صفحة في «{k}».\n\nبقي {left} يوماً. من تأخّر فليستدرك اليوم، ومن سبق فليثبت، ﴿وفي ذلك فليتنافس المتنافسون﴾ [المطففين: 26].\n{link}","حسبة بسيطة: الصفحة الواحدة من المصحف فيها مئات الحروف، و«الحسنة بعشر أمثالها».\n\nفوِرد اليوم ({p} صفحة) فيه آلاف الحسنات بفضل الله. اقرأه الآن ولا تؤجّل.\n{link}","«خيركم من تعلم القرآن وعلمه» (رواه البخاري).\n\nاقرأ وِردك اليوم، ثم علّم من حولك آية أو معنى كلمة تعلّمته. الصغار يتعلمون منا بالقدوة قبل الكلام.\n{link}","إن فاتك وِرد الأمس فلا تيأس ولا تترك. اقرأ اليوم وِرد اليوم وشيئاً مما فاتك، فالمهم ألا ينقطع حبلك بكتاب الله.\n\nاليوم {day} من {d}، وما زال في الوقت متسع بإذن الله.\n{link}"],"done":["الحمد لله الذي بنعمته تتم الصالحات.\n\nمبارك لكل من ختم القرآن في «{k}»، تقبّل الله منا ومنكم، وجعل القرآن ربيع قلوبنا ونور صدورنا.\n\nولنجعل ما قرأناه عملاً نعيشه في بيوتنا ومعاملاتنا، فالقرآن أُنزل ليُعمل به.","أتممنا ختمتنا ولله الحمد، والعهد مع القرآن لا ينتهي.\n\n﴿الذين آتيناهم الكتاب يتلونه حق تلاوته أولئك يؤمنون به﴾ [البقرة: 121].\n\nنبدأ الختمة القادمة قريباً بإذن الله، فاستعدّوا.\n{link}"]};
 var VAPID='BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc';
@@ -645,13 +648,12 @@ function vWird(){
   return '<section class="hero">'+hello+
     '<div class="hmain">'+pring(m.p)+'<div class="htext"><span class="eyebrow">'+(ahead?'وِرد الغد':'وِرد اليوم · الجزء '+juzOf(w.a))+'</span>'+
     '<p class="wtitle">'+esc(Q.names[suraAt(w.a)])+'</p><p class="range">الصفحات '+rng(w.a,w.b)+'</p></div></div>'+
-    (bm&&bm.pg>m.p&&bm.pg<=w.b+daily()?'<button class="gbtn" data-act="gobm">'+I('mark')+'تابع من علامتك · ص '+bm.pg+'</button>':'<button class="gbtn" data-act="wird">'+I('book')+(ahead?'تقدَّم في وِرد الغد':'اقرأ وِرد اليوم')+'</button>')+
+    (function(){var ra=resumeAt(m);return '<button class="gbtn" data-act="wird">'+I(ra.bm?'mark':'book')+(ra.bm?'تابع من علامتك':ahead?'تابع وِرد الغد':m.p>0&&!ahead&&m.p>targetAt(dn-1)?'تابع وِرد اليوم':'اقرأ وِرد اليوم')+' · ص '+ra.pg+'</button>'})()+
     '<div class="hbar"><i style="width:'+(m.p/LAST*100).toFixed(1)+'%"></i></div>'+
     '<div class="hfoot"><span class="chipst" style="--c:'+sc+'">'+st+'</span><span class="num">'+m.p+' من '+LAST+' صفحة</span></div></section>';
 }
 function vQuick(){
   return '<section class="qa"><button class="qt" data-act="open" data-v="idx"><span class="ic">'+I('list')+'</span><span>فهرس المصحف<small>السور والصفحات</small></span></button>'+
-    (pos&&pos.pg?'<button class="qt" data-act="resume"><span class="ic">'+I('play')+'</span><span>تابع القراءة<small class="num">الصفحة '+pos.pg+'</small></span></button>':'')+
     (bm?'<button class="qt bmq" data-act="gobm"><span class="ic">'+I('mark')+'</span><span>علامتي<small class="num">الصفحة '+bm.pg+(bm.n?' · الآية '+(JD[bm.n]&&JD[bm.n][bm.i]?JD[bm.n][bm.i][1]:''):'')+'</small></span></button>':'')+'</section>';
 }
 function famLink(){return location.origin+location.pathname+'#k='+code}
@@ -938,7 +940,7 @@ function isRead(p){return ver().charAt(p-1)==='1'}
 function setRead(p){var v=ver();VER=v.substr(0,p-1)+'1'+v.substr(p);try{localStorage.setItem(VKEY,VER)}catch(e){}}
 function need(p){return WC[p]?Math.max(15,Math.round(WC[p]*0.3)):9999}
 function pct(p){return isRead(p)?100:Math.min(99,Math.floor((DW[p]||0)/need(p)*100))}
-function advance(){var m=mem(me);if(!m)return;var q=m.p;while(q<LAST&&isRead(q+1))q++;if(q>m.p){m.p=q;save()}}
+function advance(){var m=mem(me);if(!m)return;var q=m.p;while(q<LAST&&isRead(q+1))q++;if(q>m.p){m.p=q;dropStaleBm();save()}}
 function paintNum(p){var b=document.querySelector('#pg'+p+' .pnum');if(!b)return;var r=isRead(p);b.classList.toggle('done',r);b.style.setProperty('--pr',pct(p)+'%');b.setAttribute('aria-label','الصفحة '+p+(r?'، قُرئت':''))}
 setInterval(function(){
   if(!reading||!mem(me)||document.hidden||(sheet&&sheet.indexOf('mean')!==0))return;
@@ -949,7 +951,9 @@ setInterval(function(){
 window.__juz=function(n,d){JD[n]=d;indexJuz(n);if(reading){updateBars();refill()}};
 window.__mean=function(n,d){MD[n]=d;if(reading)refill()};
 function pageReady(p){var js=jOf(p),ok=true;js.forEach(function(n){if(!JD[n]){ok=false;loadJuz(n)}});return ok}
-function saveBm(){try{bm?localStorage.setItem('kf_bm2',JSON.stringify(bm)):localStorage.removeItem('kf_bm2')}catch(e){}}
+function saveBm(){try{bm?localStorage.setItem(bmKey(),JSON.stringify(bm)):localStorage.removeItem(bmKey())}catch(e){}}
+function resumeAt(m){if(bm&&bm.pg>m.p)return{pg:bm.pg,ay:bm.n?bm.n+'_'+bm.i:null,bm:true};return{pg:Math.min(LAST,m.p+1)}}
+function dropStaleBm(){var m=mem(me);if(m&&bm&&bm.pg<=m.p){var old=bm.pg;bm=null;saveBm();if(reading)fillPage(old,true)}}
 function bmLabel(){if(!bm)return '';if(bm.n&&JD[bm.n]&&JD[bm.n][bm.i]){var a=JD[bm.n][bm.i];return 'سورة '+Q.names[a[0]-1]+'، الآية '+a[1]}return 'سورة '+Q.names[suraAt(bm.pg)]}
 function setBm(nb){var old=bm&&bm.pg;bm=nb;saveBm();if(reading){if(old)fillPage(old,true);if(bm)fillPage(bm.pg,true);updateBars()}}
 function pageSura(p){var l=PGI[p],s=999;if(l)l.forEach(function(r){var x=JD[r[0]][r[1]][0];if(x<s)s=x});return s<999?s-1:suraAt(p)}
@@ -1005,9 +1009,9 @@ function barsHTML(){
     '<button class="ib'+(tjOn?' on':'')+'" data-act="open" data-v="tjs" aria-label="ألوان التجويد">'+I('pal')+'</button>'+
     '<button class="ib" data-act="open" data-v="idx" aria-label="فهرس المصحف">'+I('list')+'</button></div></div>';
   var wb='';
-  if(m&&m.p<LAST){var T=Math.max(targetAt(dayNo()),m.p+1),left=T-m.p,done=dayNo()>0&&m.p>=targetAt(dayNo());
-    wb='<div class="wbar"><div><span><small>'+(done?'أتممتَ وِرد اليوم':'وِرد اليوم')+'</small><b class="num">'+(done?'بارك الله فيك':'بقي '+pagesN(left)+' · حتى ص '+T)+'</b></span>'+
-      (p<m.p||p>T?'<button class="btn sm wgo" data-act="wird">اذهب</button>':'')+'<button class="btn sm wgo" data-act="open" data-v="how">كيف يُحتسب؟</button></div></div>'}
+  if(m&&m.p<LAST){var dn2=dayNo(),done=dn2>0&&m.p>=targetAt(dn2),T=done?Math.min(LAST,targetAt(dn2+1)):Math.max(targetAt(dn2),m.p+1),left=T-m.p,ra=resumeAt(m);
+    wb='<div class="wbar"><div><span><small>'+(done?(left>0?'أتممتَ وِرد اليوم ✓ · وِرد الغد':'سبقتَ بوِرد الغد'):'وِرد اليوم')+'</small><b class="num">'+(left>0?'بقي '+pagesN(left)+' · حتى ص '+T:'بارك الله فيك')+'</b></span>'+
+      (p!==ra.pg&&(p<m.p||p>T)?'<button class="btn sm wgo" data-act="wird">إلى حيث وصلت</button>':'')+'<button class="btn sm wgo" data-act="open" data-v="how">كيف يُحتسب؟</button></div></div>'}
   return {top:top,wb:wb};
 }
 function updateBars(){var b=barsHTML(),t=document.getElementById('rtop'),w=document.getElementById('rwb');if(t)t.innerHTML=b.top;if(w)w.innerHTML=b.wb}
@@ -1041,7 +1045,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand">'+STAR+'<div><h1>ختمة العائلة <span class="beta-pill">تجريبي</span></h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+
     (code?vWird():vJoin())+vBeta()+vNotif()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 14</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 15</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
@@ -1055,9 +1059,9 @@ root.addEventListener('click',function(e){
   if(act==='notify'){enableNotif();return}
   if(act==='close'){if(el.classList.contains('scrim')&&e.target!==el)return;sheet=null;copied=false;render();return}
   if(act==='open'){sheet=v;copied=false;if(v==='fb'){fbSent=false;fbErr=''}if(v==='fbl')FB=null;render();return}
-  if(act==='me'){me=v||null;try{me?localStorage.setItem('kf_me',me):localStorage.removeItem('kf_me')}catch(_){}syncSubMember();render();return}
+  if(act==='me'){me=v||null;try{me?localStorage.setItem('kf_me',me):localStorage.removeItem('kf_me')}catch(_){}loadBm();dropStaleBm();syncSubMember();render();return}
   if(act==='read'){goPage(Q.meta[+v-1][0]);return}
-  if(act==='wird'){m=mem(me);if(m)goPage(m.p+1);return}
+  if(act==='wird'){m=mem(me);if(m){var ra=resumeAt(m);goPage(ra.pg,ra.ay)}return}
   if(act==='resume'){if(pos&&pos.pg)goPage(pos.pg);return}
   if(act==='goto'){goPage(+v);return}
   if(act==='sura'){goPage(Q.si[+v-1][1]);return}
@@ -1067,7 +1071,7 @@ root.addEventListener('click',function(e){
     m=mem(me);var pv=parseInt((document.getElementById('paperTo')||{}).value,10),pe=document.getElementById('paperErr');
     if(!(document.getElementById('pledge')||{}).checked){pe.textContent='ضع علامة على الإقرار أولاً.';return}
     if(!(pv>m.p&&pv<=LAST)){pe.textContent='اكتب رقم صفحة بين '+(m.p+1)+' و'+LAST+'.';return}
-    m.p=pv;sheet=null;save();return;
+    m.p=pv;dropStaleBm();sheet=null;save();return;
   }
   if(act==='nobeta'){noBeta=true;try{localStorage.setItem('kf_nobeta','1')}catch(_){}render();return}
   if(act==='fbt'){var keep=(document.getElementById('fbText')||{}).value||'';fbType=v;render();var ta=document.getElementById('fbText');if(ta)ta.value=keep;return}
