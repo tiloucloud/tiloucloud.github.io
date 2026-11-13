@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ختمة العائلة</title><meta name="theme-color" content="#0a3b31"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="robots" content="noindex"><style>@font-face{font-family:'Reem Kufi';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/reem-kufi-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>ختمة العائلة</title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ختمة العائلة"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="theme-color" content="#0a3b31"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="robots" content="noindex"><style>@font-face{font-family:'Reem Kufi';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/reem-kufi-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
 @font-face{font-family:'Reem Kufi';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/reem-kufi-latin-600.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Reem Kufi';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/reem-kufi-arabic-700.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
 @font-face{font-family:'Reem Kufi';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/reem-kufi-latin-700.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -52,7 +52,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .num{font-variant-numeric:tabular-nums}
 :focus-visible{outline:3px solid var(--gold-l);outline-offset:2px}
-.wrap{max-width:560px;margin:0 auto;padding:18px 16px 48px;display:grid;gap:16px}
+.wrap{max-width:560px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(48px + env(safe-area-inset-bottom));display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
 .sub{color:var(--muted);font-size:14px}
 
 /* header */
@@ -182,7 +182,7 @@ label{font-size:14px;color:var(--muted);display:grid;gap:6px;flex:1 1 150px}
 @media (min-width:600px){.scrim{align-items:center;padding:16px}.sheet{border-radius:24px}}
 
 /* reader */
-.rbar{position:sticky;top:0;z-index:5;background:var(--bar-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.rbar{position:sticky;top:0;z-index:5;padding-top:env(safe-area-inset-top);background:var(--bar-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .rbar>div{max-width:680px;margin:0 auto;padding:8px 12px;display:flex;align-items:center;gap:6px}
 .rbar .t{flex:1;text-align:center;font-family:var(--display);font-weight:700;font-size:19px;color:var(--brand);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rbar .ib.on{color:var(--gold);border-color:var(--gold-soft)}
@@ -215,6 +215,15 @@ label{font-size:14px;color:var(--muted);display:grid;gap:6px;flex:1 1 150px}
   .sheet{animation:up .25s cubic-bezier(.2,.8,.2,1)}
   @keyframes up{from{transform:translateY(24px);opacity:.5}to{transform:none;opacity:1}}
 }
+
+.inst{display:flex;align-items:center;gap:12px;padding:10px 10px 10px 14px;border-radius:18px;border:1px dashed var(--gold-soft);background:color-mix(in srgb,var(--gold) 7%,var(--surface))}
+.inst .ic svg{width:34px;height:34px;display:block}
+.itx{flex:1;display:grid;min-width:0}
+.itx b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.itx small{color:var(--muted);font-size:12.5px}
+.inst .x{width:32px;height:32px;border:0;background:transparent;font-size:22px;line-height:1}
+.steps{margin:0;padding-inline-start:22px;display:grid;gap:10px;line-height:1.7}
+.steps svg.i{width:18px;height:18px;vertical-align:-3px;color:var(--primary)}
 </style></head><body><div id="root"></div><script>
 (function(){
 var Q={"si":[[1,1],[1,2],[3,50],[4,77],[6,106],[7,128],[8,151],[9,177],[10,187],[11,208],[11,221],[12,235],[13,249],[13,255],[14,262],[14,267],[15,282],[15,293],[16,305],[16,312],[17,322],[17,332],[18,342],[18,350],[18,359],[19,367],[19,377],[20,385],[20,396],[21,404],[21,411],[21,415],[21,418],[22,428],[22,434],[22,440],[23,446],[23,453],[23,458],[24,467],[24,477],[25,483],[25,489],[25,496],[25,499],[26,502],[26,507],[26,511],[26,515],[26,518],[26,520],[27,523],[27,526],[27,528],[27,531],[27,534],[27,537],[28,542],[28,545],[28,549],[28,551],[28,553],[28,554],[28,556],[28,558],[28,560],[29,562],[29,564],[29,566],[29,568],[29,570],[29,572],[29,574],[29,575],[29,577],[29,578],[29,580],[30,582],[30,583],[30,585],[30,586],[30,587],[30,587],[30,589],[30,590],[30,591],[30,591],[30,592],[30,593],[30,594],[30,595],[30,595],[30,596],[30,596],[30,597],[30,597],[30,598],[30,598],[30,599],[30,599],[30,600],[30,600],[30,601],[30,601],[30,601],[30,602],[30,602],[30,602],[30,603],[30,603],[30,603],[30,604],[30,604],[30,604]],"meta":[[1,21,1,1,147],[22,41,2,141,110],[42,61,2,251,125],[62,81,3,91,133],[82,101,4,24,123],[102,121,4,147,112],[121,141,5,84,150],[142,161,6,112,142],[162,181,7,87,160],[182,201,8,41,129],[201,221,9,94,151],[222,241,11,6,168],[242,261,12,53,157],[262,281,15,1,227],[282,301,17,1,183],[302,321,18,74,265],[322,341,21,1,187],[342,361,23,1,201],[362,381,25,21,340],[382,401,27,58,171],[402,421,29,46,176],[422,441,33,31,169],[442,461,36,27,354],[462,481,39,31,171],[482,502,41,46,239],[502,521,46,1,195],[522,541,51,31,397],[542,561,58,1,136],[562,581,67,1,430],[582,604,78,1,566]],"names":["الفَاتِحة","البَقَرَة","آل عِمران","النِّسَاء","المَائدة","الأنعَام","الأعرَاف","الأنفَال","التوبَة","يُونس","هُود","يُوسُف","الرَّعد","إبراهِيم","الحِجر","النَّحل","الإسرَاء","الكَهف","مَريَم","طه","الأنبيَاء","الحج","المؤمنُون","النور","الفُرقَان","الشعراء","النَّمل","القَصَص","العَنكبُوت","الرُّوم","لُقمَان","السَّجدة","الأحزَاب","سَبإ","فَاطِر","يسٓ","الصَّافَات","صٓ","الزُّمَر","غَافِر","فُصِّلَت","الشُّوري","الزُّخرُف","الدُّخان","الجاثِية","الأحقَاف","مُحمد","الفَتح","الحُجُرَات","قٓ","الذَّاريَات","الطُّور","النَّجم","القَمَر","الرَّحمٰن","الوَاقِعة","الحدِيد","المُجَادلة","الحَشر","المُمتَحنَة","الصَّف","الجُمعَة","المُنَافِقُونَ","التغَابُن","الطَّلَاق","التَّحرِيم","المُلك","القَلَم","الحَاقة","المَعَارج","نُوح","الجِن","المُزمل","المُدثر","القِيَامة","الإنسَان","المُرسَلات","النَّبَإ","النَّازعَات","عَبَسَ","التَّكوير","الانفِطَار","المُطَففين","الانشِقَاق","البُرُوج","الطَّارق","الأعلى","الغَاشِية","الفَجر","البَلَد","الشَّمس","اللَّيل","الضُّحى","الشَّرح","التِّين","العَلَق","القَدر","البَينَة","الزَّلزَلة","العَاديَات","القَارعَة","التَّكاثُر","العَصر","الهُمَزة","الفِيل","قُرَيش","المَاعُون","الكَوثر","الكافِرون","النَّصر","المَسَد","الإخلَاص","الفَلَق","النَّاس"],"bsm":"بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ","dua":"﴿رَبَّنَا تَقَبَّلْ مِنَّآ إِنَّكَ أَنتَ اَ۬لسَّمِيعُ اُ۬لْعَلِيمُ﴾","duaRef":"البقرة، الآية 126 برواية ورش"};
@@ -223,8 +232,10 @@ var S=null;try{S=JSON.parse(localStorage.getItem('kf_site')||'null')}catch(e){}
 if(!S||!S.members||!S.khatma)S={v:3,khatma:{name:'ختمة العائلة',start:iso(today()),days:60},members:[]};
 var root=document.getElementById('root');
 var art=null, local=false, me=null, sheet=null, copied=false, timer=null;
+var dpr=null, noInst=false, isSA=false, isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+try{isSA=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){}
 var reading=0, JD={}, loadErr=0, fs=26, pos=null, want=null, tjOn=true, MD={}, ML={}, bm=0, sec={};
-try{me=localStorage.getItem('kf_me');fs=+localStorage.getItem('kf_fs')||26;tjOn=localStorage.getItem('kf_tj')!=='0';pos=JSON.parse(localStorage.getItem('kf_pos')||'null');bm=+localStorage.getItem('kf_bm')||0}catch(e){}
+try{noInst=localStorage.getItem('kf_noinst')==='1';me=localStorage.getItem('kf_me');fs=+localStorage.getItem('kf_fs')||26;tjOn=localStorage.getItem('kf_tj')!=='0';pos=JSON.parse(localStorage.getItem('kf_pos')||'null');bm=+localStorage.getItem('kf_bm')||0}catch(e){}
 
 var IC={
   book:'M12 6.5C10 5 7 4.5 4 5v13.5c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V20',
@@ -237,7 +248,10 @@ var IC={
   back:'M5 12h14M13 6l6 6-6 6',
   more:'M12 5.5h.01M12 12h.01M12 18.5h.01',
   pal:'M12 3.5a8.5 8.5 0 1 0 0 17c1 0 1.6-.8 1.6-1.6 0-1.1-1-1.4-1-2.4 0-.8.7-1.5 1.5-1.5h2.4a4 4 0 0 0 4-4c0-4.3-3.8-7.5-8.5-7.5zM7.5 11.5h.01M10 7.5h.01M15 7.5h.01',
-  check:'M5 12.5l4.5 4.5L19 7.5'
+  check:'M5 12.5l4.5 4.5L19 7.5',
+  dl:'M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14',
+  share:'M12 15V3.5M8 7.5l4-4 4 4M6.5 11H5v9.5h14V11h-1.5',
+  link:'M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1'
 };
 function I(n){return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"'+(n==='more'?' style="stroke-width:3"':'')+'><path d="'+IC[n]+'"/></svg>'}
 var STAR='<svg viewBox="0 0 40 40" aria-hidden="true"><g transform="translate(20 20)"><rect x="-12" y="-12" width="24" height="24" rx="2" fill="var(--brand)"/><rect x="-12" y="-12" width="24" height="24" rx="2" fill="var(--brand)" transform="rotate(45)"/><circle r="7.5" fill="none" stroke="var(--gold-l)" stroke-width="1.6"/><circle r="3" fill="var(--gold-l)"/></g></svg>';
@@ -368,6 +382,17 @@ function vQuick(){
     (pos&&pos.n?'<button class="qt" data-act="resume"><span class="ic">'+I('play')+'</span><span>تابع القراءة<small class="num">الجزء '+pos.n+'</small></span></button>':'')+
     (bm?'<button class="qt" data-act="goto" data-v="'+bm+'"><span class="ic">'+I('mark')+'</span><span>علامتي<small class="num">الصفحة '+bm+'</small></span></button>':'')+'</section>';
 }
+function famLink(){return location.origin+location.pathname+'#k='+code}
+function vInstall(){
+  if(isSA||noInst)return '';
+  return '<section class="inst"><span class="ic">'+STAR+'</span><span class="itx"><b>ثبّت التطبيق</b><small>افتحه بلمسة من شاشتك الرئيسية</small></span>'+
+    '<button class="btn sm" data-act="install">'+I('dl')+'ثبّت</button><button class="ib x" data-act="noinst" aria-label="إخفاء">×</button></section>';
+}
+function vJoin(){
+  return '<section class="card stack"><h2 class="ctitle">انضم إلى ختمة عائلتك</h2><p class="sub">الصق هنا رابط العائلة الذي وصلك على واتساب، أو الرمز الذي فيه.</p>'+
+    '<form class="form" data-form="join"><input id="joinIn" dir="ltr" autocomplete="off" placeholder="https://…#k=…" aria-label="رابط العائلة"><button class="btn" type="submit">انضم</button></form>'+
+    '<p class="sub" id="joinErr"></p></section>';
+}
 function det(k,icon,title,sub,body){
   return '<details class="card" data-sec="'+k+'"'+(sec[k]?' open':'')+'><summary><span class="sic">'+I(icon)+'</span><span class="stt"><b>'+title+'</b><span class="num">'+sub+'</span></span></summary><div class="stack dbody">'+body+'</div></details>';
 }
@@ -391,6 +416,7 @@ function vAdmin(){
   var K=S.khatma;
   return det('admin','cog','إدارة الختمة',esc(K.name),'<p class="sub num">تبدأ <bdi dir="ltr">'+esc(K.start)+'</bdi> · '+K.days+' يوماً · لكل فرد ختمة كاملة</p>'+
     '<form class="form" data-form="addm"><input id="newMember" maxlength="24" placeholder="اسم فرد جديد" aria-label="اسم فرد جديد" autocomplete="off"><button class="btn ghost" type="submit">أضف فرداً</button></form>'+
+    (code?'<button class="btn ghost" data-act="open" data-v="invite">'+I('link')+'رابط العائلة لدعوة فرد</button>':'')+
     '<button class="btn ghost" data-act="open" data-v="new">ختمة جديدة</button>'+
     '<button class="btn ghost num" data-act="dl"'+(dl>0?' disabled':'')+'>'+(dl===-1?'المصحف محفوظ للقراءة دون إنترنت':dl===-2?'تعذّر التحميل، أعد المحاولة':dl>0?'جارٍ التحميل '+Math.min(60,dl)+' من 60':'حمّل المصحف للقراءة دون إنترنت')+'</button>');
 }
@@ -408,6 +434,12 @@ function vSheet(){
   }else if(k==='idx'){
     h='<h3>فهرس المصحف</h3><form class="form" data-form="gopg"><input id="goPage" type="number" min="1" max="'+LAST+'" inputmode="numeric" placeholder="رقم الصفحة (1–'+LAST+')" aria-label="رقم الصفحة"><button class="btn" type="submit">اذهب</button></form><div class="sidx">'+
       Q.names.map(function(nm,i){return '<button class="srow" data-act="sura" data-v="'+(i+1)+'"><span class="n num"><span>'+(i+1)+'</span></span><span class="nm">'+esc(nm)+'</span><span class="sub num">ص '+Q.si[i][1]+'</span></button>'}).join('')+'</div>';
+  }else if(k==='inst'){
+    if(isIOS)h='<h3>التثبيت على آيفون</h3><ol class="steps"><li>افتح هذه الصفحة في <b>Safari</b>.</li><li>اضغط زر المشاركة '+I('share')+' أسفل الشاشة.</li><li>اختر <b>إضافة إلى الشاشة الرئيسية</b>، ثم <b>إضافة</b>.</li><li>افتح التطبيق من أيقونته. إن طلب رابط العائلة فالصقه.</li></ol>'+
+      (code?'<button class="btn" data-act="copylink">'+(copied?I('check')+'تمّ نسخ الرابط':I('link')+'انسخ رابط العائلة أولاً')+'</button><p class="sub">آيفون يفصل التطبيق المثبّت عن Safari، فانسخ الرابط الآن لتلصقه فيه بعد التثبيت.</p>':'');
+    else h='<h3>التثبيت على أندرويد</h3><ol class="steps"><li>افتح هذه الصفحة في <b>Chrome</b>.</li><li>اضغط القائمة <b>⋮</b> أعلى الشاشة.</li><li>اختر <b>تثبيت التطبيق</b> أو <b>إضافة إلى الشاشة الرئيسية</b>.</li><li>تظهر أيقونة «ختمة العائلة» بين تطبيقاتك.</li></ol>';
+  }else if(k==='invite'){
+    h='<h3>رابط العائلة</h3><p class="msg" dir="ltr" style="word-break:break-all;font-size:13px">'+esc(famLink())+'</p><button class="btn" data-act="copylink">'+(copied?I('check')+'تمّ النسخ':I('link')+'انسخ الرابط')+'</button><p class="sub">أرسله لأفراد العائلة فقط: من يملكه يستطيع رؤية الختمة وتعديلها.</p>';
   }else if(k==='mem'){
     m=mem(a);
     h='<h3>'+esc(m.name)+'</h3><p class="sub num">قرأ '+m.p+' من '+LAST+' صفحة</p>'+
@@ -531,7 +563,7 @@ function render(){
   var h=hijri();
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand">'+STAR+'<div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div></header>'+
-    vWird()+vQuick()+vRace()+vJuz()+vAdmin()+
+    (code?vWird():vJoin())+vInstall()+vQuick()+vRace()+vJuz()+vAdmin()+
     '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 function land(){
@@ -556,6 +588,8 @@ function loadMean(n){
   var s=document.createElement('script');s.src='m/'+(n<10?'0':'')+n+'.js';s.onerror=function(){ML[n]=0};
   document.head.appendChild(s);
 }
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
+window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
 window.__mean=function(n,d){MD[n]=d;if(reading===n&&JD[n])render()};
 window.__juz=function(n,d){JD[n]=d;if(reading===n){render();land()}};
 var st=0;
@@ -583,6 +617,13 @@ root.addEventListener('click',function(e){
   if(act==='bm'){bm=+v;try{localStorage.setItem('kf_bm',bm)}catch(_){}sheet=null;render();return}
   if(act==='finish'){m=mem(me);if(m)m.p=Math.max(m.p,Q.meta[+v-1][1]);reading=0;save();window.scrollTo(0,0);return}
   if(act==='delm'){S.members=S.members.filter(function(x){return x.id!==v});if(me===v)me=null;sheet=null;save();return}
+  if(act==='install'){
+    if(dpr){var pr=dpr;dpr=null;pr.prompt();try{pr.userChoice.then(function(c){if(c&&c.outcome==='accepted'){noInst=true}render()})}catch(_){}}
+    else{sheet='inst';copied=false;render()}
+    return;
+  }
+  if(act==='noinst'){noInst=true;try{localStorage.setItem('kf_noinst','1')}catch(_){}render();return}
+  if(act==='copylink'){try{navigator.clipboard.writeText(famLink()).then(function(){copied=true;render()},function(){})}catch(_){}return}
   if(act==='dl'){if(dl<=0)dlAll();return}
   if(act==='copy'){
     var txt=document.getElementById('msgText').textContent;
@@ -599,6 +640,10 @@ root.addEventListener('submit',function(e){
   }else if(f==='renm'){
     var rn=document.getElementById('renName').value.trim(),rm=mem(e.target.getAttribute('data-v'));
     if(!rn||!rm)return;rm.name=rn;sheet=null;save();
+  }else if(f==='join'){
+    var jv=document.getElementById('joinIn').value.trim(),jm=/k=([A-Za-z0-9_-]{6,64})/.exec(jv)||/^([A-Za-z0-9_-]{6,64})$/.exec(jv);
+    if(!jm){document.getElementById('joinErr').textContent='لم أجد رمز العائلة في ما لصقته. انسخ الرابط كاملاً من رسالة واتساب.';return}
+    code=jm[1];try{localStorage.setItem('kf_code',code)}catch(_){}prev=null;render();sync();
   }else if(f==='gopg'){
     var g=parseInt(document.getElementById('goPage').value,10);if(g>=1&&g<=LAST)goPage(g);
   }else if(f==='newk'){
