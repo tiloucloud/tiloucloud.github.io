@@ -611,6 +611,6 @@ migrate();render();sync();
 setInterval(function(){if(!document.hidden)sync()},30000);
 document.addEventListener('visibilitychange',function(){if(!document.hidden)sync()});
 window.addEventListener('online',sync);
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(function(){});
 })();
 </script></body></html>
