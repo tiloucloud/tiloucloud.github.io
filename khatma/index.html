@@ -1,127 +1,246 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ختمة العائلة</title><meta name="theme-color" content="#0f5f57"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="robots" content="noindex"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;display=swap" rel="stylesheet"><style>
-/* Layout idea: one phone-width column; a 30-segment ring (one segment per juz) is the hero; the mushaf reader is a quiet full page set in the Warsh Uthmanic face. */
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ختمة العائلة</title><meta name="theme-color" content="#0a3b31"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="robots" content="noindex"><style>@font-face{font-family:'Reem Kufi';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/reem-kufi-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
+@font-face{font-family:'Reem Kufi';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/reem-kufi-latin-600.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Reem Kufi';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/reem-kufi-arabic-700.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
+@font-face{font-family:'Reem Kufi';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/reem-kufi-latin-700.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/ibm-plex-sans-arabic-arabic-400.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/ibm-plex-sans-arabic-latin-400.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/ibm-plex-sans-arabic-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/ibm-plex-sans-arabic-latin-600.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/ibm-plex-sans-arabic-arabic-700.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/ibm-plex-sans-arabic-latin-700.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* Layout idea: illuminated-mushaf language. An emerald hero panel with a faint gold eight-point-star lattice holds today's portion; everything else sits on calm white cards; the reader is a framed paper page with emerald surah bands. */
 :root{
-  --bg:#eef2ee; --surface:#fbfcfa; --ink:#16302b; --muted:#5d726c; --line:#cfd9d3; --track:#dbe3de;
-  --accent:#0f5f57; --accent-ink:#ffffff; --gold:#8f6a17; --late:#a23f2a; --ok:#2b7349;
-  --tile-l:36%; --tile-ink:#ffffff; --tj-g:#1b7a3a; --tj-q:#1c5cb8; --tj-m:#b3261e; --tj-k:#7a3aa8; --tj-i:#a05a00; --tj-x:#8c9994; --tj-l:#00797f;
-  --display:'Aref Ruqaa','Amiri','Traditional Arabic',serif;
+  --bg:#edf0ec; --surface:#ffffff; --ink:#122620; --muted:#5d6e67; --line:#dfe6e1; --track:#e6ece8;
+  --primary:#0d5546; --primary-ink:#ffffff; --brand:#0b4237;
+  --emerald:#0a3b31; --emerald-2:#11604f; --gold:#9b7019; --gold-l:#e8c66f; --gold-soft:#dcc38a;
+  --ok:#1e7646; --late:#b23a2a; --paper:#fffdf7; --paper-line:#e8dab2; --bar-bg:rgba(237,240,236,.88);
+  --av-l:40%; --tile-ink:#ffffff;
+  --shadow:0 1px 2px rgba(14,40,33,.05),0 10px 28px -16px rgba(14,40,33,.28);
+  --tj-g:#1b7a3a; --tj-q:#1c5cb8; --tj-m:#b3261e; --tj-k:#7a3aa8; --tj-i:#a05a00; --tj-x:#8c9994; --tj-l:#00797f;
+  --display:'Reem Kufi','Segoe UI',Tahoma,sans-serif;
   --body:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
   --mushaf:'warsh','Amiri','Traditional Arabic',serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#0e1917; --surface:#152421; --ink:#e4ece8; --muted:#93a8a1; --line:#2a3d39; --track:#22332f;
-    --accent:#63c2b2; --accent-ink:#08201c; --gold:#dcb65c; --late:#f08b72; --ok:#7fd0a0;
-    --tile-l:66%; --tile-ink:#0e1917; --tj-g:#6fd08c; --tj-q:#84b4ff; --tj-m:#ff8a80; --tj-k:#cf9cf2; --tj-i:#f2a65a; --tj-x:#74867f; --tj-l:#5fd4d4; color-scheme:dark;
+    --bg:#08120f; --surface:#0f1d19; --ink:#e4ebe7; --muted:#8fa39b; --line:#1d302a; --track:#1a2b26;
+    --primary:#d8b25c; --primary-ink:#1b1404; --brand:#e8c66f;
+    --emerald:#0a2721; --emerald-2:#104538; --gold:#d8b25c; --gold-l:#e8c66f; --gold-soft:#5b4b24;
+    --ok:#72cf98; --late:#f08a75; --paper:#0c1916; --paper-line:#3a3320; --bar-bg:rgba(8,18,15,.88);
+    --av-l:52%; --tile-ink:#08120f; --shadow:0 0 0 1px rgba(0,0,0,.2);
+    --tj-g:#6fd08c; --tj-q:#84b4ff; --tj-m:#ff8a80; --tj-k:#cf9cf2; --tj-i:#f2a65a; --tj-x:#74867f; --tj-l:#5fd4d4;
+    color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0e1917; --surface:#152421; --ink:#e4ece8; --muted:#93a8a1; --line:#2a3d39; --track:#22332f;
-  --accent:#63c2b2; --accent-ink:#08201c; --gold:#dcb65c; --late:#f08b72; --ok:#7fd0a0;
-  --tile-l:66%; --tile-ink:#0e1917; --tj-g:#6fd08c; --tj-q:#84b4ff; --tj-m:#ff8a80; --tj-k:#cf9cf2; --tj-i:#f2a65a; --tj-x:#74867f; --tj-l:#5fd4d4; color-scheme:dark;
+  --bg:#08120f; --surface:#0f1d19; --ink:#e4ebe7; --muted:#8fa39b; --line:#1d302a; --track:#1a2b26;
+  --primary:#d8b25c; --primary-ink:#1b1404; --brand:#e8c66f;
+  --emerald:#0a2721; --emerald-2:#104538; --gold:#d8b25c; --gold-l:#e8c66f; --gold-soft:#5b4b24;
+  --ok:#72cf98; --late:#f08a75; --paper:#0c1916; --paper-line:#3a3320; --bar-bg:rgba(8,18,15,.88);
+  --av-l:52%; --tile-ink:#08120f; --shadow:0 0 0 1px rgba(0,0,0,.2);
+  --tj-g:#6fd08c; --tj-q:#84b4ff; --tj-m:#ff8a80; --tj-k:#cf9cf2; --tj-i:#f2a65a; --tj-x:#74867f; --tj-l:#5fd4d4;
+  color-scheme:dark;
 }
 @font-face{font-family:'warsh';src:url('warsh.woff2') format('woff2');font-display:block}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
-.wrap{max-width:560px;margin:0 auto;padding:20px 16px 56px;display:grid;gap:18px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 h1,h2,h3,p{margin:0}
-h1{font-family:var(--display);font-weight:700;font-size:38px;line-height:1.15;color:var(--accent)}
-h2{font-size:15px;font-weight:600;color:var(--muted)}
-.num{font-variant-numeric:tabular-nums}
-header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 16px}
-.kname{font-weight:600}
-.kmeta{color:var(--muted);font-size:14px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
-.stack{display:grid;gap:12px}
-.hero{display:flex;flex-wrap:wrap;align-items:center;gap:16px 20px}
-.ring{width:150px;height:150px;flex:none;margin-inline:auto}
-.ring path{fill:none;stroke-width:15;stroke:var(--track)}
-.ring path.d{stroke:var(--accent)}
-.ring text{font-family:var(--display);font-weight:700;fill:var(--ink)}
-.herotext{flex:1 1 180px;display:grid;gap:6px}
-.big{font-family:var(--display);font-size:28px;font-weight:700;line-height:1.25;text-wrap:balance}
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:2px 10px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
-.pill.ok{color:var(--ok)} .pill.late{color:var(--late)} .pill.fin{color:var(--gold)} .pill.idle{color:var(--muted)}
-.ayah{font-family:var(--mushaf);font-size:26px;line-height:2;color:var(--gold);text-wrap:balance}
 button{font:inherit;color:inherit;cursor:pointer}
-.btn{min-height:44px;padding:8px 16px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:600}
-.btn.ghost{background:transparent;color:var(--accent)}
-.btn.sm{min-height:36px;padding:4px 12px;font-size:14px}
-.btn.quiet{border-color:var(--line);background:transparent;color:var(--muted)}
-:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{min-height:40px;padding:6px 14px;border-radius:999px;border:1.5px solid var(--line);background:transparent;display:inline-flex;align-items:center;gap:8px}
-.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:600}
-.dot{width:12px;height:12px;border-radius:50%;background:hsl(var(--h) 42% var(--tile-l));flex:none}
-.rows{display:grid}
-.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 0;border-top:1px solid var(--line)}
-.row:first-child{border-top:0;padding-top:0}
-.row:last-child{padding-bottom:0}
-.rank{width:22px;text-align:center;color:var(--muted);font-weight:600;flex:none}
-.grow{flex:1 1 70px;min-width:0}
+svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--gold-l);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 48px;display:grid;gap:16px}
 .sub{color:var(--muted);font-size:14px}
-.bar{height:8px;border-radius:99px;background:var(--track);overflow:hidden;flex:1 1 100%}
-.bar i{display:block;height:100%;border-radius:99px;background:hsl(var(--h) 42% var(--tile-l))}
-.next{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
-.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.tile{aspect-ratio:1;border-radius:10px;border:2px solid var(--line);background:transparent;display:grid;place-content:center;padding:0;color:var(--ink);font-size:17px;font-weight:600}
-.tile.d{background:hsl(var(--h) 42% var(--tile-l));border-color:transparent;color:var(--tile-ink)}
-.tile.nx{border-color:var(--gold)}
-.form{display:flex;flex-wrap:wrap;gap:8px}
-input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:6px 12px;flex:1 1 140px;min-width:0}
-label{font-size:14px;color:var(--muted);display:grid;gap:4px;flex:1 1 140px}
-.foot{color:var(--muted);font-size:13px;text-align:center}
-.scrim{position:fixed;inset:0;background:rgba(6,16,14,.55);display:flex;align-items:flex-end;justify-content:center;padding:16px;z-index:5}
-.sheet{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;width:100%;max-width:520px;max-height:90%;overflow:auto;display:grid;gap:12px}
-.sheet h3{font-family:var(--display);font-size:26px;color:var(--accent)}
-.msg{background:var(--bg);border-radius:10px;padding:12px;font-size:15px}
-/* reader */
-.rbar{position:sticky;top:0;z-index:3;background:var(--bg);border-bottom:1px solid var(--line)}
-.rbar div{max-width:640px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;gap:8px}
-.rbar .t{flex:1;font-weight:600;text-align:center}
-.read{max-width:640px;margin:0 auto;padding:16px 18px 56px;display:grid;gap:18px}
-.q{font-family:var(--mushaf);font-size:var(--fs,26px);line-height:2.15;text-align:justify;word-spacing:.06em}
-.sura{font-family:var(--mushaf);text-align:center;font-size:calc(var(--fs,26px) * 1.05);border-block:1px solid var(--gold);color:var(--gold);padding:4px 0;line-height:1.9}
-.cont{text-align:center;color:var(--muted);font-size:14px}
-.bsm{font-family:var(--mushaf);font-size:var(--fs,26px);text-align:center;line-height:2}
-.pgm{font-family:var(--body);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:0 8px;margin:0 6px;vertical-align:middle;white-space:nowrap}
-.src{color:var(--muted);font-size:12px;text-align:center}
-.tg{color:var(--tj-g)}.tq{color:var(--tj-q)}.tm{color:var(--tj-m)}.tk{color:var(--tj-k)}.ti{color:var(--tj-i)}.tx{color:var(--tj-x)}.tl{color:var(--tj-l)}
-.leg{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:13px;color:var(--muted);padding:10px 14px}
-.leg .k{font-weight:600}.leg .k::before{content:'';display:inline-block;width:10px;height:10px;border-radius:50%;background:currentColor;margin-inline-end:5px}
-.leg .btn{margin-inline-start:auto}.leg .w{flex-basis:100%}
-.mw{cursor:pointer;text-decoration:underline dotted var(--muted);text-decoration-thickness:1.5px;text-underline-offset:.5em}
-.sheet .mq{font-family:var(--mushaf);font-size:28px;line-height:2;text-align:center}
-.msg b{color:var(--accent)}
-@media (min-width:600px){.scrim{align-items:center}}
-@media (prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}.sheet{animation:up .22s ease}@keyframes up{from{transform:translateY(16px);opacity:.6}to{transform:none;opacity:1}}}
-.wide{width:100%}
-.hello{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 12px;font-size:15px}
-.lnk{background:none;border:0;padding:6px 0;color:var(--muted);text-decoration:underline;font-size:13px}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand svg{width:38px;height:38px;flex:none}
+.brand h1{font-family:var(--display);font-weight:700;font-size:25px;line-height:1.1;color:var(--brand)}
+.brand p{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.when{text-align:end;font-size:12.5px;color:var(--muted);line-height:1.5;flex:none}
+.when b{display:block;color:var(--ink);font-weight:600;font-size:13px}
+
+/* hero */
+.hero{position:relative;border-radius:24px;padding:18px 18px 16px;color:#f3eedd;display:grid;gap:16px;overflow:hidden;box-shadow:var(--shadow);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23e8c66f' stroke-opacity='.13' stroke-width='1'%3E%3Crect x='17' y='17' width='22' height='22'/%3E%3Crect x='17' y='17' width='22' height='22' transform='rotate(45 28 28)'/%3E%3Cpath d='M0 28h6.5M49.5 28H56M28 0v6.5M28 49.5V56'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(120% 100% at 100% 0%,var(--emerald-2) 0%,transparent 62%),
+    linear-gradient(165deg,var(--emerald-2),var(--emerald));}
+.hero::after{content:'';position:absolute;inset:6px;border:1px solid rgba(232,198,111,.28);border-radius:19px;pointer-events:none}
+.hero>*{position:relative;z-index:1}
+.hi{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14.5px}
+.hi b{color:#fff}
+.lnk{background:none;border:0;padding:6px 0;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;color:inherit;opacity:.72}
+.hmain{display:flex;align-items:center;gap:16px}
+.pring{width:92px;height:92px;flex:none}
+.pring circle{fill:none;stroke-width:7}
+.pring .tr{stroke:rgba(255,255,255,.12)}
+.pring .pv{stroke:var(--gold-l);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%}
+.pring text{fill:#fff;font-family:var(--body);font-weight:600}
+.htext{display:grid;gap:2px;min-width:0}
+.eyebrow{color:var(--gold-l);font-size:13px;font-weight:600}
+.wtitle{font-family:var(--display);font-size:28px;font-weight:700;line-height:1.25;color:#fff;text-wrap:balance}
+.range{font-size:15px;color:rgba(243,238,221,.85)}
+.range bdi{font-size:20px;font-weight:600;color:#fff}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;border:0;border-radius:14px;background:linear-gradient(180deg,#f0d283,#d9b05a);color:#241904;font-weight:700;font-size:16.5px;box-shadow:0 6px 18px -8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.45)}
+.gbtn svg.i{width:22px;height:22px}
+.hfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:rgba(243,238,221,.8)}
+.hbar{height:5px;border-radius:9px;background:rgba(255,255,255,.12);overflow:hidden}
+.hbar i{display:block;height:100%;background:var(--gold-l);border-radius:9px}
+.chipst{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.1);font-weight:600;color:#fff}
+.chipst::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--c,#9be3b5)}
+.ayah{font-family:var(--mushaf);font-size:25px;line-height:2;color:var(--gold-l);text-align:center;text-wrap:balance}
+
+/* member picker */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.stack{display:grid;gap:12px}
+.ctitle{font-family:var(--display);font-size:22px;font-weight:700;color:var(--brand)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:42px;padding:6px 14px 6px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;gap:8px;font-weight:500}
+.chip[aria-pressed="true"]{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary) inset}
+.av{width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:15px;font-weight:700;color:#fff;background:hsl(var(--h) 42% var(--av-l))}
+.chip .av{width:28px;height:28px;font-size:13px}
+
+/* quick actions */
+.qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.qt{display:flex;flex-direction:row;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);text-align:start;font-weight:600;font-size:14px;line-height:1.35;min-height:64px}
+.qt .ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--primary) 12%,transparent);color:var(--primary)}
+.qt small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+
+/* collapsible sections */
 details.card{padding:0}
-details.card>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;gap:12px;min-height:52px}
+details.card>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:12px;min-height:60px}
 details.card>summary::-webkit-details-marker{display:none}
-details.card>summary .sub{margin-inline-start:auto;text-align:end}
-details.card>summary::after{content:'';width:8px;height:8px;border-left:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);flex:none}
+.sic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold)}
+.stt{display:grid;min-width:0;flex:1}
+.stt b{font-weight:600}
+.stt span{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details.card>summary::after{content:'';width:8px;height:8px;border-left:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);flex:none;margin-inline-end:4px;transition:transform .2s}
 details.card[open]>summary::after{transform:rotate(-45deg)}
-.dbody{padding:0 16px 16px}
-.wbar{position:sticky;bottom:0;z-index:3;background:var(--surface);border-top:1px solid var(--line)}
-.wbar div{max-width:640px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600}
-.pgm{cursor:pointer}.pgm,.sura{scroll-margin-top:64px}
+.dbody{padding:2px 16px 16px;border-top:1px solid var(--line);padding-top:14px}
+
+/* race */
+.fam{display:flex;align-items:center;gap:16px}
+.ring{width:110px;height:110px;flex:none}
+.ring path{fill:none;stroke-width:15;stroke:var(--track)}
+.ring path.d{stroke:var(--gold)}
+.ring text{fill:var(--ink);font-family:var(--body);font-weight:700}
+.fam .stack{gap:4px}
+.big2{font-family:var(--display);font-size:18px;font-weight:700;color:var(--brand)}
+.rows{display:grid}
+.row{display:grid;grid-template-columns:auto auto 1fr auto auto;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.rank{width:20px;text-align:center;color:var(--muted);font-size:13px;font-weight:600}
+.row.lead .rank{color:var(--gold)}
+.who{min-width:0;display:grid;gap:5px}
+.who b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who b small{font-weight:400;color:var(--muted);font-size:12.5px;margin-inline-start:6px}
+.bar{height:5px;border-radius:9px;background:var(--track);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;background:hsl(var(--h) 45% var(--av-l))}
+.st{font-size:12.5px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.st::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}
+.st.ok{color:var(--ok)} .st.late{color:var(--late)} .st.idle{color:var(--muted)} .st.fin{color:var(--gold)}
+.ib{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;flex:none;color:var(--muted)}
+.row .ib{width:34px;height:34px;border:0;background:transparent}
+
+/* juz grid */
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.tile{aspect-ratio:1;border-radius:12px;border:1px solid var(--line);background:var(--bg);display:grid;place-content:center;padding:0;font-size:15px;font-weight:600;color:var(--ink)}
+.tile.d{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.tile.nx{border:2px solid var(--gold);color:var(--gold)}
+
+/* buttons and forms */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:8px 18px;border-radius:13px;border:1px solid var(--primary);background:var(--primary);color:var(--primary-ink);font-weight:600}
+.btn.ghost{background:transparent;color:var(--primary)}
+.btn.quiet{border-color:var(--line);background:transparent;color:var(--muted)}
+.btn.sm{min-height:38px;padding:4px 14px;font-size:14px}
+.btn[disabled]{opacity:.6}
+.form{display:flex;flex-wrap:wrap;gap:8px}
+.form>.btn{flex:1 1 auto}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:13px;min-height:46px;padding:6px 14px;flex:1 1 150px;min-width:0}
+label{font-size:14px;color:var(--muted);display:grid;gap:6px;flex:1 1 150px}
+.foot{color:var(--muted);font-size:12.5px;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.foot::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--fc,var(--muted))}
+
+/* sheets */
+.scrim{position:fixed;inset:0;background:rgba(4,14,11,.5);display:flex;align-items:flex-end;justify-content:center;z-index:10}
+.sheet{position:relative;background:var(--surface);border-radius:24px 24px 0 0;padding:26px 18px 20px;width:100%;max-width:560px;max-height:88%;overflow:auto;display:grid;gap:12px;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+.sheet::before{content:'';position:absolute;top:9px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:9px;background:var(--line)}
+.sheet h3{font-family:var(--display);font-size:24px;font-weight:700;color:var(--brand)}
+.msg{background:var(--bg);border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.75}
+.msg b{color:var(--primary)}
+.sheet .mq{font-family:var(--mushaf);font-size:30px;line-height:2;text-align:center;color:var(--ink)}
 .sidx{display:grid}
-.srow{display:flex;align-items:center;gap:10px;background:none;border:0;border-top:1px solid var(--line);padding:8px 2px;min-height:44px;text-align:start}
+.srow{display:flex;align-items:center;gap:12px;background:none;border:0;border-top:1px solid var(--line);padding:8px 2px;min-height:48px;text-align:start}
+.srow .n{width:30px;height:30px;flex:none;display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--gold);border:1px solid var(--gold-soft);border-radius:9px;transform:rotate(45deg)}
+.srow .n span{transform:rotate(-45deg)}
+.srow .nm{flex:1;font-weight:500}
+@media (min-width:600px){.scrim{align-items:center;padding:16px}.sheet{border-radius:24px}}
+
+/* reader */
+.rbar{position:sticky;top:0;z-index:5;background:var(--bar-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.rbar>div{max-width:680px;margin:0 auto;padding:8px 12px;display:flex;align-items:center;gap:6px}
+.rbar .t{flex:1;text-align:center;font-family:var(--display);font-weight:700;font-size:19px;color:var(--brand);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rbar .ib.on{color:var(--gold);border-color:var(--gold-soft)}
+.fsz{font-family:var(--display);font-weight:700;font-size:15px}
+.read{max-width:680px;margin:0 auto;padding:12px 12px 90px;display:grid;gap:14px}
+.leg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted);padding:2px 4px}
+.leg .k{font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.leg .k::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}
+.leg .w{flex-basis:100%;font-size:12px}
+.page{background:var(--paper);border:1px solid var(--paper-line);border-radius:16px;padding:20px 14px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6px var(--paper-line),var(--shadow);display:grid;gap:10px}
+.q{font-family:var(--mushaf);font-size:var(--fs,26px);line-height:2.2;text-align:justify;word-spacing:.06em;margin:0}
+.sura{position:relative;margin:10px 0 2px;text-align:center;font-family:var(--mushaf);font-size:calc(var(--fs,26px)*1.02);line-height:1.8;color:var(--gold-l);padding:6px 34px;border-radius:12px;
+  background:linear-gradient(165deg,var(--emerald-2),var(--emerald));box-shadow:inset 0 0 0 3px var(--emerald),inset 0 0 0 4px rgba(232,198,111,.55);scroll-margin-top:70px}
+.sura::before,.sura::after{content:'';position:absolute;top:50%;width:12px;height:12px;margin-top:-6px;background:var(--gold-l);transform:rotate(45deg);opacity:.85}
+.sura::before{right:14px}.sura::after{left:14px}
+.bsm{font-family:var(--mushaf);font-size:var(--fs,26px);text-align:center;line-height:2}
+.cont{text-align:center;color:var(--muted);font-size:13.5px}
+.pgm{display:inline-block;font-family:var(--body);font-size:11px;line-height:20px;min-width:24px;padding:0 6px;text-align:center;color:var(--gold);border:1px solid var(--gold-soft);border-radius:99px;margin:0 6px;vertical-align:middle;cursor:pointer;word-spacing:0;scroll-margin-top:70px}
+.mw{cursor:pointer;text-decoration:underline dotted var(--muted);text-decoration-thickness:1.5px;text-underline-offset:.5em}
+.tg{color:var(--tj-g)}.tq{color:var(--tj-q)}.tm{color:var(--tj-m)}.tk{color:var(--tj-k)}.ti{color:var(--tj-i)}.tx{color:var(--tj-x)}.tl{color:var(--tj-l)}
+.rend{display:grid;gap:10px;padding-top:6px}
+.src{color:var(--muted);font-size:12px;text-align:center;line-height:1.7}
+.wbar{position:fixed;left:0;right:0;bottom:0;z-index:5;color:#f3eedd;background:linear-gradient(165deg,var(--emerald-2),var(--emerald));box-shadow:0 -8px 24px -12px rgba(0,0,0,.4)}
+.wbar>div{max-width:680px;margin:0 auto;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:12px}
+.wbar small{display:block;color:var(--gold-l);font-size:12px;font-weight:600}
+.wbar b{font-weight:600}
+.wbar .gbtn{width:auto;min-height:42px;padding:0 18px;font-size:15px}
+@media (prefers-reduced-motion:no-preference){
+  .bar i,.hbar i,.pring .pv{transition:all .5s ease}
+  .sheet{animation:up .25s cubic-bezier(.2,.8,.2,1)}
+  @keyframes up{from{transform:translateY(24px);opacity:.5}to{transform:none;opacity:1}}
+}
 </style></head><body><div id="root"></div><script>
 (function(){
 var Q={"si":[[1,1],[1,2],[3,50],[4,77],[6,106],[7,128],[8,151],[9,177],[10,187],[11,208],[11,221],[12,235],[13,249],[13,255],[14,262],[14,267],[15,282],[15,293],[16,305],[16,312],[17,322],[17,332],[18,342],[18,350],[18,359],[19,367],[19,377],[20,385],[20,396],[21,404],[21,411],[21,415],[21,418],[22,428],[22,434],[22,440],[23,446],[23,453],[23,458],[24,467],[24,477],[25,483],[25,489],[25,496],[25,499],[26,502],[26,507],[26,511],[26,515],[26,518],[26,520],[27,523],[27,526],[27,528],[27,531],[27,534],[27,537],[28,542],[28,545],[28,549],[28,551],[28,553],[28,554],[28,556],[28,558],[28,560],[29,562],[29,564],[29,566],[29,568],[29,570],[29,572],[29,574],[29,575],[29,577],[29,578],[29,580],[30,582],[30,583],[30,585],[30,586],[30,587],[30,587],[30,589],[30,590],[30,591],[30,591],[30,592],[30,593],[30,594],[30,595],[30,595],[30,596],[30,596],[30,597],[30,597],[30,598],[30,598],[30,599],[30,599],[30,600],[30,600],[30,601],[30,601],[30,601],[30,602],[30,602],[30,602],[30,603],[30,603],[30,603],[30,604],[30,604],[30,604]],"meta":[[1,21,1,1,147],[22,41,2,141,110],[42,61,2,251,125],[62,81,3,91,133],[82,101,4,24,123],[102,121,4,147,112],[121,141,5,84,150],[142,161,6,112,142],[162,181,7,87,160],[182,201,8,41,129],[201,221,9,94,151],[222,241,11,6,168],[242,261,12,53,157],[262,281,15,1,227],[282,301,17,1,183],[302,321,18,74,265],[322,341,21,1,187],[342,361,23,1,201],[362,381,25,21,340],[382,401,27,58,171],[402,421,29,46,176],[422,441,33,31,169],[442,461,36,27,354],[462,481,39,31,171],[482,502,41,46,239],[502,521,46,1,195],[522,541,51,31,397],[542,561,58,1,136],[562,581,67,1,430],[582,604,78,1,566]],"names":["الفَاتِحة","البَقَرَة","آل عِمران","النِّسَاء","المَائدة","الأنعَام","الأعرَاف","الأنفَال","التوبَة","يُونس","هُود","يُوسُف","الرَّعد","إبراهِيم","الحِجر","النَّحل","الإسرَاء","الكَهف","مَريَم","طه","الأنبيَاء","الحج","المؤمنُون","النور","الفُرقَان","الشعراء","النَّمل","القَصَص","العَنكبُوت","الرُّوم","لُقمَان","السَّجدة","الأحزَاب","سَبإ","فَاطِر","يسٓ","الصَّافَات","صٓ","الزُّمَر","غَافِر","فُصِّلَت","الشُّوري","الزُّخرُف","الدُّخان","الجاثِية","الأحقَاف","مُحمد","الفَتح","الحُجُرَات","قٓ","الذَّاريَات","الطُّور","النَّجم","القَمَر","الرَّحمٰن","الوَاقِعة","الحدِيد","المُجَادلة","الحَشر","المُمتَحنَة","الصَّف","الجُمعَة","المُنَافِقُونَ","التغَابُن","الطَّلَاق","التَّحرِيم","المُلك","القَلَم","الحَاقة","المَعَارج","نُوح","الجِن","المُزمل","المُدثر","القِيَامة","الإنسَان","المُرسَلات","النَّبَإ","النَّازعَات","عَبَسَ","التَّكوير","الانفِطَار","المُطَففين","الانشِقَاق","البُرُوج","الطَّارق","الأعلى","الغَاشِية","الفَجر","البَلَد","الشَّمس","اللَّيل","الضُّحى","الشَّرح","التِّين","العَلَق","القَدر","البَينَة","الزَّلزَلة","العَاديَات","القَارعَة","التَّكاثُر","العَصر","الهُمَزة","الفِيل","قُرَيش","المَاعُون","الكَوثر","الكافِرون","النَّصر","المَسَد","الإخلَاص","الفَلَق","النَّاس"],"bsm":"بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ","dua":"﴿رَبَّنَا تَقَبَّلْ مِنَّآ إِنَّكَ أَنتَ اَ۬لسَّمِيعُ اُ۬لْعَلِيمُ﴾","duaRef":"البقرة، الآية 126 برواية ورش"};
-var HUES=[172,38,265,330,205,95,12,290],LAST=604;
+var HUES=[168,36,262,332,204,92,12,290,190,56,240],LAST=604;
 var S=null;try{S=JSON.parse(localStorage.getItem('kf_site')||'null')}catch(e){}
 if(!S||!S.members||!S.khatma)S={v:3,khatma:{name:'ختمة العائلة',start:iso(today()),days:60},members:[]};
 var root=document.getElementById('root');
 var art=null, local=false, me=null, sheet=null, copied=false, timer=null;
 var reading=0, JD={}, loadErr=0, fs=26, pos=null, want=null, tjOn=true, MD={}, ML={}, bm=0, sec={};
 try{me=localStorage.getItem('kf_me');fs=+localStorage.getItem('kf_fs')||26;tjOn=localStorage.getItem('kf_tj')!=='0';pos=JSON.parse(localStorage.getItem('kf_pos')||'null');bm=+localStorage.getItem('kf_bm')||0}catch(e){}
+
+var IC={
+  book:'M12 6.5C10 5 7 4.5 4 5v13.5c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V20',
+  list:'M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01',
+  mark:'M6.5 3.5h11v17l-5.5-4-5.5 4z',
+  play:'M8 5.5v13l10.5-6.5z',
+  users:'M15.5 19.5v-1a4 4 0 0 0-4-4h-5a4 4 0 0 0-4 4v1M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM21.5 19.5v-1a4 4 0 0 0-3-3.9M15.5 4.1a3.5 3.5 0 0 1 0 6.8',
+  grid:'M4 4h6.5v6.5H4zM13.5 4H20v6.5h-6.5zM4 13.5h6.5V20H4zM13.5 13.5H20V20h-6.5z',
+  cog:'M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4',
+  back:'M5 12h14M13 6l6 6-6 6',
+  more:'M12 5.5h.01M12 12h.01M12 18.5h.01',
+  pal:'M12 3.5a8.5 8.5 0 1 0 0 17c1 0 1.6-.8 1.6-1.6 0-1.1-1-1.4-1-2.4 0-.8.7-1.5 1.5-1.5h2.4a4 4 0 0 0 4-4c0-4.3-3.8-7.5-8.5-7.5zM7.5 11.5h.01M10 7.5h.01M15 7.5h.01',
+  check:'M5 12.5l4.5 4.5L19 7.5'
+};
+function I(n){return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"'+(n==='more'?' style="stroke-width:3"':'')+'><path d="'+IC[n]+'"/></svg>'}
+var STAR='<svg viewBox="0 0 40 40" aria-hidden="true"><g transform="translate(20 20)"><rect x="-12" y="-12" width="24" height="24" rx="2" fill="var(--brand)"/><rect x="-12" y="-12" width="24" height="24" rx="2" fill="var(--brand)" transform="rotate(45)"/><circle r="7.5" fill="none" stroke="var(--gold-l)" stroke-width="1.6"/><circle r="3" fill="var(--gold-l)"/></g></svg>';
 
 function migrate(){
   S.members.forEach(function(m){
@@ -134,25 +253,27 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return '&#'+c.ch
 function midx(id){for(var i=0;i<S.members.length;i++)if(S.members[i].id===id)return i;return -1}
 function mem(id){var i=midx(id);return i<0?null:S.members[i]}
 function hue(id){var i=midx(id);return i<0?0:HUES[i%HUES.length]}
+function av(m){return '<span class="av" style="--h:'+hue(m.id)+'">'+esc((m.name||'؟').charAt(0))+'</span>'}
 function today(){var d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
 function pd(s){var p=s.split('-');return new Date(+p[0],p[1]-1,+p[2])}
 function iso(d){function z(n){return(n<10?'0':'')+n}return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())}
+function hijri(){try{return new Intl.DateTimeFormat('ar-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}catch(e){return ''}}
 function dayNo(){var n=Math.round((today()-pd(S.khatma.start))/864e5)+1;return Math.max(0,Math.min(S.khatma.days,n))}
 function daily(){return Math.ceil(LAST/S.khatma.days)}
 function targetAt(dn){return Math.min(LAST,Math.ceil(LAST*Math.max(0,dn)/S.khatma.days))}
 function juzOf(pg){for(var j=0;j<30;j++)if(pg<=Q.meta[j][1])return j+1;return 30}
 function suraAt(pg){var s=0;for(var i=0;i<114;i++)if(Q.si[i][1]<=pg)s=i;return s}
 function pagesN(n){return n===1?'صفحة واحدة':n===2?'صفحتان':n<=10?n+' صفحات':n+' صفحة'}
-function lateBy(n){return n===1?'متأخر بصفحة':n===2?'متأخر بصفحتين':n<=10?'متأخر بـ'+n+' صفحات':'متأخر بـ'+n+' صفحة'}
 function total(){var t=0;S.members.forEach(function(m){t+=m.p});return t}
 function wirdOf(m){return{a:m.p+1,b:Math.min(LAST,m.p+daily())}}
-function pill(m){
-  var dn=dayNo();
-  if(m.p>=LAST)return '<span class="pill fin">ختم القرآن</span>';
-  if(m.p<targetAt(dn-1))return '<span class="pill late">'+lateBy(targetAt(dn-1)-m.p)+'</span>';
-  if(dn>0&&m.p<targetAt(dn))return '<span class="pill idle">وِرد اليوم لم يُقرأ بعد</span>';
-  return '<span class="pill ok">'+(dn>0?'أتمّ وِرد اليوم':'على الموعد')+'</span>';
+function stat(m){
+  var dn=dayNo(),t=targetAt(dn-1);
+  if(m.p>=LAST)return['fin','ختم القرآن'];
+  if(m.p<t)return['late','متأخر '+(t-m.p)+' ص'];
+  if(dn>0&&m.p<targetAt(dn))return['idle','لم يقرأ اليوم'];
+  return['ok',dn>0?'أتمّ وِرده':'على الموعد'];
 }
+function rng(a,b){return '<bdi dir="ltr" class="num">'+a+(b>a?' – '+b:'')+'</bdi>'}
 
 var CFG={db:"https://khatma-16d1b-default-rtdb.firebaseio.com"},code=null,seed=null,prev=null,online=false,syncing=false,edits=0,dl=0;
 if(CFG.db.indexOf('http')!==0)CFG.db='';
@@ -212,53 +333,63 @@ function ringSvg(){
   for(var i=0;i<30;i++){
     var a0=(i*12+1.3-90)*Math.PI/180,a1=((i+1)*12-1.3-90)*Math.PI/180,k=0;
     S.members.forEach(function(m){if(m.p>=Q.meta[i][1])k++});
-    out+='<path'+(k?' class="d" style="stroke-opacity:'+(0.25+0.75*k/M).toFixed(2)+'"':'')+' d="M'+(c+r*Math.cos(a0)).toFixed(2)+' '+(c+r*Math.sin(a0)).toFixed(2)+' A'+r+' '+r+' 0 0 1 '+(c+r*Math.cos(a1)).toFixed(2)+' '+(c+r*Math.sin(a1)).toFixed(2)+'"/>';
+    out+='<path'+(k?' class="d" style="stroke-opacity:'+(0.3+0.7*k/M).toFixed(2)+'"':'')+' d="M'+(c+r*Math.cos(a0)).toFixed(2)+' '+(c+r*Math.sin(a0)).toFixed(2)+' A'+r+' '+r+' 0 0 1 '+(c+r*Math.cos(a1)).toFixed(2)+' '+(c+r*Math.sin(a1)).toFixed(2)+'"/>';
   }
   var pct=all?Math.round(total()/all*100):0;
-  return '<svg class="ring" viewBox="0 0 200 200" role="img" aria-label="أنجزت العائلة '+pct+' بالمئة"><g>'+out+'</g><text x="100" y="108" text-anchor="middle" font-size="44" class="num">'+pct+'%</text><text x="100" y="132" text-anchor="middle" font-size="16">من الختمات</text></svg>';
+  return '<svg class="ring" viewBox="0 0 200 200" role="img" aria-label="أنجزت العائلة '+pct+' بالمئة"><g>'+out+'</g><text x="100" y="114" text-anchor="middle" font-size="46" class="num">'+pct+'%</text></svg>';
+}
+function pring(p){
+  var r=40,C=2*Math.PI*r,f=Math.max(0,Math.min(1,p/LAST)),pct=Math.round(f*100);
+  return '<svg class="pring" viewBox="0 0 92 92" role="img" aria-label="أتممتَ '+pct+' بالمئة من ختمتك"><circle class="tr" cx="46" cy="46" r="'+r+'"/><circle class="pv" cx="46" cy="46" r="'+r+'" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-f)).toFixed(1)+'"/>'+
+    '<text x="46" y="44" text-anchor="middle" font-size="20" class="num">'+pct+'%</text><text x="46" y="62" text-anchor="middle" font-size="10.5" fill-opacity=".7">من ختمتك</text></svg>';
 }
 function chips(){
-  return S.members.map(function(m){return '<button class="chip" aria-pressed="'+(m.id===me)+'" data-act="me" data-v="'+m.id+'"><i class="dot" style="--h:'+hue(m.id)+'"></i>'+esc(m.name)+'</button>'}).join('');
+  return S.members.map(function(m){return '<button class="chip" aria-pressed="'+(m.id===me)+'" data-act="me" data-v="'+m.id+'">'+av(m)+esc(m.name)+'</button>'}).join('');
 }
 function vWird(){
   var m=mem(me);
-  if(!m)return '<section class="card stack"><p class="big">من أنت؟</p><p class="sub">'+(S.members.length?'اختر اسمك مرة واحدة، ويتذكرك هذا الجهاز بعدها.':(code?'أضف أفراد العائلة أولاً من «إدارة الختمة» في الأسفل.':'افتح رابط العائلة الذي وصلك لتنضم إلى الختمة. ويمكنك القراءة من المصحف الآن.'))+'</p><div class="chips">'+chips()+'</div></section>';
-  var hello='<div class="hello"><span>السلام عليكم يا <b>'+esc(m.name)+'</b></span><button class="lnk" data-act="me" data-v="">لستُ '+esc(m.name)+'؟</button></div>';
-  if(m.p>=LAST)return '<section class="card stack" style="--h:'+hue(me)+'">'+hello+'<p class="big">ختمتَ القرآن كاملاً، الحمد لله</p><p class="ayah">'+esc(Q.dua)+'</p><p class="sub">'+esc(Q.duaRef)+'</p></section>';
-  var w=wirdOf(m),dn=dayNo(),ahead=dn>0&&m.p>=targetAt(dn);
-  return '<section class="card stack" style="--h:'+hue(me)+'">'+hello+
-    '<div><p class="big">'+(ahead?'أتممتَ وِرد اليوم':'وِردك اليوم')+'</p>'+
-    '<p class="num">'+(ahead?'وِرد الغد: ':'')+'ص '+w.a+'–'+w.b+' · '+pagesN(w.b-w.a+1)+' · '+esc(Q.names[suraAt(w.a)])+'</p></div>'+
-    '<button class="btn wide" data-act="wird">'+(ahead?'تقدَّم في وِرد الغد':'اقرأ وِرد اليوم')+'</button>'+
-    '<div class="bar"><i style="width:'+(m.p/LAST*100).toFixed(1)+'%"></i></div>'+
-    '<div class="next"><span class="sub num">قرأتَ '+m.p+' من '+LAST+' صفحة · الجزء '+juzOf(w.a)+'</span>'+pill(m)+'</div></section>';
+  if(!m)return '<section class="card stack"><h2 class="ctitle">من أنت؟</h2><p class="sub">'+(S.members.length?'اختر اسمك مرة واحدة، ويتذكرك هذا الجهاز بعدها.':(code?'أضف أفراد العائلة أولاً من «إدارة الختمة» في الأسفل.':'افتح رابط العائلة الذي وصلك لتنضم إلى الختمة. ويمكنك القراءة من المصحف الآن.'))+'</p><div class="chips">'+chips()+'</div></section>';
+  var hello='<div class="hi"><span>السلام عليكم يا <b>'+esc(m.name)+'</b></span><button class="lnk" data-act="me" data-v="">لستُ '+esc(m.name)+'؟</button></div>';
+  if(m.p>=LAST)return '<section class="hero">'+hello+'<div class="hmain">'+pring(m.p)+'<div class="htext"><span class="eyebrow">مبارك</span><p class="wtitle">ختمتَ القرآن كاملاً، الحمد لله</p></div></div><p class="ayah">'+esc(Q.dua)+'</p></section>';
+  var w=wirdOf(m),dn=dayNo(),ahead=dn>0&&m.p>=targetAt(dn),t=targetAt(dn-1),sc,st;
+  if(m.p<t){sc='#ffa38f';st='متأخر '+pagesN(t-m.p)+' عن الموعد'}
+  else if(ahead){sc='#9be3b5';st='أتممتَ وِرد اليوم، بارك الله فيك'}
+  else if(dn===0){sc='#e8c66f';st='تبدأ الختمة في '+esc(S.khatma.start)}
+  else{sc='#e8c66f';st='وِرد اليوم لم يُقرأ بعد'}
+  return '<section class="hero">'+hello+
+    '<div class="hmain">'+pring(m.p)+'<div class="htext"><span class="eyebrow">'+(ahead?'وِرد الغد':'وِرد اليوم · الجزء '+juzOf(w.a))+'</span>'+
+    '<p class="wtitle">'+esc(Q.names[suraAt(w.a)])+'</p><p class="range">الصفحات '+rng(w.a,w.b)+'</p></div></div>'+
+    '<button class="gbtn" data-act="wird">'+I('book')+(ahead?'تقدَّم في وِرد الغد':'اقرأ وِرد اليوم')+'</button>'+
+    '<div class="hbar"><i style="width:'+(m.p/LAST*100).toFixed(1)+'%"></i></div>'+
+    '<div class="hfoot"><span class="chipst" style="--c:'+sc+'">'+st+'</span><span class="num">'+m.p+' من '+LAST+' صفحة</span></div></section>';
 }
 function vQuick(){
-  return '<section class="form"><button class="btn ghost" data-act="open" data-v="idx">فهرس المصحف</button>'+
-    (pos&&pos.n?'<button class="btn ghost" data-act="resume">تابع من حيث توقفت</button>':'')+
-    (bm?'<button class="btn ghost num" data-act="goto" data-v="'+bm+'">علامتك: ص '+bm+'</button>':'')+'</section>';
+  return '<section class="qa"><button class="qt" data-act="open" data-v="idx"><span class="ic">'+I('list')+'</span><span>فهرس المصحف<small>السور والصفحات</small></span></button>'+
+    (pos&&pos.n?'<button class="qt" data-act="resume"><span class="ic">'+I('play')+'</span><span>تابع القراءة<small class="num">الجزء '+pos.n+'</small></span></button>':'')+
+    (bm?'<button class="qt" data-act="goto" data-v="'+bm+'"><span class="ic">'+I('mark')+'</span><span>علامتي<small class="num">الصفحة '+bm+'</small></span></button>':'')+'</section>';
 }
-function det(k,title,sub,body){
-  return '<details class="card" data-sec="'+k+'"'+(sec[k]?' open':'')+'><summary><span class="kname">'+title+'</span><span class="sub num">'+sub+'</span></summary><div class="stack dbody">'+body+'</div></details>';
+function det(k,icon,title,sub,body){
+  return '<details class="card" data-sec="'+k+'"'+(sec[k]?' open':'')+'><summary><span class="sic">'+I(icon)+'</span><span class="stt"><b>'+title+'</b><span class="num">'+sub+'</span></span></summary><div class="stack dbody">'+body+'</div></details>';
 }
 function vRace(){
   var list=S.members.slice().sort(function(a,b){return b.p-a.p}),K=S.khatma,M=S.members.length;
   var rows=list.map(function(m,i){
-    return '<div class="row" style="--h:'+hue(m.id)+'"><span class="rank num">'+(i+1)+'</span><i class="dot"></i><div class="grow"><span class="kname">'+esc(m.name)+'</span> <span class="sub num">ص '+m.p+'</span></div>'+pill(m)+
-      '<button class="btn sm quiet" data-act="open" data-v="mem:'+m.id+'" aria-label="خيارات '+esc(m.name)+'">خيارات</button>'+
-      '<div class="bar"><i style="width:'+(m.p/LAST*100).toFixed(1)+'%"></i></div></div>';
+    var s=stat(m);
+    return '<div class="row'+(i===0&&m.p?' lead':'')+'" style="--h:'+hue(m.id)+'"><span class="rank num">'+(i+1)+'</span>'+av(m)+
+      '<div class="who"><b>'+esc(m.name)+'<small class="num">ص '+m.p+'</small></b><div class="bar"><i style="width:'+(m.p/LAST*100).toFixed(1)+'%"></i></div></div>'+
+      '<span class="st '+s[0]+'">'+s[1]+'</span><button class="ib" data-act="open" data-v="mem:'+m.id+'" aria-label="خيارات '+esc(m.name)+'">'+I('more')+'</button></div>';
   }).join('');
   var lead=list.length&&list[0].p?'في المقدمة: '+esc(list[0].name):M+' أفراد';
-  return det('race','سباق العائلة',lead,'<div class="hero">'+ringSvg()+'<div class="herotext"><p class="sub num">قرأت العائلة '+total()+' من '+(LAST*M)+' صفحة</p><p class="sub num">اليوم '+dayNo()+' من '+K.days+' · الوِرد اليومي '+pagesN(daily())+'</p></div></div><div class="rows">'+(rows||'<p class="sub">لا أعضاء بعد.</p>')+'</div>');
+  return det('race','users','سباق العائلة',lead,'<div class="fam">'+ringSvg()+'<div class="stack"><span class="sub">ما أنجزته العائلة</span><span class="big2 num">'+total()+' من '+(LAST*M)+' صفحة</span><span class="sub num">اليوم '+dayNo()+' من '+K.days+' · الوِرد اليومي '+pagesN(daily())+'</span></div></div><div class="rows">'+(rows||'<p class="sub">لا أعضاء بعد.</p>')+'</div>');
 }
 function vJuz(){
   var m=mem(me),t='',nx=m?juzOf(Math.min(LAST,m.p+1)):0,dn=0;
   for(var n=1;n<=30;n++){var d=m&&m.p>=Q.meta[n-1][1];if(d)dn++;t+='<button class="tile num'+(d?' d':'')+(n===nx&&!d?' nx':'')+'" data-act="open" data-v="juz:'+n+'" aria-label="الجزء '+n+(d?'، مقروء':'')+'">'+n+'</button>'}
-  return det('juz','الأجزاء الثلاثون',m?'أتممتَ '+dn+' من 30':'افتح أي جزء','<div class="grid" style="--h:'+hue(me)+'">'+t+'</div>');
+  return det('juz','grid','الأجزاء الثلاثون',m?'أتممتَ '+dn+' من 30':'افتح أي جزء للقراءة','<div class="grid">'+t+'</div>');
 }
 function vAdmin(){
   var K=S.khatma;
-  return det('admin','إدارة الختمة',esc(K.name),'<p class="sub num">تبدأ <bdi dir="ltr">'+esc(K.start)+'</bdi> · '+K.days+' يوماً · لكل فرد ختمة كاملة</p>'+
+  return det('admin','cog','إدارة الختمة',esc(K.name),'<p class="sub num">تبدأ <bdi dir="ltr">'+esc(K.start)+'</bdi> · '+K.days+' يوماً · لكل فرد ختمة كاملة</p>'+
     '<form class="form" data-form="addm"><input id="newMember" maxlength="24" placeholder="اسم فرد جديد" aria-label="اسم فرد جديد" autocomplete="off"><button class="btn ghost" type="submit">أضف فرداً</button></form>'+
     '<button class="btn ghost" data-act="open" data-v="new">ختمة جديدة</button>'+
     '<button class="btn ghost num" data-act="dl"'+(dl>0?' disabled':'')+'>'+(dl===-1?'المصحف محفوظ للقراءة دون إنترنت':dl===-2?'تعذّر التحميل، أعد المحاولة':dl>0?'جارٍ التحميل '+Math.min(60,dl)+' من 60':'حمّل المصحف للقراءة دون إنترنت')+'</button>');
@@ -268,24 +399,24 @@ function vSheet(){
   var p=sheet.split(':'),k=p[0],a=p[1],h='',m,n;
   if(k==='juz'){
     n=+a;m=mem(me);var mt=Q.meta[n-1];
-    h='<h3>الجزء '+n+'</h3><p class="sub num">من '+esc(Q.names[mt[2]-1])+'، الآية '+mt[3]+' · ص '+mt[0]+'–'+mt[1]+'</p><button class="btn" data-act="read" data-v="'+n+'">اقرأ الجزء</button>'+
-      (m?'<button class="btn ghost num" data-act="setp" data-v="'+mt[1]+'">قرأتُ حتى نهاية هذا الجزء (ص '+mt[1]+')</button>':'');
+    h='<h3>الجزء '+n+'</h3><p class="sub num">يبدأ من '+esc(Q.names[mt[2]-1])+'، الآية '+mt[3]+' · الصفحات '+rng(mt[0],mt[1])+'</p><button class="btn" data-act="read" data-v="'+n+'">'+I('book')+'اقرأ الجزء</button>'+
+      (m?'<button class="btn ghost num" data-act="setp" data-v="'+mt[1]+'">قرأتُ حتى نهاية هذا الجزء</button>':'');
   }else if(k==='pg'){
     n=+a;m=mem(me);
-    h='<h3 class="num">الصفحة '+n+'</h3>'+(m?'<button class="btn num" data-act="setp" data-v="'+(n-1)+'">قرأتُ حتى هنا</button><p class="sub num">يُسجَّل أنك أتممتَ '+(n-1)+' صفحة، ويبدأ وِردك التالي من هذه الصفحة.</p>':'')+
-      '<button class="btn ghost" data-act="bm" data-v="'+n+'">ضع علامتي المرجعية هنا</button>';
+    h='<h3 class="num">الصفحة '+n+'</h3>'+(m?'<button class="btn num" data-act="setp" data-v="'+(n-1)+'">'+I('check')+'قرأتُ حتى هنا</button><p class="sub num">يُسجَّل أنك أتممتَ '+(n-1)+' صفحة، ويبدأ وِردك التالي من هذه الصفحة.</p>':'')+
+      '<button class="btn ghost" data-act="bm" data-v="'+n+'">'+I('mark')+'ضع علامتي هنا</button>';
   }else if(k==='idx'){
     h='<h3>فهرس المصحف</h3><form class="form" data-form="gopg"><input id="goPage" type="number" min="1" max="'+LAST+'" inputmode="numeric" placeholder="رقم الصفحة (1–'+LAST+')" aria-label="رقم الصفحة"><button class="btn" type="submit">اذهب</button></form><div class="sidx">'+
-      Q.names.map(function(nm,i){return '<button class="srow" data-act="sura" data-v="'+(i+1)+'"><span class="rank num">'+(i+1)+'</span><span class="grow">'+esc(nm)+'</span><span class="sub num">ص '+Q.si[i][1]+'</span></button>'}).join('')+'</div>';
+      Q.names.map(function(nm,i){return '<button class="srow" data-act="sura" data-v="'+(i+1)+'"><span class="n num"><span>'+(i+1)+'</span></span><span class="nm">'+esc(nm)+'</span><span class="sub num">ص '+Q.si[i][1]+'</span></button>'}).join('')+'</div>';
   }else if(k==='mem'){
     m=mem(a);
     h='<h3>'+esc(m.name)+'</h3><p class="sub num">قرأ '+m.p+' من '+LAST+' صفحة</p>'+
       (m.p<LAST?'<button class="btn" data-act="open" data-v="remind:'+a+'">أرسل له تذكيراً لطيفاً</button>':'')+
-      '<button class="btn ghost" data-act="open" data-v="ren:'+a+'">تعديل الاسم</button><button class="btn ghost" data-act="open" data-v="del:'+a+'">حذف من الختمة</button>';
+      '<button class="btn ghost" data-act="open" data-v="ren:'+a+'">تعديل الاسم</button><button class="btn quiet" data-act="open" data-v="del:'+a+'">حذف من الختمة</button>';
   }else if(k==='remind'){
     m=mem(a);var w=wirdOf(m);
     var msg='السلام عليكم يا '+m.name+'، تذكير طيّب بختمتك في «'+S.khatma.name+'»: قرأتَ '+m.p+' من '+LAST+' صفحة، ووِردك التالي من الصفحة '+w.a+' إلى '+w.b+'. يسّر الله لك وأعانك.';
-    h='<h3>تذكير لطيف</h3><p class="msg" id="msgText">'+esc(msg)+'</p><button class="btn" data-act="copy">'+(copied?'تمّ النسخ':'انسخ الرسالة')+'</button><p class="sub">الصقها في واتساب أو أي تطبيق مراسلة.</p>';
+    h='<h3>تذكير لطيف</h3><p class="msg" id="msgText">'+esc(msg)+'</p><button class="btn" data-act="copy">'+(copied?I('check')+'تمّ النسخ':'انسخ الرسالة')+'</button><p class="sub">الصقها في واتساب أو أي تطبيق مراسلة.</p>';
   }else if(k==='del'){
     m=mem(a);
     h='<h3>حذف '+esc(m.name)+'؟</h3><p class="sub">يُحذف من الختمة مع ما سجّله من قراءة.</p><button class="btn" data-act="delm" data-v="'+a+'">نعم، احذف</button>';
@@ -361,10 +492,10 @@ function tj(t,marks,color,key){
   return o;
 }
 function legend(){
-  var L=[['tg','غنّة'],['tk','إخفاء'],['ti','إقلاب'],['tx','مدغم لا يُنطق'],['tq','قلقلة'],['tm','مدّ مُشبَع'],['tl','لام مغلّظة']];
-  return '<div class="card leg">'+(tjOn?L.map(function(x){return '<span class="k '+x[0]+'">'+x[1]+'</span>'}).join(''):'<span>ألوان التجويد مخفية</span>')+
-    '<button class="btn sm quiet" data-act="tj">'+(tjOn?'إخفاء الألوان':'إظهار الألوان')+'</button>'+
-    '<span class="w">اضغط الكلمة التي تحتها نقط ليظهر معناها، واضغط رقم الصفحة لتسجّل أين وصلت.</span></div>';
+  if(!tjOn)return '';
+  var L=[['tg','غنّة'],['tk','إخفاء'],['ti','إقلاب'],['tx','مدغم'],['tq','قلقلة'],['tm','مدّ مُشبَع'],['tl','لام مغلّظة']];
+  return '<div class="leg">'+L.map(function(x){return '<span class="k '+x[0]+'">'+x[1]+'</span>'}).join('')+
+    '<span class="w">اضغط الكلمة المنقوطة ليظهر معناها، ورقم الصفحة لتسجّل أين وصلت.</span></div>';
 }
 function vReader(){
   var n=reading,d=JD[n],m=mem(me),body;
@@ -374,28 +505,34 @@ function vReader(){
     d.forEach(function(a,i){
       if(a[1]===1||i===0){
         if(open){out+='</p>';open=false}
-        if(a[1]===1){out+='<div class="sura" id="s'+a[0]+'">'+esc(Q.names[a[0]-1])+'</div>';if(a[0]!==9)out+='<p class="bsm">'+esc(Q.bsm)+'</p>'}
-        else out+='<p class="cont">تتمة '+esc(Q.names[a[0]-1])+'</p>';
+        if(a[1]===1){out+='<div class="sura" id="s'+a[0]+'">سورة '+esc(Q.names[a[0]-1])+'</div>';if(a[0]!==9)out+='<p class="bsm">'+esc(Q.bsm)+'</p>'}
+        else out+='<p class="cont">تتمة سورة '+esc(Q.names[a[0]-1])+'</p>';
       }
       if(!open){out+='<p class="q">';open=true}
-      if(a[3]!==page){page=a[3];out+='<span class="pgm num" id="p'+page+'" data-act="open" data-v="pg:'+page+'">ص '+page+'</span>'}
+      if(a[3]!==page){page=a[3];out+='<span class="pgm num" id="p'+page+'" data-act="open" data-v="pg:'+page+'">'+page+'</span>'}
       out+=tj(a[2],MD[n]&&MD[n][i],tjOn,i)+' ';
     });
     if(open)out+='</p>';
-    body=out+'<div class="stack">'+
-      (m&&m.p<Q.meta[n-1][1]?'<button class="btn num" data-act="finish" data-v="'+n+'">أتممتُ الجزء '+n+' كاملاً</button>':'')+
-      (n<30?'<button class="btn ghost" data-act="read" data-v="'+(n+1)+'">الجزء التالي</button>':'')+
-      '<p class="src">رواية ورش عن نافع · نص مجمع الملك فهد لطباعة المصحف الشريف</p><p class="src">معاني الكلمات: «السراج في بيان غريب القرآن» لمحمد بن عبد العزيز الخضيري · عن الموسوعة القرآنية quranpedia.net</p></div>';
+    body='<div class="page">'+out+'</div><div class="rend">'+
+      (m&&m.p<Q.meta[n-1][1]?'<button class="btn ghost num" data-act="finish" data-v="'+n+'">'+I('check')+'أتممتُ الجزء '+n+' كاملاً</button>':'')+
+      (n<30?'<button class="btn quiet" data-act="read" data-v="'+(n+1)+'">الجزء التالي</button>':'')+
+      '<p class="src">رواية ورش عن نافع · نص مجمع الملك فهد لطباعة المصحف الشريف<br>معاني الكلمات: «السراج في بيان غريب القرآن» لمحمد بن عبد العزيز الخضيري · عن الموسوعة القرآنية quranpedia.net</p></div>';
   }
   var wb='';
-  if(d&&m&&m.p<LAST){var w=wirdOf(m);wb='<div class="wbar"><div><span class="num">وِردك: ص '+w.a+'–'+w.b+'</span><button class="btn sm num" data-act="setp" data-v="'+w.b+'">أتممتُه</button></div></div>'}
-  return '<div class="rbar"><div><button class="btn sm quiet" data-act="back">رجوع</button><span class="t num">الجزء '+n+'</span><button class="btn sm quiet" data-act="open" data-v="idx">فهرس</button><button class="btn sm quiet" data-act="fs" data-v="-2" aria-label="تصغير الخط">أ−</button><button class="btn sm quiet" data-act="fs" data-v="2" aria-label="تكبير الخط">أ+</button></div></div><div class="read" style="--fs:'+fs+'px">'+(d?legend():'')+body+'</div>'+wb;
+  if(d&&m&&m.p<LAST){var w=wirdOf(m);wb='<div class="wbar"><div><span><small>وِردك</small><b>الصفحات '+rng(w.a,w.b)+'</b></span><button class="gbtn" data-act="setp" data-v="'+w.b+'">'+I('check')+'أتممتُه</button></div></div>'}
+  return '<div class="rbar"><div><button class="ib" data-act="back" aria-label="رجوع">'+I('back')+'</button><span class="t num">الجزء '+n+'</span>'+
+    '<button class="ib'+(tjOn?' on':'')+'" data-act="tj" aria-label="'+(tjOn?'إخفاء ألوان التجويد':'إظهار ألوان التجويد')+'">'+I('pal')+'</button>'+
+    '<button class="ib" data-act="open" data-v="idx" aria-label="فهرس المصحف">'+I('list')+'</button>'+
+    '<button class="ib fsz" data-act="fs" data-v="-2" aria-label="تصغير الخط">أ−</button><button class="ib fsz" data-act="fs" data-v="2" aria-label="تكبير الخط">أ+</button></div></div>'+
+    '<div class="read" style="--fs:'+fs+'px">'+(d?legend():'')+body+'</div>'+wb;
 }
 function render(){
   if(reading){var y0=window.scrollY;root.innerHTML=vReader()+vSheet();window.scrollTo(0,y0);return}
-  root.innerHTML='<div class="wrap"><header class="top"><h1>ختمة العائلة</h1><div class="kmeta">'+esc(S.khatma.name)+'</div></header>'+
+  var h=hijri();
+  root.innerHTML='<div class="wrap"><header class="top"><div class="brand">'+STAR+'<div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
+    '<div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div></header>'+
     vWird()+vQuick()+vRace()+vJuz()+vAdmin()+
-    '<p class="foot">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 function land(){
   var t=want,el=null,g;
