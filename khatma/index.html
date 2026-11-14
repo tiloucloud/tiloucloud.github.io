@@ -727,7 +727,7 @@ function syncSubMember(){
 function fbUrl(id){return CFG.db.replace(/\/+$/,'')+'/k/'+code+'/fb'+(id?'/'+id:'')+'.json'}
 function vBeta(){
   if(noBeta)return '';
-  return '<section class="beta"><span class="btag">نسخة تجريبية</span><p>التطبيق ما زال في طور التجربة. إن واجهتك مشكلة أو خطرت لك فكرة لتحسينه، فأرسلها لنا من هنا، جزاك الله خيراً.</p>'+
+  return '<section class="beta"><span class="btag">لملاحظاتكم واقتراحاتكم</span><p>التطبيق ما زال في طور التجربة. إن واجهتك مشكلة أو خطرت لك فكرة لتحسينه، فأرسلها لنا من هنا، جزاك الله خيراً.</p>'+
     '<div class="mact"><button class="btn sm" data-act="open" data-v="fb">أرسل ملاحظة أو خطأ</button><button class="btn sm quiet" data-act="nobeta">فهمت</button></div></section>';
 }
 function sendFb(){
@@ -745,7 +745,7 @@ function loadFb(){
 }
 function vInstall(){
   if(isSA||noInst)return '';
-  return '<section class="inst"><span class="ic">'+STAR+'</span><span class="itx"><b>ثبّت التطبيق</b><small>افتحه بلمسة من شاشتك الرئيسية</small></span>'+
+  return '<section class="inst"><img class="appic" src="icon2-192.png" alt=""><span class="itx"><b>ثبّت التطبيق</b><small>افتحه بلمسة من شاشتك الرئيسية</small></span>'+
     '<button class="btn sm" data-act="install">'+I('dl')+'ثبّت</button><button class="ib x" data-act="noinst" aria-label="إخفاء">×</button></section>';
 }
 function vJoin(){
@@ -1049,8 +1049,8 @@ function render(){
   var h=hijri();
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة <span class="beta-pill">تجريبي</span></h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+
-    (code?vWird():vJoin())+vBeta()+vNotif()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 18</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
+    (code?vWird():vJoin())+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta()+
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 19</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
