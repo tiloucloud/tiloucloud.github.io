@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>ختمة العائلة</title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ختمة العائلة"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="theme-color" content="#0a3b31"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" sizes="32x32" href="favicon2-32.png"><link rel="icon" type="image/png" sizes="192x192" href="icon2-192.png"><link rel="apple-touch-icon" sizes="180x180" href="icon2-180.png"><meta name="robots" content="noindex"><style>@font-face{font-family:'Reem Kufi';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/reem-kufi-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* Phone showing the page as a desktop site (Chrome "Desktop site"): the page is laid out ~980px wide and shrunk, so scale it back up to fill the screen. */
+(function(){function fit(){var d=document.documentElement,sw=Math.min(screen.width,screen.height),lw=window.innerWidth;if(screen.width>screen.height)sw=Math.max(screen.width,screen.height);var z=(matchMedia('(pointer:coarse)').matches&&sw>0&&lw>sw*1.2)?lw/sw:1;d.style.zoom=z>1?z.toFixed(3):''}fit();addEventListener('resize',fit);addEventListener('orientationchange',function(){setTimeout(fit,300)})})();</script><title>ختمة العائلة</title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ختمة العائلة"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="theme-color" content="#0a3b31"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" sizes="32x32" href="favicon2-32.png"><link rel="icon" type="image/png" sizes="192x192" href="icon2-192.png"><link rel="apple-touch-icon" sizes="180x180" href="icon2-180.png"><meta name="robots" content="noindex"><style>@font-face{font-family:'Reem Kufi';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/reem-kufi-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
 @font-face{font-family:'Reem Kufi';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/reem-kufi-latin-600.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Reem Kufi';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/reem-kufi-arabic-700.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
 @font-face{font-family:'Reem Kufi';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/reem-kufi-latin-700.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -1005,7 +1006,15 @@ function fillPage(p,force){
 function refill(force){if(!reading)return;for(var d=-2;d<=2;d++)fillPage(reading+d,force)}
 function scroller(){return document.getElementById('pgs')}
 function curFromScroll(){var sc=scroller();if(!sc)return reading;return Math.max(1,Math.min(LAST,Math.round(Math.abs(sc.scrollLeft)/sc.clientWidth)+1))}
-function jumpTo(p){var el=document.getElementById('pg'+p),sc=scroller();if(!el||!sc)return;sc.style.scrollBehavior='auto';sc.scrollLeft=-(p-1)*sc.clientWidth;if(Math.abs(Math.abs(sc.scrollLeft)-(p-1)*sc.clientWidth)>2)sc.scrollLeft=(p-1)*sc.clientWidth;sc.style.scrollBehavior=''}
+function setLeft(sc,p){sc.scrollLeft=-(p-1)*sc.clientWidth;if(Math.abs(Math.abs(sc.scrollLeft)-(p-1)*sc.clientWidth)>2)sc.scrollLeft=(p-1)*sc.clientWidth}
+var want=0,wantT=0;
+function jumpTo(p){var el=document.getElementById('pg'+p),sc=scroller();if(!el||!sc)return;
+  // Turn snapping off while jumping: on phones the browser otherwise snaps a new reader back to page 1.
+  sc.style.scrollBehavior='auto';sc.style.scrollSnapType='none';setLeft(sc,p);
+  want=p;wantT=Date.now()+1800;
+  requestAnimationFrame(function(){if(scroller()!==sc)return;if(curFromScroll()!==p)setLeft(sc,p);sc.style.scrollSnapType='';sc.style.scrollBehavior=''});
+  setTimeout(function(){if(scroller()===sc&&want===p&&Date.now()<wantT&&curFromScroll()!==p)setLeft(sc,p)},350);
+}
 function savePos(){pos={pg:reading};try{localStorage.setItem('kf_pos',JSON.stringify(pos))}catch(e){}}
 function barsHTML(){
   var p=reading,m=mem(me),top='<div class="rbar"><div><button class="ib" data-act="back" aria-label="رجوع">'+I('back')+'</button><span class="t"><b>'+esc(Q.names[pageSura(p)])+'</b><small class="num">ص '+p+' · الجزء '+juzOf(p)+'</small></span>'+
@@ -1027,19 +1036,20 @@ function readerShell(){
 }
 function onPgScroll(){
   var c=curFromScroll();
+  if(want&&Date.now()<wantT&&c!==want){var sc=scroller();if(sc)setLeft(sc,want);return}
   if(c!==reading){reading=c;updateBars();refill()}
   clearTimeout(scT);scT=setTimeout(function(){if(reading){savePos();refill()}},150);
 }
 function goPage(pg,ay){
   pg=Math.max(1,Math.min(LAST,+pg||1));
   var fresh=!reading;reading=pg;sheet=null;
-  if(fresh||!scroller()){root.innerHTML=readerShell();scroller().addEventListener('scroll',onPgScroll,{passive:true});scroller().addEventListener('scroll',function(e){var t=e.target;if(t.classList&&t.classList.contains('pbody'))markOvf(t.closest('.pg'))},{passive:true,capture:true});document.body.classList.add('reading')}
+  if(fresh||!scroller()){root.innerHTML=readerShell();scroller().addEventListener('scroll',onPgScroll,{passive:true});['touchstart','pointerdown','wheel'].forEach(function(ev){scroller().addEventListener(ev,function(){wantT=0},{passive:true})});scroller().addEventListener('scroll',function(e){var t=e.target;if(t.classList&&t.classList.contains('pbody'))markOvf(t.closest('.pg'))},{passive:true,capture:true});document.body.classList.add('reading')}
   else{updateBars();document.getElementById('shost').innerHTML=''}
   jumpTo(pg);refill();savePos();
   if(ay)showAyah(ay,0);
 }
 function showAyah(id,k){var el=document.getElementById('a'+id);if(!el){if(k<20)setTimeout(function(){showAyah(id,k+1)},150);return}var b=el.closest('.pbody');if(b){var r=el.getBoundingClientRect(),rb=b.getBoundingClientRect();b.scrollTop+=r.top-rb.top-rb.height/3}el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}
-function closeReader(){reading=0;sheet=null;filledSig={};document.body.classList.remove('reading');render();window.scrollTo(0,0)}
+function closeReader(){reading=0;want=0;wantT=0;sheet=null;filledSig={};document.body.classList.remove('reading');render();window.scrollTo(0,0)}
 window.addEventListener('resize',function(){if(reading){var p=reading;filledSig={};jumpTo(p);refill(true)}});
 document.addEventListener('keydown',function(e){if(!reading||sheet)return;if(e.key==='ArrowLeft')goPage(reading+1);else if(e.key==='ArrowRight')goPage(reading-1)});
 function render(){
@@ -1050,7 +1060,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+
     (code?vWird():vJoin())+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta()+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 21</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 22</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});

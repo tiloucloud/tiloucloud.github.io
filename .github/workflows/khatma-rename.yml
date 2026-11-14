@@ -1,0 +1,19 @@
+name: Khatma rename (one-off)
+on:
+  push:
+    paths: ['khatma-push/rename-request.txt']
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Rename
+        working-directory: khatma-push
+        env:
+          DB: https://khatma-16d1b-default-rtdb.firebaseio.com
+          KHATMA_CODE: ${{ secrets.KHATMA_CODE }}
+          NAME: ختمتنا العائلية
+        run: node rename.js
