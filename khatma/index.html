@@ -727,7 +727,7 @@ function syncSubMember(){
 function fbUrl(id){return CFG.db.replace(/\/+$/,'')+'/k/'+code+'/fb'+(id?'/'+id:'')+'.json'}
 function vBeta(){
   if(noBeta)return '';
-  return '<section class="beta"><span class="btag">لملاحظاتكم واقتراحاتكم</span><p>التطبيق ما زال في طور التجربة. إن واجهتك مشكلة أو خطرت لك فكرة لتحسينه، فأرسلها لنا من هنا، جزاك الله خيراً.</p>'+
+  return '<section class="beta"><span class="btag">لملاحظاتكم واقتراحاتكم</span><p>يسعدنا أن نسمع منكم: إن واجهتكم مشكلة في التطبيق، أو خطرت لكم فكرة لتحسينه، فأرسلوها من هنا، جزاكم الله خيراً.</p>'+
     '<div class="mact"><button class="btn sm" data-act="open" data-v="fb">أرسل ملاحظة أو خطأ</button><button class="btn sm quiet" data-act="nobeta">فهمت</button></div></section>';
 }
 function sendFb(){
