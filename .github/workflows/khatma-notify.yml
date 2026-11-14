@@ -2,8 +2,8 @@ name: Khatma notifications
 
 on:
   schedule:
-    - cron: '0 7 * * *'   # morning message, 07:00 UTC
-    - cron: '0 19 * * *'  # evening reminder, 19:00 UTC
+    - cron: '41 6 * * *'   # morning message, ~06:41 UTC (off the busy top of the hour)
+    - cron: '37 18 * * *'  # evening reminder, ~18:37 UTC
   workflow_dispatch:
     inputs:
       slot:
@@ -15,10 +15,10 @@ jobs:
   send:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
       - name: Install
         working-directory: khatma-push
         run: npm install --no-audit --no-fund
@@ -30,5 +30,5 @@ jobs:
           VAPID_PUBLIC: BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc
           VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
           KHATMA_CODE: ${{ secrets.KHATMA_CODE }}
-          SLOT: ${{ github.event.inputs.slot || (github.event.schedule == '0 7 * * *' && 'am' || 'pm') }}
+          SLOT: ${{ github.event.inputs.slot || (github.event.schedule == '41 6 * * *' && 'am' || 'pm') }}
         run: node send.js

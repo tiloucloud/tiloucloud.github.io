@@ -75,6 +75,10 @@ async function main() {
     data = await r.json();
   }
   if (!data || !data.khatma) { console.log('No khatma found for this code.'); return; }
+  const h = now.getUTCHours();
+  if (!process.env.FORCE && ((slot === 'am' && h >= 12) || (slot === 'pm' && (h >= 22 || h < 12)))) {
+    console.log(`slot=${slot} started too late (${h}:00 UTC); skipping so nobody is woken up.`); return;
+  }
   const { dn, out } = buildMessages(data, msgs, slot, now);
   console.log(`slot=${slot} day=${dn} subscriptions=${Object.keys(data.subs || {}).length} to_send=${out.length}`);
   if (DRY) { for (const o of out) console.log('---', o.id, '\n' + o.payload.title + '\n' + o.payload.body); return; }
