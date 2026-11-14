@@ -937,7 +937,7 @@ function loadMean(n){
 }
 function indexJuz(n){JD[n].forEach(function(a,i){(PGI[a[3]]=PGI[a[3]]||[]).push([n,i]);WC[a[3]]=(WC[a[3]]||0)+a[2].split(/[ \u00A0]+/).length})}
 var WC={},DW={},END={},VER=null,VKEY='';
-function vkey(){return 'kf_rd_'+S.khatma.start+'_'+(me||'')}
+function vkey(){return 'kf_rd_'+S.khatma.start+'_'+(S.khatma.r||0)+'_'+(me||'')}
 function ver(){var k=vkey();if(VKEY!==k){VKEY=k;DW={};END={};try{VER=localStorage.getItem(k)||''}catch(e){VER=''}if(VER.length!==LAST)VER=new Array(LAST+1).join('0')}return VER}
 function isRead(p){return ver().charAt(p-1)==='1'}
 function setRead(p){var v=ver();VER=v.substr(0,p-1)+'1'+v.substr(p);try{localStorage.setItem(VKEY,VER)}catch(e){}}
@@ -1050,7 +1050,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة <span class="beta-pill">تجريبي</span></h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+
     (code?vWird():vJoin())+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta()+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 19</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 20</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});

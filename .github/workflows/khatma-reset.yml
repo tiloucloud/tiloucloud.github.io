@@ -1,0 +1,20 @@
+name: Khatma reset progress
+on:
+  push:
+    branches: [main]
+    paths: ['khatma-push/reset-request.txt']
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Reset
+        working-directory: khatma-push
+        env:
+          DB: https://khatma-16d1b-default-rtdb.firebaseio.com
+          KHATMA_CODE: ${{ secrets.KHATMA_CODE }}
+          START: '2026-11-14'
+        run: node reset.js
