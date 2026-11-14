@@ -295,8 +295,8 @@ details.card>summary::after{border-color:var(--gold-l)}
 a.btn{text-decoration:none}
 
 /* welcome screen */
-.wel{min-height:100vh;min-height:100dvh;display:flex;justify-content:center;background:var(--em-bg);color:#f3eedd;padding:calc(24px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom))}
-.wel-in{width:100%;max-width:520px;display:flex;flex-direction:column;gap:18px}
+.wel{height:100vh;height:100dvh;display:flex;justify-content:center;background:var(--em-bg);color:#f3eedd;padding:calc(24px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom))}
+.wel-in{width:100%;max-width:520px;max-height:100%;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:14px}
 .wel-top{text-align:center;display:grid;justify-items:center;gap:4px}
 .wel-star svg{width:76px;height:76px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.35))}
 .wel-star rect{fill:#e8c66f}.wel-star circle{stroke:#0a3b31}.wel-star circle:last-child{fill:#0a3b31}
@@ -304,8 +304,9 @@ a.btn{text-decoration:none}
 .wel-top p{color:rgba(243,238,221,.8)}
 .wel-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 .wel-meta span{padding:4px 12px;border-radius:99px;border:1px solid rgba(232,198,111,.4);font-size:13px;font-weight:600}
-.wel-msg{flex:1;white-space:pre-line;font-size:16px;line-height:1.95;padding:18px 18px;border-radius:20px;background:rgba(255,253,247,.96);color:#1c2a24;box-shadow:inset 0 0 0 4px rgba(255,253,247,.96),inset 0 0 0 5px #e1cf9c,0 14px 30px -18px rgba(0,0,0,.6);overflow-wrap:anywhere}
-.wel-go{min-height:58px;font-size:18px}
+.wel-msg{flex:0 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;white-space:pre-line;font-size:16px;line-height:1.95;padding:18px 18px;border-radius:20px;background:rgba(255,253,247,.96);color:#1c2a24;box-shadow:inset 0 0 0 4px rgba(255,253,247,.96),inset 0 0 0 5px #e1cf9c,0 14px 30px -18px rgba(0,0,0,.6);overflow-wrap:anywhere}
+.wel-go{flex:none;min-height:58px;font-size:18px}
+.wel-top,.wel-meta{flex:none}
 /* done celebration */
 .celeb{padding-top:0}
 .celeb-top{margin:0 -18px;padding:30px 18px 18px;background:var(--em-bg);text-align:center;display:grid;justify-items:center;gap:4px;border-bottom:2px solid var(--gold-soft)}
@@ -1060,7 +1061,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+
     (code?vWird():vJoin())+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta()+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 22</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 23</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
