@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId 'com.tiloucloud.khatma'
-        minSdk 21
+        minSdk 24
         targetSdk 36
         versionCode buildNumber
         versionName "1.0.${buildNumber}"
