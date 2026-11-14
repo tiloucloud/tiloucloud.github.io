@@ -36,11 +36,12 @@ jobs:
           KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
           if [ -z "$KS_B64" ] || [ -z "$KS_PASS" ]; then
-            echo "::error::Add the ANDROID_KEYSTORE_B64 and ANDROID_KEYSTORE_PASSWORD repository secrets first."
-            exit 1
+            echo "::warning::Signing secrets are missing: building an unsigned test build only."
+            echo "UNSIGNED=1" >> "$GITHUB_ENV"
+          else
+            echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+            echo "KS_PATH=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
           fi
-          echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
-          echo "KS_PATH=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
 
       - name: Build
         working-directory: khatma-android
@@ -50,9 +51,17 @@ jobs:
         run: gradle --no-daemon bundleRelease assembleRelease
 
       - name: Check signature
+        if: env.UNSIGNED != '1'
         run: |
           APK=$(ls khatma-android/app/build/outputs/apk/release/*.apk | head -1)
           "$ANDROID_HOME"/build-tools/$(ls "$ANDROID_HOME"/build-tools | sort -V | tail -1)/apksigner verify --print-certs "$APK" | grep -i "SHA-256"
+
+      - name: Stop here without signing keys
+        if: env.UNSIGNED == '1'
+        run: |
+          ls -la khatma-android/app/build/outputs/bundle/release/ khatma-android/app/build/outputs/apk/release/
+          echo "::error::The project builds. Add the ANDROID_KEYSTORE_B64 and ANDROID_KEYSTORE_PASSWORD secrets to get a signed app."
+          exit 1
 
       - name: Publish files to the site
         run: |
