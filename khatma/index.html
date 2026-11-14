@@ -792,7 +792,7 @@ function vSheet(){
       '';
   }else if(k==='pg'){
     n=+a;m=mem(me);
-    h='<h3 class="num">الصفحة '+n+'</h3>'+(m?'<p class="msg num">'+(isRead(n)?'قُرئت هذه الصفحة واحتُسبت لك.':'تُحتسب الصفحة حين تبقى عليها مدة تكفي لقراءتها'+(WC[n]?' (نحو '+need(n)+' ثانية)':'')+'، وتصل إلى آخرها.')+'</p>':'')+
+    h='<h3 class="num">الصفحة '+n+'</h3>'+(m?'<p class="msg num">'+(isRead(n)?'قُرئت هذه الصفحة واحتُسبت لك.':'تُحتسب الصفحة حين تبقى عليها مدة تكفي لقراءتها'+(WC[n]?' (نحو '+dur(need(n))+')':'')+'، وتصل إلى آخرها.')+'</p>':'')+
       '<button class="btn ghost" data-act="bm" data-v="'+n+'">'+I('mark')+'ضع علامتي على هذه الصفحة</button><p class="sub">ولتحديد آية بعينها، اضغط رقمها في آخرها.</p>';
   }else if(k==='ay'){
     var an=+a,ai=+p[2],ar=JD[an]&&JD[an][ai];
@@ -941,7 +941,9 @@ function vkey(){return 'kf_rd_'+S.khatma.start+'_'+(me||'')}
 function ver(){var k=vkey();if(VKEY!==k){VKEY=k;DW={};END={};try{VER=localStorage.getItem(k)||''}catch(e){VER=''}if(VER.length!==LAST)VER=new Array(LAST+1).join('0')}return VER}
 function isRead(p){return ver().charAt(p-1)==='1'}
 function setRead(p){var v=ver();VER=v.substr(0,p-1)+'1'+v.substr(p);try{localStorage.setItem(VKEY,VER)}catch(e){}}
-function need(p){return WC[p]?Math.max(15,Math.round(WC[p]*0.3)):9999}
+// about 0.63 s per word: a typical 142-word page takes ~1 min 30 s, as measured by a real reader
+function need(p){return WC[p]?Math.max(20,Math.round(WC[p]*0.63)):9999}
+function dur(s){var m=Math.floor(s/60),r=s%60;return m?(m===1?'دقيقة':m===2?'دقيقتان':m+' دقائق')+(r?' و'+r+' ثانية':''):s+' ثانية'}
 function pct(p){return isRead(p)?100:Math.min(99,Math.floor((DW[p]||0)/need(p)*100))}
 function advance(){var m=mem(me);if(!m)return;var q=m.p;while(q<LAST&&isRead(q+1))q++;if(q>m.p){m.p=q;dropStaleBm();save()}}
 function paintNum(p){var b=document.querySelector('#pg'+p+' .pnum');if(!b)return;var r=isRead(p);b.classList.toggle('done',r);b.style.setProperty('--pr',pct(p)+'%');b.setAttribute('aria-label','الصفحة '+p+(r?'، قُرئت':''))}
@@ -1048,7 +1050,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="app-icon-192.png" alt=""><div><h1>ختمة العائلة <span class="beta-pill">تجريبي</span></h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+
     (code?vWird():vJoin())+vBeta()+vNotif()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 16</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 17</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'لم يُربط هذا الهاتف بختمة العائلة بعد. افتح الرابط الذي وصلك.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
