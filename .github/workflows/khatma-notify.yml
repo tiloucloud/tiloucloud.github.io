@@ -30,5 +30,6 @@ jobs:
           VAPID_PUBLIC: BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc
           VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
           KHATMA_CODE: ${{ secrets.KHATMA_CODE }}
+          DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
           SLOT: ${{ github.event.inputs.slot || (github.event.schedule == '41 6 * * *' && 'am' || 'pm') }}
         run: node send.js

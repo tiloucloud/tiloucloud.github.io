@@ -63,40 +63,59 @@ function buildMessages(data, msgs, slot, now) {
   return { dn, out };
 }
 
+// Every khatma that turned on notifications registers itself under /pidx.
+// That list is private (rules deny reads), so it is read with the database
+// secret when one is configured; without it only KHATMA_CODE is served.
+async function listCodes() {
+  const codes = new Set(CODE ? [CODE] : []);
+  const SECRET = process.env.DB_SECRET || '';
+  if (SECRET) {
+    const r = await fetch(DB + '/pidx.json?shallow=true&auth=' + encodeURIComponent(SECRET));
+    if (r.ok) Object.keys((await r.json()) || {}).forEach((c) => codes.add(c));
+    else console.log('could not list registered khatmas:', r.status);
+  }
+  return [...codes].filter((c) => /^[A-Za-z0-9_-]{12,64}$/.test(c));
+}
+
 async function main() {
   const msgs = JSON.parse(fs.readFileSync(path.join(__dirname, 'msgs.json'), 'utf8'));
   const slot = slotNow(), now = new Date();
-  let data;
-  if (process.env.DATA_FILE) data = JSON.parse(fs.readFileSync(process.env.DATA_FILE, 'utf8'));
-  else {
-    if (!DB || !CODE) throw new Error('DB and KHATMA_CODE are required');
-    const r = await fetch(DB + '/k/' + CODE + '.json');
-    if (!r.ok) throw new Error('Firebase read failed: ' + r.status);
-    data = await r.json();
-  }
-  if (!data || !data.khatma) { console.log('No khatma found for this code.'); return; }
   const h = now.getUTCHours();
   if (!process.env.FORCE && ((slot === 'am' && h >= 12) || (slot === 'pm' && (h >= 22 || h < 12)))) {
     console.log(`slot=${slot} started too late (${h}:00 UTC); skipping so nobody is woken up.`); return;
   }
-  const { dn, out } = buildMessages(data, msgs, slot, now);
-  console.log(`slot=${slot} day=${dn} subscriptions=${Object.keys(data.subs || {}).length} to_send=${out.length}`);
-  if (DRY) { for (const o of out) console.log('---', o.id, '\n' + o.payload.title + '\n' + o.payload.body); return; }
-  if (!PRIV || !PUB) throw new Error('VAPID keys are required');
-  webpush.setVapidDetails(SITE, PUB, PRIV);
-  let sent = 0, gone = 0, failed = 0;
-  for (const o of out) {
-    try {
-      await webpush.sendNotification(o.sub, JSON.stringify(o.payload), { TTL: 6 * 3600 });
-      sent++;
-    } catch (e) {
-      if (e.statusCode === 404 || e.statusCode === 410) {
-        gone++;
-        await fetch(DB + '/k/' + CODE + '/subs/' + o.id + '.json', { method: 'DELETE' }).catch(() => {});
-      } else { failed++; console.log('send failed', o.id, e.statusCode || e.message); }
+  let jobs;
+  if (process.env.DATA_FILE) jobs = [{ code: CODE || 'file', data: JSON.parse(fs.readFileSync(process.env.DATA_FILE, 'utf8')) }];
+  else {
+    if (!DB) throw new Error('DB is required');
+    jobs = [];
+    for (const c of await listCodes()) {
+      const r = await fetch(DB + '/k/' + c + '.json');
+      if (!r.ok) { console.log('read failed for one khatma:', r.status); continue; }
+      jobs.push({ code: c, data: await r.json() });
     }
   }
-  console.log(`sent=${sent} removed_expired=${gone} failed=${failed}`);
+  if (!DRY) { if (!PRIV || !PUB) throw new Error('VAPID keys are required'); webpush.setVapidDetails(SITE, PUB, PRIV); }
+  let sent = 0, gone = 0, failed = 0, fams = 0;
+  for (const { code, data } of jobs) {
+    if (!data || !data.khatma) continue;
+    const { dn, out } = buildMessages(data, msgs, slot, now);
+    fams++;
+    console.log(`khatma #${fams}: slot=${slot} day=${dn} subscriptions=${Object.keys(data.subs || {}).length} to_send=${out.length}`);
+    if (DRY) { for (const o of out) console.log('---', o.id, '\n' + o.payload.title + '\n' + o.payload.body); continue; }
+    for (const o of out) {
+      try {
+        await webpush.sendNotification(o.sub, JSON.stringify(o.payload), { TTL: 6 * 3600 });
+        sent++;
+      } catch (e) {
+        if (e.statusCode === 404 || e.statusCode === 410) {
+          gone++;
+          await fetch(DB + '/k/' + code + '/subs/' + o.id + '.json', { method: 'DELETE' }).catch(() => {});
+        } else { failed++; console.log('send failed', o.id, e.statusCode || e.message); }
+      }
+    }
+  }
+  console.log(`khatmas=${fams} sent=${sent} removed_expired=${gone} failed=${failed}`);
 }
 
 if (require.main === module) main().catch((e) => { console.error(e.message); process.exit(1); });
