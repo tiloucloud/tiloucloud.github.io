@@ -10,6 +10,10 @@ on:
         description: 'am = morning message, pm = evening reminder'
         required: true
         default: 'am'
+      dry:
+        description: 'yes = only print what would be sent'
+        required: false
+        default: 'no'
 
 jobs:
   send:
@@ -32,4 +36,5 @@ jobs:
           KHATMA_CODE: ${{ secrets.KHATMA_CODE }}
           DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
           SLOT: ${{ github.event.inputs.slot || (github.event.schedule == '41 6 * * *' && 'am' || 'pm') }}
+          DRY_RUN: ${{ github.event.inputs.dry == 'yes' && '1' || '' }}
         run: node send.js
