@@ -511,6 +511,21 @@ html.big .msrc{font-size:15px}
 .wbar .wq{padding:0;width:38px}
 .wbar b{font-size:clamp(13.5px,4.1vw,16px)}
 html.big .wbar b{white-space:normal;line-height:1.35}
+/* intro video card + player */
+.wel-vid{flex:none;display:flex;align-items:center;gap:14px;width:100%;padding:10px;border-radius:20px;border:1.5px solid rgba(232,198,111,.55);background:rgba(255,255,255,.08);color:#f3eedd;text-align:right;cursor:pointer;font:inherit}
+.wv-th{position:relative;flex:none;width:58px;height:92px;border-radius:12px;overflow:hidden;box-shadow:0 6px 14px -6px rgba(0,0,0,.6)}
+.wv-th img{width:100%;height:100%;object-fit:cover;display:block}
+.wv-th i{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-size:22px;color:#2a1d00;background:radial-gradient(circle,rgba(240,211,132,.95) 0 17px,transparent 18px)}
+.wv-tx b{display:block;font-size:17px;color:var(--gold-l)}
+.wv-tx small{font-size:13px;opacity:.8}
+html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
+.vov{position:fixed;inset:0;z-index:50;background:#03140f;display:flex;flex-direction:column}
+.vov video{flex:1 1 auto;min-height:0;width:100%;object-fit:contain;background:#03140f}
+.vov-bar{flex:none;display:flex;gap:10px;align-items:center;padding:10px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(165deg,var(--emerald-2),var(--emerald))}
+.vov-bar .gbtn{flex:1;min-height:54px;font-size:17px}
+.vov-x{flex:none;width:54px;height:54px;border-radius:16px;color:#f3eedd;border:1.5px solid rgba(232,198,111,.5);background:transparent;font-size:20px}
+.vov.done .vov-go{animation:vgo 1.2s ease-in-out infinite alternate}
+@keyframes vgo{to{transform:scale(1.04);box-shadow:0 0 0 6px rgba(232,198,111,.25)}}
 </style></head><body><div id="root"></div><script>
 (function(){
 var Q={"si":[[1,1],[1,2],[3,50],[4,77],[6,106],[7,128],[8,151],[9,177],[10,187],[11,208],[11,221],[12,235],[13,249],[13,255],[14,262],[14,267],[15,282],[15,293],[16,305],[16,312],[17,322],[17,332],[18,342],[18,350],[18,359],[19,367],[19,377],[20,385],[20,396],[21,404],[21,411],[21,415],[21,418],[22,428],[22,434],[22,440],[23,446],[23,453],[23,458],[24,467],[24,477],[25,483],[25,489],[25,496],[25,499],[26,502],[26,507],[26,511],[26,515],[26,518],[26,520],[27,523],[27,526],[27,528],[27,531],[27,534],[27,537],[28,542],[28,545],[28,549],[28,551],[28,553],[28,554],[28,556],[28,558],[28,560],[29,562],[29,564],[29,566],[29,568],[29,570],[29,572],[29,574],[29,575],[29,577],[29,578],[29,580],[30,582],[30,583],[30,585],[30,586],[30,587],[30,587],[30,589],[30,590],[30,591],[30,591],[30,592],[30,593],[30,594],[30,595],[30,595],[30,596],[30,596],[30,597],[30,597],[30,598],[30,598],[30,599],[30,599],[30,600],[30,600],[30,601],[30,601],[30,601],[30,602],[30,602],[30,602],[30,603],[30,603],[30,603],[30,604],[30,604],[30,604]],"meta":[[1,21,1,1,147],[22,41,2,141,110],[42,61,2,251,125],[62,81,3,91,133],[82,101,4,24,123],[102,121,4,147,112],[121,141,5,84,150],[142,161,6,112,142],[162,181,7,87,160],[182,201,8,41,129],[201,221,9,94,151],[222,241,11,6,168],[242,261,12,53,157],[262,281,15,1,227],[282,301,17,1,183],[302,321,18,74,265],[322,341,21,1,187],[342,361,23,1,201],[362,381,25,21,340],[382,401,27,58,171],[402,421,29,46,176],[422,441,33,31,169],[442,461,36,27,354],[462,481,39,31,171],[482,502,41,46,239],[502,521,46,1,195],[522,541,51,31,397],[542,561,58,1,136],[562,581,67,1,430],[582,604,78,1,566]],"names":["الفَاتِحة","البَقَرَة","آل عِمران","النِّسَاء","المَائدة","الأنعَام","الأعرَاف","الأنفَال","التوبَة","يُونس","هُود","يُوسُف","الرَّعد","إبراهِيم","الحِجر","النَّحل","الإسرَاء","الكَهف","مَريَم","طه","الأنبيَاء","الحج","المؤمنُون","النور","الفُرقَان","الشعراء","النَّمل","القَصَص","العَنكبُوت","الرُّوم","لُقمَان","السَّجدة","الأحزَاب","سَبإ","فَاطِر","يسٓ","الصَّافَات","صٓ","الزُّمَر","غَافِر","فُصِّلَت","الشُّوري","الزُّخرُف","الدُّخان","الجاثِية","الأحقَاف","مُحمد","الفَتح","الحُجُرَات","قٓ","الذَّاريَات","الطُّور","النَّجم","القَمَر","الرَّحمٰن","الوَاقِعة","الحدِيد","المُجَادلة","الحَشر","المُمتَحنَة","الصَّف","الجُمعَة","المُنَافِقُونَ","التغَابُن","الطَّلَاق","التَّحرِيم","المُلك","القَلَم","الحَاقة","المَعَارج","نُوح","الجِن","المُزمل","المُدثر","القِيَامة","الإنسَان","المُرسَلات","النَّبَإ","النَّازعَات","عَبَسَ","التَّكوير","الانفِطَار","المُطَففين","الانشِقَاق","البُرُوج","الطَّارق","الأعلى","الغَاشِية","الفَجر","البَلَد","الشَّمس","اللَّيل","الضُّحى","الشَّرح","التِّين","العَلَق","القَدر","البَينَة","الزَّلزَلة","العَاديَات","القَارعَة","التَّكاثُر","العَصر","الهُمَزة","الفِيل","قُرَيش","المَاعُون","الكَوثر","الكافِرون","النَّصر","المَسَد","الإخلَاص","الفَلَق","النَّاس"],"bsm":"بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ","dua":"﴿رَبَّنَا تَقَبَّلْ مِنَّآ إِنَّكَ أَنتَ اَ۬لسَّمِيعُ اُ۬لْعَلِيمُ﴾","duaRef":"البقرة، الآية 126 برواية ورش"};
@@ -710,12 +725,22 @@ function vMsgs(){
 }
 var AYAH_HTML='<p class="tnf" aria-label="قال الله تعالى: وفي ذلك فليتنافس المتنافسون"><span class="ab">﴿</span><span class="aw">وَفِے ذَٰلِكَ فَلْيَتَنَافَسِ اِ۬لْمُتَنَٰفِسُونَۖ</span><span class="ab">﴾</span></p>';
 var MSRC={1:'«تذكرة الأريب في تفسير الغريب» لابن الجوزي',2:'«التبيان في تفسير غريب القرآن» لابن الهائم'};
+function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
+function openVid(){var m=mem(me),o=document.createElement('div');o.className='vov';
+  o.innerHTML='<video src="fam-intro.mp4" poster="fam-intro.jpg" playsinline controls autoplay preload="auto"></video>'+
+   '<div class="vov-bar"><button class="ib vov-x" aria-label="إغلاق">✕</button><button class="gbtn vov-go">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button></div>';
+  document.body.appendChild(o);var v=o.querySelector('video');try{var pr=v.play();pr&&pr.catch(function(){})}catch(e){}
+  function shut(){try{v.pause()}catch(e){}o.remove()}
+  o.querySelector('.vov-x').onclick=shut;
+  o.querySelector('.vov-go').onclick=function(){shut();var b=document.querySelector('[data-act=enter]');if(b)b.click()};
+  v.addEventListener('ended',function(){o.classList.add('done')})}
 function vWelcome(){
   var n=0;try{n=+localStorage.getItem('kf_wc')||0}catch(e){}
   var s=MSG.start[n%MSG.start.length],m=mem(me),K=S.khatma;
   return '<div class="wel"><div class="wel-in">'+
     '<div class="wel-top"><img class="wel-ic" src="icon2-192.png" alt=""><h1>ختمة العائلة</h1><p>'+esc(K.name)+'</p>'+AYAH_HTML+'</div>'+
     '<div class="wel-meta num"><span>'+K.days+' يوماً</span><span>'+pagesN(daily())+' كل يوم</span><span>اليوم '+Math.max(1,dayNo())+'</span></div>'+
+    (famVid()?'<button class="wel-vid" data-act="vid" aria-label="شاهد الفيديو التعريفي"><span class="wv-th"><img src="fam-intro.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>شاهدوا فيديو ختمتنا</b><small>40 ثانية · بالصوت</small></span></button>':'')+
     '<div class="wel-msg">'+esc(fill(s.b))+'</div>'+
     '<button class="gbtn wel-go" data-act="enter">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button>'+
   '</div></div>';
@@ -1095,7 +1120,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vWird()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 26</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 27</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
@@ -1104,7 +1129,7 @@ root.addEventListener('toggle',function(e){var k=e.target.getAttribute&&e.target
 root.addEventListener('click',function(e){
   var el=e.target.closest('[data-act]');if(!el||!root.contains(el))return;
   var act=el.getAttribute('data-act'),v=el.getAttribute('data-v'),m;
-  if(act==='enter'){welcome=false;try{localStorage.setItem('kf_wc',(+localStorage.getItem('kf_wc')||0)+1)}catch(_){}render();window.scrollTo(0,0);return}
+  if(act==='vid'){openVid();return}else if(act==='enter'){welcome=false;try{localStorage.setItem('kf_wc',(+localStorage.getItem('kf_wc')||0)+1)}catch(_){}render();window.scrollTo(0,0);return}
   if(act==='donex'){if(el.classList.contains('scrim')&&e.target!==el)return;try{localStorage.setItem(doneKey(),'1')}catch(_){}sheet=null;render();return}
   if(act==='notify'){enableNotif();return}
   if(act==='close'){if(el.classList.contains('scrim')&&e.target!==el)return;sheet=null;copied=false;render();return}
