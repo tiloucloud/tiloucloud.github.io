@@ -49,14 +49,15 @@ function buildMessages(data, msgs, slot, now) {
     if (slot === 'am') {
       const t = msgs.daily[(dn - 1) % msgs.daily.length];
       title = 'وِرد اليوم ' + dn + ' · ' + k.name;
-      body = finish(fill(t, ctx));
+      const PR = ['وهل صلّيتم الفجر؟ «الصلاة نور» 🕌', 'حافظوا على الصلوات الخمس في أوقاتها 🕌', 'ابدؤوا يومكم بالصلاة، فهي أحبّ الأعمال إلى الله 🕌'];
+      body = finish(fill(t, ctx)) + '\n' + PR[(dn - 1) % PR.length];
     } else {
       if (!m) continue; // evening reminders are personal
       const need = target(dn) - p;
       if (need <= 0) continue; // already read today's portion
       title = 'لم تُتمّ وِرد اليوم بعد';
       body = 'يا ' + m.name + '، بقي لك ' + pages(need) + ' لتُتمّ وِرد اليوم ' + dn + ' من «' + k.name + '».\n' +
-        'اقرأها قبل أن تنام، فـ«أحب الأعمال إلى الله أدومها وإن قل».';
+        'اقرأها قبل أن تنام، فـ«أحب الأعمال إلى الله أدومها وإن قل».\nولا تنسَ صلاة العشاء 🕌';
     }
     out.push({ id, sub: { endpoint: s.e, keys: s.k }, payload: { title, body, tag: 'khatma-' + slot, url: SITE } });
   }

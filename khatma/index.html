@@ -526,6 +526,30 @@ html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
 .vov-x{flex:none;width:54px;height:54px;border-radius:16px;color:#f3eedd;border:1.5px solid rgba(232,198,111,.5);background:transparent;font-size:20px}
 .vov.done .vov-go{animation:vgo 1.2s ease-in-out infinite alternate}
 @keyframes vgo{to{transform:scale(1.04);box-shadow:0 0 0 6px rgba(232,198,111,.25)}}
+
+/* prayer */
+.pray .pr-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pr-st{font-size:13px;font-weight:700;color:#8a6a1f;background:#fbf3dc;border:1px solid #ecdcae;border-radius:99px;padding:3px 10px}
+.pr-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:10px}
+.prb{display:grid;justify-items:center;gap:5px;padding:8px 2px;border:0;background:none;font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
+.prb span{width:44px;height:44px;border-radius:50%;border:2.5px solid #c9a24a;display:grid;place-items:center;background:#fff;transition:background .2s}
+.prb span svg{width:22px;height:22px;color:#2a1d00}
+.prb.on span{background:linear-gradient(180deg,#f0d384,#c9a24a);border-color:#c9a24a;box-shadow:0 4px 10px -4px rgba(155,112,25,.7)}
+.pr-m{text-align:center;margin-top:8px;font-size:14px;color:var(--em,#0a3b31);font-weight:600}
+.pr-pv{text-align:center;font-size:12px;color:var(--muted,#5d6e67);margin-top:4px}
+.prd{display:inline-flex;gap:4px}.prd i{width:10px;height:10px;border-radius:50%;border:1.5px solid #c9a24a}.prd i.on{background:#c9a24a}
+.prd.big i{width:14px;height:14px}
+.kids .kd{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 10px;padding:10px 0;border-bottom:1px solid rgba(10,59,49,.08)}
+.kids .kd small{grid-column:1/-1;font-size:12.5px;color:var(--muted,#5d6e67)}
+.pfr{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:right}
+.pfr small{font-size:12.5px;opacity:.75;font-weight:400}
+.pfg{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.pfc{display:inline-flex;align-items:center;gap:4px;padding:8px 14px;border-radius:99px;border:1.5px solid #c9a24a;background:#fff;font:inherit;font-weight:600;cursor:pointer}
+.pfc.on{background:linear-gradient(180deg,#f0d384,#c9a24a)}.pfc svg{width:16px;height:16px}
+.wel-pr{flex:none;text-align:center;font-size:15px;line-height:1.8;color:#f3eedd;padding:6px 10px;border-radius:14px;background:rgba(255,255,255,.06)}
+.wel-pr .aw{font-family:'warsh',var(--display);font-size:1.15em;color:#f0d384}.wel-pr .ab{color:#e8c66f}
+.wel-pr small{display:inline-block;margin-inline-start:6px;font-size:12px;opacity:.75}
+html.big .prb{font-size:15px}html.big .prb span{width:50px;height:50px}html.big .wel-pr{font-size:17px}html.big .pr-m{font-size:16px}
 </style></head><body><div id="root"></div><script>
 (function(){
 var Q={"si":[[1,1],[1,2],[3,50],[4,77],[6,106],[7,128],[8,151],[9,177],[10,187],[11,208],[11,221],[12,235],[13,249],[13,255],[14,262],[14,267],[15,282],[15,293],[16,305],[16,312],[17,322],[17,332],[18,342],[18,350],[18,359],[19,367],[19,377],[20,385],[20,396],[21,404],[21,411],[21,415],[21,418],[22,428],[22,434],[22,440],[23,446],[23,453],[23,458],[24,467],[24,477],[25,483],[25,489],[25,496],[25,499],[26,502],[26,507],[26,511],[26,515],[26,518],[26,520],[27,523],[27,526],[27,528],[27,531],[27,534],[27,537],[28,542],[28,545],[28,549],[28,551],[28,553],[28,554],[28,556],[28,558],[28,560],[29,562],[29,564],[29,566],[29,568],[29,570],[29,572],[29,574],[29,575],[29,577],[29,578],[29,580],[30,582],[30,583],[30,585],[30,586],[30,587],[30,587],[30,589],[30,590],[30,591],[30,591],[30,592],[30,593],[30,594],[30,595],[30,595],[30,596],[30,596],[30,597],[30,597],[30,598],[30,598],[30,599],[30,599],[30,600],[30,600],[30,601],[30,601],[30,601],[30,602],[30,602],[30,602],[30,603],[30,603],[30,603],[30,604],[30,604],[30,604]],"meta":[[1,21,1,1,147],[22,41,2,141,110],[42,61,2,251,125],[62,81,3,91,133],[82,101,4,24,123],[102,121,4,147,112],[121,141,5,84,150],[142,161,6,112,142],[162,181,7,87,160],[182,201,8,41,129],[201,221,9,94,151],[222,241,11,6,168],[242,261,12,53,157],[262,281,15,1,227],[282,301,17,1,183],[302,321,18,74,265],[322,341,21,1,187],[342,361,23,1,201],[362,381,25,21,340],[382,401,27,58,171],[402,421,29,46,176],[422,441,33,31,169],[442,461,36,27,354],[462,481,39,31,171],[482,502,41,46,239],[502,521,46,1,195],[522,541,51,31,397],[542,561,58,1,136],[562,581,67,1,430],[582,604,78,1,566]],"names":["الفَاتِحة","البَقَرَة","آل عِمران","النِّسَاء","المَائدة","الأنعَام","الأعرَاف","الأنفَال","التوبَة","يُونس","هُود","يُوسُف","الرَّعد","إبراهِيم","الحِجر","النَّحل","الإسرَاء","الكَهف","مَريَم","طه","الأنبيَاء","الحج","المؤمنُون","النور","الفُرقَان","الشعراء","النَّمل","القَصَص","العَنكبُوت","الرُّوم","لُقمَان","السَّجدة","الأحزَاب","سَبإ","فَاطِر","يسٓ","الصَّافَات","صٓ","الزُّمَر","غَافِر","فُصِّلَت","الشُّوري","الزُّخرُف","الدُّخان","الجاثِية","الأحقَاف","مُحمد","الفَتح","الحُجُرَات","قٓ","الذَّاريَات","الطُّور","النَّجم","القَمَر","الرَّحمٰن","الوَاقِعة","الحدِيد","المُجَادلة","الحَشر","المُمتَحنَة","الصَّف","الجُمعَة","المُنَافِقُونَ","التغَابُن","الطَّلَاق","التَّحرِيم","المُلك","القَلَم","الحَاقة","المَعَارج","نُوح","الجِن","المُزمل","المُدثر","القِيَامة","الإنسَان","المُرسَلات","النَّبَإ","النَّازعَات","عَبَسَ","التَّكوير","الانفِطَار","المُطَففين","الانشِقَاق","البُرُوج","الطَّارق","الأعلى","الغَاشِية","الفَجر","البَلَد","الشَّمس","اللَّيل","الضُّحى","الشَّرح","التِّين","العَلَق","القَدر","البَينَة","الزَّلزَلة","العَاديَات","القَارعَة","التَّكاثُر","العَصر","الهُمَزة","الفِيل","قُرَيش","المَاعُون","الكَوثر","الكافِرون","النَّصر","المَسَد","الإخلَاص","الفَلَق","النَّاس"],"bsm":"بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ","dua":"﴿رَبَّنَا تَقَبَّلْ مِنَّآ إِنَّكَ أَنتَ اَ۬لسَّمِيعُ اُ۬لْعَلِيمُ﴾","duaRef":"البقرة، الآية 126 برواية ورش"};
@@ -620,17 +644,17 @@ try{code=localStorage.getItem('kf_code')}catch(e){}
   if(m||s)try{history.replaceState(null,'',location.pathname)}catch(e){}
 })();
 function url(){return CFG.db.replace(/\/+$/,'')+'/k/'+code+'.json'}
-function toR(){var o={};S.members.forEach(function(m,i){o[m.id]={name:m.name,p:m.p,i:i}});return{khatma:S.khatma,members:o}}
+function toR(){var o={};S.members.forEach(function(m,i){o[m.id]={name:m.name,p:m.p,i:i,g:m.g||''}});return{khatma:S.khatma,members:o}}
 function fromR(r){
   var ms=[],id,x;
-  for(id in (r.members||{})){x=r.members[id];if(x&&x.name!=null)ms.push({id:id,name:String(x.name),p:Math.max(0,Math.min(LAST,+x.p||0)),i:+x.i||0})}
+  for(id in (r.members||{})){x=r.members[id];if(x&&x.name!=null)ms.push({id:id,name:String(x.name),p:Math.max(0,Math.min(LAST,+x.p||0)),i:+x.i||0,g:typeof x.g==='string'?x.g:''})}
   ms.sort(function(a,b){return a.i-b.i});
-  return{v:3,khatma:r.khatma&&r.khatma.start?r.khatma:S.khatma,members:ms.map(function(x){return{id:x.id,name:x.name,p:x.p}})};
+  return{v:3,khatma:r.khatma&&r.khatma.start?r.khatma:S.khatma,members:ms.map(function(x){return{id:x.id,name:x.name,p:x.p,g:x.g}})};
 }
 function diff(a,b){
   var d={},id,n=0;
   if(JSON.stringify(a.khatma)!==JSON.stringify(b.khatma)){d.khatma=b.khatma;n++}
-  for(id in b.members)['name','p','i'].forEach(function(f){if(!a.members[id]||a.members[id][f]!==b.members[id][f]){d['members/'+id+'/'+f]=b.members[id][f];n++}});
+  for(id in b.members)['name','p','i','g'].forEach(function(f){if(!a.members[id]||(a.members[id][f]||'')!==(b.members[id][f]||'')){d['members/'+id+'/'+f]=b.members[id][f];n++}});
   for(id in a.members)if(!b.members[id]){d['members/'+id]=null;n++}
   return n?d:null;
 }
@@ -649,7 +673,7 @@ function sync(){
     }
     if(prev&&edits!==e0)return;
     var before=JSON.stringify(S);
-    S=fromR(r);prev=toR();cache();
+    S=fromR(r);prev=toR();cache();prMerge(r.pr);
     if(JSON.stringify(S)!==before&&!sheet)render();
   }).catch(function(){online=false}).then(function(){syncing=false;if(was!==online&&!sheet&&!reading)render();if(prev&&diff(prev,toR())&&online)setTimeout(sync,500)});
 }
@@ -725,6 +749,44 @@ function vMsgs(){
 }
 var AYAH_HTML='<p class="tnf" aria-label="قال الله تعالى: وفي ذلك فليتنافس المتنافسون"><span class="ab">﴿</span><span class="aw">وَفِے ذَٰلِكَ فَلْيَتَنَافَسِ اِ۬لْمُتَنَٰفِسُونَۖ</span><span class="ab">﴾</span></p>';
 var MSRC={1:'«تذكرة الأريب في تفسير الغريب» لابن الجوزي',2:'«التبيان في تفسير غريب القرآن» لابن الهائم'};
+
+/* ---------- prayer tracker ---------- */
+var PRN=['الفجر','الظهر','العصر','المغرب','العشاء'],PRQ=[["وَامُرَ اَهْلَكَ بِالصَّلَوٰةِ وَاصْطَبِرْ عَلَيْهَاۖ", "طه"], ["حَٰفِظُواْ عَلَى اَ۬لصَّلَوَٰتِ وَالصَّلَوٰةِ اِ۬لْوُسْط۪ىٰ", "البقرة"], ["إِنَّ اَ۬لصَّلَوٰةَ تَنْه۪ىٰ عَنِ اِ۬لْفَحْشَآءِ وَالْمُنكَرِۖ", "العنكبوت"], ["قَدَ اَفْلَحَ اَ۬لْمُومِنُونَۖ اَ۬لذِينَ هُمْ فِے صَلَاتِهِمْ خَٰشِعُونَ", "المؤمنون"], ["وَاسْتَعِينُواْ بِالصَّبْرِ وَالصَّلَوٰةِۖ", "البقرة"]],PRH=[["الصلاةُ نور", "رواه مسلم"], ["أرِحْنا بها يا بلال", "رواه أبو داود"], ["وجُعِلَت قُرّةُ عيني في الصلاة", "رواه النسائي"], ["أحبُّ العمل إلى الله الصلاةُ على وقتها", "متفق عليه"], ["إنّ أولَ ما يُحاسَبُ به العبدُ يومَ القيامة من عمله صلاتُه", "رواه الترمذي"]];
+var PR={},PRP={};try{PR=JSON.parse(localStorage.getItem('kf_pr')||'{}')||{}}catch(e){PR={}}
+function prMerge(r){var o={},id,d;r=r||{};for(id in r)if(r[id]&&typeof r[id]==='object'){o[id]={};for(d in r[id])o[id][d]=+r[id][d]||0}
+  for(var k in PRP){var q=PRP[k];(o[q.m]=o[q.m]||{})[q.d]=q.v}
+  PR=o;try{localStorage.setItem('kf_pr',JSON.stringify(PR))}catch(e){}}
+function prGet(m,d){return (PR[m]&&PR[m][d])||0}
+function prDay(o){var t=today();t.setDate(t.getDate()-o);return iso(t)}
+function prStreak(m){var n=0,o=prGet(m,prDay(0))===31?0:1;for(;o<400&&prGet(m,prDay(o))===31;o++)n++;return n}
+function prWeek(m){var n=0;for(var o=0;o<7;o++){var v=prGet(m,prDay(o));while(v){n+=v&1;v>>=1}}return n}
+function prSet(i){if(!me||!code)return;var d=prDay(0),v=prGet(me,d)^(1<<i),key=me+d;
+  (PR[me]=PR[me]||{})[d]=v;PRP[key]={m:me,d:d,v:v};try{localStorage.setItem('kf_pr',JSON.stringify(PR))}catch(e){}
+  render();
+  if(CFG.db)fetch(CFG.db.replace(/\/+$/,'')+'/k/'+code+'/pr/'+me+'/'+d+'.json',{method:'PUT',body:String(v)}).then(function(r){if(r.ok&&PRP[key]&&PRP[key].v===v)delete PRP[key]}).catch(function(){})}
+function gTog(v){var p=v.split('|'),m=mem(p[0]);if(!m)return;var gs=guards(m),i=gs.indexOf(p[1]);if(i>=0)gs.splice(i,1);else gs.push(p[1]);m.g=gs.join(',');save()}
+function guards(m){return (m&&m.g?m.g.split(','):[]).filter(Boolean)}
+function myKids(){return S.members.filter(function(m){return m.id!==me&&guards(m).indexOf(me)>=0})}
+function prDots(v,big){var h='';for(var i=0;i<5;i++)h+='<i class="'+(v>>i&1?'on':'')+'" title="'+PRN[i]+'"></i>';return '<span class="prd'+(big?' big':'')+'">'+h+'</span>'}
+function vPray(){
+  var m=mem(me);if(!m)return '';
+  var v=prGet(me,prDay(0)),st=prStreak(me),all=v===31,gs=guards(m).map(function(id){var x=mem(id);return x?x.name:''}).filter(Boolean);
+  var b='';for(var i=0;i<5;i++)b+='<button class="prb'+(v>>i&1?' on':'')+'" data-act="pray" data-v="'+i+'" aria-pressed="'+(v>>i&1?'true':'false')+'"><span>'+(v>>i&1?I('check'):'')+'</span>'+PRN[i]+'</button>';
+  return '<section class="card pray"><div class="pr-h"><h2 class="ctitle">صلواتي اليوم</h2>'+(st?'<span class="pr-st num">🌟 '+st+' '+(st===1?'يوم':st===2?'يومان':st<=10?'أيام':'يوماً')+'</span>':'')+'</div>'+
+    '<div class="pr-row">'+b+'</div>'+
+    '<p class="pr-m">'+(all?'أحسنتَ، حافظتَ على صلواتك الخمس اليوم. تقبّل الله منك 🌟':'اضغط على الصلاة بعد أن تؤدّيها')+'</p>'+
+    '<p class="pr-pv">🔒 لا تدخل في سباق العائلة'+(gs.length?'، ويراها: '+esc(gs.join('، ')):'')+'</p></section>';
+}
+function vKids(){
+  var ks=myKids();if(!ks.length)return '';
+  return '<section class="card kids"><h2 class="ctitle">صلوات أبنائي اليوم</h2>'+ks.map(function(k){
+    var v=prGet(k.id,prDay(0)),st=prStreak(k.id),w=prWeek(k.id);
+    return '<div class="kd"><b>'+esc(k.name)+'</b>'+prDots(v,1)+'<small class="num">'+(st?'🌟 '+st+' متتالية · ':'')+'الأسبوع '+w+'/35</small></div>'}).join('')+
+    '<p class="pr-pv">شجّعوهم بكلمة طيبة، فالصلاة تُحبَّب ولا تُفرض بالقسوة.</p></section>';
+}
+function prLine(){var n=dayNo()+((S.khatma.start||'').length),q=n%2===0;
+  if(q){var a=PRQ[(n>>1)%PRQ.length];return '<p class="wel-pr"><span class="ab">﴿</span><span class="aw">'+a[0]+'</span><span class="ab">﴾</span><small>'+a[1]+'</small></p>'}
+  var h=PRH[(n>>1)%PRH.length];return '<p class="wel-pr">🕌 «'+h[0]+'» <small>'+h[1]+'</small></p>'}
 function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
 function openVid(){var m=mem(me),o=document.createElement('div');o.className='vov';
   o.innerHTML='<video src="fam-intro.mp4" poster="fam-intro.jpg" playsinline controls autoplay preload="auto"></video>'+
@@ -741,7 +803,7 @@ function vWelcome(){
     '<div class="wel-top"><img class="wel-ic" src="icon2-192.png" alt=""><h1>ختمة العائلة</h1><p>'+esc(K.name)+'</p>'+AYAH_HTML+'</div>'+
     '<div class="wel-meta num"><span>'+K.days+' يوماً</span><span>'+pagesN(daily())+' كل يوم</span><span>اليوم '+Math.max(1,dayNo())+'</span></div>'+
     (famVid()?'<button class="wel-vid" data-act="vid" aria-label="شاهد الفيديو التعريفي"><span class="wv-th"><img src="fam-intro.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>شاهدوا فيديو ختمتنا</b><small>40 ثانية · بالصوت</small></span></button>':'')+
-    '<div class="wel-msg">'+esc(fill(s.b))+'</div>'+
+    prLine()+'<div class="wel-msg">'+esc(fill(s.b))+'</div>'+
     '<button class="gbtn wel-go" data-act="enter">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button>'+
   '</div></div>';
 }
@@ -839,6 +901,7 @@ function vAdmin(){
     '<form class="form" data-form="addm"><input id="newMember" maxlength="24" placeholder="اسم فرد جديد" aria-label="اسم فرد جديد" autocomplete="off"><button class="btn ghost" type="submit">أضف فرداً</button></form>'+
     (code?'<button class="btn ghost" data-act="open" data-v="invite">'+I('link')+'رابط العائلة لدعوة فرد</button>':'')+
     (code?'<button class="btn ghost" data-act="open" data-v="fbl">'+I('chat')+'ملاحظات العائلة على التطبيق</button>':'')+
+    '<button class="btn ghost" data-act="open" data-v="pfol">🕌 متابعة صلاة الأبناء</button>'+
     '<button class="btn ghost" data-act="open" data-v="fb">أرسل ملاحظة أو أبلغ عن خطأ</button>'+
     '<button class="btn ghost" data-act="open" data-v="new">ختمة جديدة</button>'+
     '<button class="btn ghost num" data-act="dl"'+(dl>0?' disabled':'')+'>'+(dl===-1?'المصحف محفوظ للقراءة دون إنترنت':dl===-2?'تعذّر التحميل، أعد المحاولة':dl>0?'جارٍ التحميل '+Math.min(60,dl)+' من 60':'حمّل المصحف للقراءة دون إنترنت')+'</button>');
@@ -912,6 +975,16 @@ function vSheet(){
   }else if(k==='del'){
     m=mem(a);
     h='<h3>حذف '+esc(m.name)+'؟</h3><p class="sub">يُحذف من الختمة مع ما سجّله من قراءة.</p><button class="btn" data-act="delm" data-v="'+a+'">نعم، احذف</button>';
+  }else if(k==='pfol'){
+    h='<h3>متابعة صلاة الأبناء</h3><p class="sub">اختر الابن أو البنت، ثم حدّد من يرى صلواته من الوالدين. صلوات كل فرد لا يراها غيره إلا من تختارهم هنا، ولا تدخل في سباق العائلة.</p>'+
+      S.members.map(function(x){var gs=guards(x).map(function(id){var y=mem(id);return y?y.name:''}).filter(Boolean);
+        return '<button class="btn ghost pfr" data-act="open" data-v="pfol1:'+x.id+'"><b>'+esc(x.name)+'</b><small>'+(gs.length?'يتابعه: '+esc(gs.join('، ')):'لا أحد')+'</small></button>'}).join('');
+  }else if(k==='pfol1'){
+    m=mem(a);var gs=guards(m);
+    h='<h3>من يتابع صلاة '+esc(m.name)+'؟</h3><p class="sub">اضغط على اسم الأب أو الأم.</p><div class="pfg">'+
+      S.members.filter(function(x){return x.id!==a}).map(function(x){var on=gs.indexOf(x.id)>=0;
+        return '<button class="pfc'+(on?' on':'')+'" data-act="gtog" data-v="'+a+'|'+x.id+'" aria-pressed="'+on+'">'+(on?I('check'):'')+esc(x.name)+'</button>'}).join('')+'</div>'+
+      '<button class="btn" data-act="open" data-v="pfol">تمّ</button>';
   }else if(k==='ren'){
     m=mem(a);
     h='<h3>تعديل الاسم</h3><form class="stack" data-form="renm" data-v="'+a+'"><label>الاسم الجديد<input id="renName" maxlength="24" value="'+esc(m.name)+'" required autocomplete="off"></label><button class="btn" type="submit">احفظ الاسم</button></form>';
@@ -1119,8 +1192,8 @@ function render(){
   var h=hijri();
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
-    (code?vWird()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 27</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    (code?vWird()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 28</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
@@ -1129,7 +1202,7 @@ root.addEventListener('toggle',function(e){var k=e.target.getAttribute&&e.target
 root.addEventListener('click',function(e){
   var el=e.target.closest('[data-act]');if(!el||!root.contains(el))return;
   var act=el.getAttribute('data-act'),v=el.getAttribute('data-v'),m;
-  if(act==='vid'){openVid();return}else if(act==='enter'){welcome=false;try{localStorage.setItem('kf_wc',(+localStorage.getItem('kf_wc')||0)+1)}catch(_){}render();window.scrollTo(0,0);return}
+  if(act==='vid'){openVid();return}else if(act==='pray'){prSet(+v);return}else if(act==='gtog'){gTog(v);return}else if(act==='enter'){welcome=false;try{localStorage.setItem('kf_wc',(+localStorage.getItem('kf_wc')||0)+1)}catch(_){}render();window.scrollTo(0,0);return}
   if(act==='donex'){if(el.classList.contains('scrim')&&e.target!==el)return;try{localStorage.setItem(doneKey(),'1')}catch(_){}sheet=null;render();return}
   if(act==='notify'){enableNotif();return}
   if(act==='close'){if(el.classList.contains('scrim')&&e.target!==el)return;sheet=null;copied=false;render();return}
