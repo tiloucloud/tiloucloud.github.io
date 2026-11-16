@@ -490,15 +490,27 @@ html.big textarea{font-size:18px}
 html.big .msrc{font-size:15px}
 
 /* verse under the khatma name */
-.ayah{display:inline-flex;align-items:baseline;gap:3px;margin-top:2px;font-size:20px;line-height:1.7;white-space:nowrap}
-.ayah .aw{font-family:'warsh',var(--display);font-size:1.12em;background-image:linear-gradient(90deg,#9a6a12,#c9962d 45%,#a8751a);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ayah .ab{font-family:'Segoe UI Symbol','Noto Naskh Arabic',serif;color:#b8862b;font-size:.95em}
-.wel-top .ayah{justify-content:center;font-size:20px;margin-top:2px}
-.wel-top .ayah .aw{background-image:linear-gradient(90deg,#e8c66f,#fff1c4 50%,#d9b25a)}
-.wel-top .ayah .ab{color:#e8c66f}
-html.big .ayah{font-size:22px}
+.tnf{display:flex;justify-content:center;align-items:baseline;gap:4px;margin:2px 0 0;max-width:100%;overflow:hidden;font-size:clamp(17px,5.6vw,24px);line-height:1.8;white-space:nowrap}
+.tnf .aw{font-family:'warsh',var(--display);font-size:1.12em;background-image:linear-gradient(90deg,#9a6a12,#c9962d 45%,#a8751a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tnf .ab{font-family:'Segoe UI Symbol','Noto Naskh Arabic',serif;color:#b8862b;font-size:.95em}
+.wel-top .tnf{font-size:clamp(17px,5.4vw,22px);margin-top:2px}
+.wel-top .tnf .aw{background-image:linear-gradient(90deg,#e8c66f,#fff1c4 50%,#d9b25a)}
+.wel-top .tnf .ab{color:#e8c66f}
 /* keep the start button on screen, right under the message */
 .wel-go{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom));z-index:2;box-shadow:0 -6px 18px rgba(4,30,24,.35)}
+
+
+.wbar>div{gap:8px}
+.wbar>div>span{flex:1 1 auto;overflow:hidden}
+.wbar b{display:block;overflow:hidden;text-overflow:ellipsis}
+.wbar .wgo{flex:none}
+.wbar .wq{padding:0;width:42px;font-weight:700}
+.brand h1{white-space:nowrap}
+.hright{min-width:0}
+.wbar .wgo{padding:0 10px;font-size:14px}
+.wbar .wq{padding:0;width:38px}
+.wbar b{font-size:clamp(13.5px,4.1vw,16px)}
+html.big .wbar b{white-space:normal;line-height:1.35}
 </style></head><body><div id="root"></div><script>
 (function(){
 var Q={"si":[[1,1],[1,2],[3,50],[4,77],[6,106],[7,128],[8,151],[9,177],[10,187],[11,208],[11,221],[12,235],[13,249],[13,255],[14,262],[14,267],[15,282],[15,293],[16,305],[16,312],[17,322],[17,332],[18,342],[18,350],[18,359],[19,367],[19,377],[20,385],[20,396],[21,404],[21,411],[21,415],[21,418],[22,428],[22,434],[22,440],[23,446],[23,453],[23,458],[24,467],[24,477],[25,483],[25,489],[25,496],[25,499],[26,502],[26,507],[26,511],[26,515],[26,518],[26,520],[27,523],[27,526],[27,528],[27,531],[27,534],[27,537],[28,542],[28,545],[28,549],[28,551],[28,553],[28,554],[28,556],[28,558],[28,560],[29,562],[29,564],[29,566],[29,568],[29,570],[29,572],[29,574],[29,575],[29,577],[29,578],[29,580],[30,582],[30,583],[30,585],[30,586],[30,587],[30,587],[30,589],[30,590],[30,591],[30,591],[30,592],[30,593],[30,594],[30,595],[30,595],[30,596],[30,596],[30,597],[30,597],[30,598],[30,598],[30,599],[30,599],[30,600],[30,600],[30,601],[30,601],[30,601],[30,602],[30,602],[30,602],[30,603],[30,603],[30,603],[30,604],[30,604],[30,604]],"meta":[[1,21,1,1,147],[22,41,2,141,110],[42,61,2,251,125],[62,81,3,91,133],[82,101,4,24,123],[102,121,4,147,112],[121,141,5,84,150],[142,161,6,112,142],[162,181,7,87,160],[182,201,8,41,129],[201,221,9,94,151],[222,241,11,6,168],[242,261,12,53,157],[262,281,15,1,227],[282,301,17,1,183],[302,321,18,74,265],[322,341,21,1,187],[342,361,23,1,201],[362,381,25,21,340],[382,401,27,58,171],[402,421,29,46,176],[422,441,33,31,169],[442,461,36,27,354],[462,481,39,31,171],[482,502,41,46,239],[502,521,46,1,195],[522,541,51,31,397],[542,561,58,1,136],[562,581,67,1,430],[582,604,78,1,566]],"names":["الفَاتِحة","البَقَرَة","آل عِمران","النِّسَاء","المَائدة","الأنعَام","الأعرَاف","الأنفَال","التوبَة","يُونس","هُود","يُوسُف","الرَّعد","إبراهِيم","الحِجر","النَّحل","الإسرَاء","الكَهف","مَريَم","طه","الأنبيَاء","الحج","المؤمنُون","النور","الفُرقَان","الشعراء","النَّمل","القَصَص","العَنكبُوت","الرُّوم","لُقمَان","السَّجدة","الأحزَاب","سَبإ","فَاطِر","يسٓ","الصَّافَات","صٓ","الزُّمَر","غَافِر","فُصِّلَت","الشُّوري","الزُّخرُف","الدُّخان","الجاثِية","الأحقَاف","مُحمد","الفَتح","الحُجُرَات","قٓ","الذَّاريَات","الطُّور","النَّجم","القَمَر","الرَّحمٰن","الوَاقِعة","الحدِيد","المُجَادلة","الحَشر","المُمتَحنَة","الصَّف","الجُمعَة","المُنَافِقُونَ","التغَابُن","الطَّلَاق","التَّحرِيم","المُلك","القَلَم","الحَاقة","المَعَارج","نُوح","الجِن","المُزمل","المُدثر","القِيَامة","الإنسَان","المُرسَلات","النَّبَإ","النَّازعَات","عَبَسَ","التَّكوير","الانفِطَار","المُطَففين","الانشِقَاق","البُرُوج","الطَّارق","الأعلى","الغَاشِية","الفَجر","البَلَد","الشَّمس","اللَّيل","الضُّحى","الشَّرح","التِّين","العَلَق","القَدر","البَينَة","الزَّلزَلة","العَاديَات","القَارعَة","التَّكاثُر","العَصر","الهُمَزة","الفِيل","قُرَيش","المَاعُون","الكَوثر","الكافِرون","النَّصر","المَسَد","الإخلَاص","الفَلَق","النَّاس"],"bsm":"بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ","dua":"﴿رَبَّنَا تَقَبَّلْ مِنَّآ إِنَّكَ أَنتَ اَ۬لسَّمِيعُ اُ۬لْعَلِيمُ﴾","duaRef":"البقرة، الآية 126 برواية ورش"};
@@ -696,7 +708,7 @@ function vMsgs(){
     '<div class="seg" role="tablist">'+cats.map(function(c){return '<button role="tab" aria-selected="'+(mcat===c[0])+'" data-act="mcat" data-v="'+c[0]+'">'+c[1]+'</button>'}).join('')+'</div>'+
     '<p class="sub">'+(mcat==='daily'?'رسالة مختلفة لكل يوم، وأرقام الوِرد والتقدّم تُملأ تلقائياً.':mcat==='start'?'ادعُ العائلة إلى الختمة، والرسالة تحمل رابط الانضمام.':'للتهنئة حين يختم الجميع.')+'</p>'+cards);
 }
-var AYAH_HTML='<p class="ayah" aria-label="قال الله تعالى: وفي ذلك فليتنافس المتنافسون"><span class="ab">﴿</span><span class="aw">وَفِے ذَٰلِكَ فَلْيَتَنَافَسِ اِ۬لْمُتَنَٰفِسُونَۖ</span><span class="ab">﴾</span></p>';
+var AYAH_HTML='<p class="tnf" aria-label="قال الله تعالى: وفي ذلك فليتنافس المتنافسون"><span class="ab">﴿</span><span class="aw">وَفِے ذَٰلِكَ فَلْيَتَنَافَسِ اِ۬لْمُتَنَٰفِسُونَۖ</span><span class="ab">﴾</span></p>';
 var MSRC={1:'«تذكرة الأريب في تفسير الغريب» لابن الجوزي',2:'«التبيان في تفسير غريب القرآن» لابن الهائم'};
 function vWelcome(){
   var n=0;try{n=+localStorage.getItem('kf_wc')||0}catch(e){}
@@ -1048,7 +1060,7 @@ function barsHTML(){
   var wb='';
   if(m&&m.p<LAST){var dn2=dayNo(),done=dn2>0&&m.p>=targetAt(dn2),T=done?Math.min(LAST,targetAt(dn2+1)):Math.max(targetAt(dn2),m.p+1),left=T-m.p,ra=resumeAt(m);
     wb='<div class="wbar"><div><span><small>'+(done?(left>0?'أتممتَ وِرد اليوم ✓ · وِرد الغد':'سبقتَ بوِرد الغد'):'وِرد اليوم')+'</small><b class="num">'+(left>0?'بقي '+pagesN(left)+' · حتى ص '+T:'بارك الله فيك')+'</b></span>'+
-      (p!==ra.pg&&(p<m.p||p>T)?'<button class="btn sm wgo" data-act="wird">إلى حيث وصلت</button>':'')+'<button class="btn sm wgo" data-act="open" data-v="how">كيف يُحتسب؟</button></div></div>'}
+      (p!==ra.pg&&(p<m.p||p>T)?'<button class="btn sm wgo" data-act="wird">إلى حيث وصلت</button><button class="btn sm wgo wq" data-act="open" data-v="how" aria-label="كيف يُحتسب؟">؟</button>':'<button class="btn sm wgo" data-act="open" data-v="how">كيف يُحتسب؟</button>')+'</div></div>'}
   return {top:top,wb:wb};
 }
 function updateBars(){var b=barsHTML(),t=document.getElementById('rtop'),w=document.getElementById('rwb');if(t)t.innerHTML=b.top;if(w)w.innerHTML=b.wb}
@@ -1080,10 +1092,10 @@ function render(){
   var m0=mem(me);if(m0&&m0.p>=LAST&&!sheet&&!reading){var dk=null;try{dk=localStorage.getItem(doneKey())}catch(e){}if(!dk)sheet='donec'}
   if(reading){if(!scroller()){goPage(reading);return}updateBars();refill();document.getElementById('shost').innerHTML=vSheet();return}
   var h=hijri();
-  root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p>'+AYAH_HTML+'</div></div>'+
-    '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+
+  root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
+    '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vWird()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 25</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 26</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
