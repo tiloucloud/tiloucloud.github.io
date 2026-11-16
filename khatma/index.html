@@ -769,13 +769,13 @@ function guards(m){return (m&&m.g?m.g.split(','):[]).filter(Boolean)}
 function myKids(){return S.members.filter(function(m){return m.id!==me&&guards(m).indexOf(me)>=0})}
 function prDots(v,big){var h='';for(var i=0;i<5;i++)h+='<i class="'+(v>>i&1?'on':'')+'" title="'+PRN[i]+'"></i>';return '<span class="prd'+(big?' big':'')+'">'+h+'</span>'}
 function vPray(){
-  var m=mem(me);if(!m)return '';
+  var m=mem(me);if(!m||!guards(m).length)return '';
   var v=prGet(me,prDay(0)),st=prStreak(me),all=v===31,gs=guards(m).map(function(id){var x=mem(id);return x?x.name:''}).filter(Boolean);
   var b='';for(var i=0;i<5;i++)b+='<button class="prb'+(v>>i&1?' on':'')+'" data-act="pray" data-v="'+i+'" aria-pressed="'+(v>>i&1?'true':'false')+'"><span>'+(v>>i&1?I('check'):'')+'</span>'+PRN[i]+'</button>';
   return '<section class="card pray"><div class="pr-h"><h2 class="ctitle">صلواتي اليوم</h2>'+(st?'<span class="pr-st num">🌟 '+st+' '+(st===1?'يوم':st===2?'يومان':st<=10?'أيام':'يوماً')+'</span>':'')+'</div>'+
     '<div class="pr-row">'+b+'</div>'+
     '<p class="pr-m">'+(all?'أحسنتَ، حافظتَ على صلواتك الخمس اليوم. تقبّل الله منك 🌟':'اضغط على الصلاة بعد أن تؤدّيها')+'</p>'+
-    '<p class="pr-pv">🔒 لا تدخل في سباق العائلة'+(gs.length?'، ويراها: '+esc(gs.join('، ')):'')+'</p></section>';
+    '<p class="pr-pv">🔒 لا تدخل في سباق العائلة، ويراها: '+esc(gs.join('، '))+'</p></section>';
 }
 function vKids(){
   var ks=myKids();if(!ks.length)return '';
@@ -1193,7 +1193,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vWird()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 28</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 29</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
