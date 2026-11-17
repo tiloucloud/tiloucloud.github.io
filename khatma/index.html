@@ -574,6 +574,25 @@ html.big .pk{width:80px;height:80px;font-size:32px}html.big .lk-pad{grid-templat
 .wel-vids .wv-th i{font-size:17px;background:radial-gradient(circle,rgba(240,211,132,.95) 0 13px,transparent 14px)}
 .wel-vids .wv-tx b{font-size:14px;line-height:1.35}.wel-vids .wv-tx small{font-size:11.5px;line-height:1.3;display:block}
 html.big .wel-vids .wv-tx b{font-size:16px}html.big .wel-vids .wv-tx small{font-size:13px}
+
+/* badges */
+.bdg h3{font-size:14.5px;margin:12px 0 6px;color:var(--em,#0a3b31)}.bdg h3 small{font-weight:400;color:var(--muted,#5d6e67)}
+.bl{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.bl li{display:grid;justify-items:center;gap:2px;padding:8px 2px;border-radius:14px;background:#f4f6f5;opacity:.45;filter:grayscale(1)}
+.bl li b{font-size:24px;line-height:1.1}.bl li small{font-size:11.5px;text-align:center;line-height:1.3;color:var(--ink,#14261f)}
+.bl li.on{opacity:1;filter:none;background:linear-gradient(180deg,#fffaf0,#fbf0d3);box-shadow:inset 0 0 0 1.5px #e3c77d}
+.bt{font-size:13px;color:var(--em,#0a3b31);margin-top:6px;font-weight:600}
+.bq{font-size:12.5px;color:var(--muted,#5d6e67);margin-top:2px}.bq small{opacity:.8}
+.jz{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:5px}
+.jz i{aspect-ratio:1;border-radius:50%;border:1.5px solid #d9c591;display:grid;place-items:center;font-style:normal}
+.jz i span{font-size:10.5px;color:#9a8550}.jz i.on{background:linear-gradient(180deg,#f0d384,#c9a24a);border-color:#c9a24a}.jz i.on span{color:#2a1d00;font-weight:700}
+.jz i.cur{border:2px solid var(--em,#0a3b31)}.jz i.cur span{color:var(--em,#0a3b31);font-weight:700}
+.famok{margin:-4px 0 6px;padding:10px 12px;border-radius:14px;text-align:center;font-weight:700;font-size:14px;color:#2a1d00;background:linear-gradient(180deg,#f7e3a8,#e8c66f)}
+.mb{display:flex;gap:8px;margin-top:3px;font-size:12px}.mb span{font-weight:700;color:#8a6a1f}
+.bnew{text-align:center;padding:6px 0 12px}.bnew .bi{font-size:64px;line-height:1.1;animation:bpop .6s ease-out}
+.bnew .bh{font-family:var(--display);font-size:22px;line-height:1.5;color:var(--em,#0a3b31);margin:8px 0}.bnew p{font-size:15px;line-height:1.8}
+@keyframes bpop{from{transform:scale(.3);opacity:0}70%{transform:scale(1.15)}to{transform:scale(1);opacity:1}}
+html.big .bl li small{font-size:13px}html.big .jz i span{font-size:12px}html.big .bt{font-size:15px}
 </style></head><body><div id="root"></div><script>
 (function(){
 var Q={"si":[[1,1],[1,2],[3,50],[4,77],[6,106],[7,128],[8,151],[9,177],[10,187],[11,208],[11,221],[12,235],[13,249],[13,255],[14,262],[14,267],[15,282],[15,293],[16,305],[16,312],[17,322],[17,332],[18,342],[18,350],[18,359],[19,367],[19,377],[20,385],[20,396],[21,404],[21,411],[21,415],[21,418],[22,428],[22,434],[22,440],[23,446],[23,453],[23,458],[24,467],[24,477],[25,483],[25,489],[25,496],[25,499],[26,502],[26,507],[26,511],[26,515],[26,518],[26,520],[27,523],[27,526],[27,528],[27,531],[27,534],[27,537],[28,542],[28,545],[28,549],[28,551],[28,553],[28,554],[28,556],[28,558],[28,560],[29,562],[29,564],[29,566],[29,568],[29,570],[29,572],[29,574],[29,575],[29,577],[29,578],[29,580],[30,582],[30,583],[30,585],[30,586],[30,587],[30,587],[30,589],[30,590],[30,591],[30,591],[30,592],[30,593],[30,594],[30,595],[30,595],[30,596],[30,596],[30,597],[30,597],[30,598],[30,598],[30,599],[30,599],[30,600],[30,600],[30,601],[30,601],[30,601],[30,602],[30,602],[30,602],[30,603],[30,603],[30,603],[30,604],[30,604],[30,604]],"meta":[[1,21,1,1,147],[22,41,2,141,110],[42,61,2,251,125],[62,81,3,91,133],[82,101,4,24,123],[102,121,4,147,112],[121,141,5,84,150],[142,161,6,112,142],[162,181,7,87,160],[182,201,8,41,129],[201,221,9,94,151],[222,241,11,6,168],[242,261,12,53,157],[262,281,15,1,227],[282,301,17,1,183],[302,321,18,74,265],[322,341,21,1,187],[342,361,23,1,201],[362,381,25,21,340],[382,401,27,58,171],[402,421,29,46,176],[422,441,33,31,169],[442,461,36,27,354],[462,481,39,31,171],[482,502,41,46,239],[502,521,46,1,195],[522,541,51,31,397],[542,561,58,1,136],[562,581,67,1,430],[582,604,78,1,566]],"names":["الفَاتِحة","البَقَرَة","آل عِمران","النِّسَاء","المَائدة","الأنعَام","الأعرَاف","الأنفَال","التوبَة","يُونس","هُود","يُوسُف","الرَّعد","إبراهِيم","الحِجر","النَّحل","الإسرَاء","الكَهف","مَريَم","طه","الأنبيَاء","الحج","المؤمنُون","النور","الفُرقَان","الشعراء","النَّمل","القَصَص","العَنكبُوت","الرُّوم","لُقمَان","السَّجدة","الأحزَاب","سَبإ","فَاطِر","يسٓ","الصَّافَات","صٓ","الزُّمَر","غَافِر","فُصِّلَت","الشُّوري","الزُّخرُف","الدُّخان","الجاثِية","الأحقَاف","مُحمد","الفَتح","الحُجُرَات","قٓ","الذَّاريَات","الطُّور","النَّجم","القَمَر","الرَّحمٰن","الوَاقِعة","الحدِيد","المُجَادلة","الحَشر","المُمتَحنَة","الصَّف","الجُمعَة","المُنَافِقُونَ","التغَابُن","الطَّلَاق","التَّحرِيم","المُلك","القَلَم","الحَاقة","المَعَارج","نُوح","الجِن","المُزمل","المُدثر","القِيَامة","الإنسَان","المُرسَلات","النَّبَإ","النَّازعَات","عَبَسَ","التَّكوير","الانفِطَار","المُطَففين","الانشِقَاق","البُرُوج","الطَّارق","الأعلى","الغَاشِية","الفَجر","البَلَد","الشَّمس","اللَّيل","الضُّحى","الشَّرح","التِّين","العَلَق","القَدر","البَينَة","الزَّلزَلة","العَاديَات","القَارعَة","التَّكاثُر","العَصر","الهُمَزة","الفِيل","قُرَيش","المَاعُون","الكَوثر","الكافِرون","النَّصر","المَسَد","الإخلَاص","الفَلَق","النَّاس"],"bsm":"بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ","dua":"﴿رَبَّنَا تَقَبَّلْ مِنَّآ إِنَّكَ أَنتَ اَ۬لسَّمِيعُ اُ۬لْعَلِيمُ﴾","duaRef":"البقرة، الآية 126 برواية ورش"};
@@ -697,7 +716,7 @@ function sync(){
     }
     if(prev&&edits!==e0)return;
     var before=JSON.stringify(S);
-    S=fromR(r);prev=toR();cache();prMerge(r.pr);
+    S=fromR(r);prev=toR();cache();prMerge(r.pr);histMerge(r.hist);
     if(JSON.stringify(S)!==before&&!sheet)render();
   }).catch(function(){online=false}).then(function(){syncing=false;if(was!==online&&!sheet&&!reading)render();if(prev&&diff(prev,toR())&&online)setTimeout(sync,500)});
 }
@@ -796,7 +815,7 @@ function vPray(){
   var m=mem(me);if(!m||!guards(m).length)return '';
   var v=prGet(me,prDay(0)),st=prStreak(me),all=v===31,gs=guards(m).map(function(id){var x=mem(id);return x?x.name:''}).filter(Boolean);
   var b='';for(var i=0;i<5;i++)b+='<button class="prb'+(v>>i&1?' on':'')+'" data-act="pray" data-v="'+i+'" aria-pressed="'+(v>>i&1?'true':'false')+'"><span>'+(v>>i&1?I('check'):'')+'</span>'+PRN[i]+'</button>';
-  return '<section class="card pray"><div class="pr-h"><h2 class="ctitle">صلواتي اليوم</h2>'+(st?'<span class="pr-st num">🌟 '+st+' '+(st===1?'يوم':st===2?'يومان':st<=10?'أيام':'يوماً')+'</span>':'')+'</div>'+
+  return '<section class="card pray"><div class="pr-h"><h2 class="ctitle">صلواتي اليوم</h2>'+(st?'<span class="pr-st num">'+(st>=7?'🕌':'🌟')+' '+st+' '+(st===1?'يوم':st===2?'يومان':st<=10?'أيام':'يوماً')+'</span>':'')+'</div>'+
     '<div class="pr-row">'+b+'</div>'+
     '<p class="pr-m">'+(all?'أحسنتَ، حافظتَ على صلواتك الخمس اليوم. تقبّل الله منك 🌟':'اضغط على الصلاة بعد أن تؤدّيها')+'</p>'+
     '<p class="pr-pv">🔒 لا تدخل في سباق العائلة، ويراها: '+esc(gs.join('، '))+'</p></section>';
@@ -805,7 +824,7 @@ function vKids(){
   var ks=myKids();if(!ks.length)return '';
   return '<section class="card kids"><h2 class="ctitle">صلوات أبنائي اليوم</h2>'+ks.map(function(k){
     var v=prGet(k.id,prDay(0)),st=prStreak(k.id),w=prWeek(k.id);
-    return '<div class="kd"><b>'+esc(k.name)+'</b>'+prDots(v,1)+'<small class="num">'+(st?'🌟 '+st+' متتالية · ':'')+'الأسبوع '+w+'/35</small></div>'}).join('')+
+    return '<div class="kd"><b>'+esc(k.name)+'</b>'+prDots(v,1)+'<small class="num">'+(st?(st>=7?'🕌 ':'🌟 ')+st+' متتالية · ':'')+'الأسبوع '+w+'/35</small></div>'}).join('')+
     '<p class="pr-pv">شجّعوهم بكلمة طيبة، فالصلاة تُحبَّب ولا تُفرض بالقسوة.</p></section>';
 }
 function prLine(){var n=dayNo()+((S.khatma.start||'').length),q=n%2===0;
@@ -862,6 +881,52 @@ document.addEventListener('visibilitychange',function(){
   if(document.hidden){hidAt=Date.now();return}
   if(hidAt&&Date.now()-hidAt>10*60000&&unlocked){unlocked=null;pinBuf='';if(reading&&typeof closeReader==='function')closeReader();render()}
 });
+
+/* ---------- encouragement badges ---------- */
+var HIST={},HISTP={};try{HIST=JSON.parse(localStorage.getItem('kf_hist')||'{}')||{}}catch(e){HIST={}}
+function histMerge(r){var o={},id,d;r=r||{};for(id in r)if(r[id]&&typeof r[id]==='object'){o[id]={};for(d in r[id])o[id][d]=+r[id][d]||0}
+  for(var k in HISTP){var q=HISTP[k];o[q.m]=o[q.m]||{};if(!(o[q.m][q.d]>=q.v))o[q.m][q.d]=q.v}
+  HIST=o;try{localStorage.setItem('kf_hist',JSON.stringify(HIST))}catch(e){}}
+function histPush(m){if(!m||!code)return;var d=iso(today()),key=m.id+d,v=m.p;
+  (HIST[m.id]=HIST[m.id]||{})[d]=v;HISTP[key]={m:m.id,d:d,v:v};try{localStorage.setItem('kf_hist',JSON.stringify(HIST))}catch(e){}
+  if(CFG.db)fetch(CFG.db.replace(/\/+$/,'')+'/k/'+code+'/hist/'+m.id+'/'+d+'.json',{method:'PUT',body:String(v)}).then(function(r){if(r.ok&&HISTP[key]&&HISTP[key].v===v)delete HISTP[key]}).catch(function(){})}
+function dateOf(dn){var t=pd(S.khatma.start);t.setDate(t.getDate()+dn-1);return iso(t)}
+function pAt(m,dn){var h=HIST[m.id]||{},d=dateOf(dn),best=-1,k;for(k in h)if(k<=d&&k>=S.khatma.start&&h[k]>best)best=h[k];
+  if(dn===dayNo())best=Math.max(best,m.p);return best}
+function dayDone(m,dn){var p=pAt(m,dn);return p>=0&&p>=targetAt(dn)}
+function wStreak(m){var dn=dayNo();if(dn<1)return 0;var n=0;if(!dayDone(m,dn))dn--;for(;dn>=1&&dayDone(m,dn);dn--)n++;return n}
+var STL=[3,7,15,30],MSL=[[.25,'🌱','ربع الختمة'],[.5,'🌿','نصف الختمة'],[.75,'🌳','ثلاثة أرباع الختمة'],[1,'🏆','الختمة كاملة']];
+function stLevel(n){var l=0;STL.forEach(function(x,i){if(n>=x)l=i+1});return l}
+function msLevel(m){var l=0;MSL.forEach(function(x,i){if(m.p>=Math.round(LAST*x[0]))l=i+1});return l}
+function juzDone(m){var n=0;for(var j=0;j<30;j++)if(m.p>=Q.meta[j][1])n++;return n}
+function famDone(){var dn=dayNo();if(dn<1||!S.members.length)return false;var t=targetAt(dn);return S.members.every(function(m){return m.p>=t})}
+function miniBadges(m){var st=wStreak(m),ml=msLevel(m),h='';if(ml)h+='<span title="'+MSL[ml-1][2]+'">'+MSL[ml-1][1]+'</span>';if(st>=3)h+='<span class="num" title="'+st+' أيام متتالية">⭐'+st+'</span>';return h?'<span class="mb">'+h+'</span>':''}
+function vBadges(){
+  var m=mem(me);if(!m)return '';
+  var st=wStreak(m),sl=stLevel(st),ml=msLevel(m),jd=juzDone(m),cur=juzOf(Math.min(LAST,m.p+1));
+  var stars=STL.map(function(x,i){return '<li class="'+(i<sl?'on':'')+'"><b>⭐</b><small class="num">'+x+' '+(x<=10?'أيام':'يوماً')+'</small></li>'}).join('');
+  var ms=MSL.map(function(x,i){return '<li class="'+(i<ml?'on':'')+'"><b>'+x[1]+'</b><small>'+x[2]+'</small></li>'}).join('');
+  var jz='';for(var j=1;j<=30;j++)jz+='<i class="'+(j<=jd?'on':(j===cur&&m.p<LAST?'cur':''))+'"><span class="num">'+j+'</span></i>';
+  var nextSt=STL[sl],stTxt=st?'أتممتَ وِردك '+st+' '+(st===1?'يوماً':st===2?'يومين':st<=10?'أيام':'يوماً')+' متتالية'+(nextSt?'، بقي '+(nextSt-st)+' للنجمة التالية':''):'أتمّ وِرد اليوم لتبدأ سلسلة المداومة';
+  return '<section class="card bdg">'+
+    (famDone()?'<p class="famok">🌟 العائلة كلها أتمّت وِرد اليوم، بارك الله فيكم</p>':'')+
+    '<h2 class="ctitle">علاماتي</h2>'+
+    '<h3>المداومة</h3><ul class="bl">'+stars+'</ul><p class="bt">'+stTxt+'</p>'+
+    '<p class="bq">«أحبُّ الأعمال إلى الله أدومُها وإن قلّ» <small>متفق عليه</small></p>'+
+    '<h3>مراحل الختمة</h3><ul class="bl">'+ms+'</ul>'+
+    '<h3>الأجزاء <small class="num">'+jd+' من 30</small></h3><div class="jz">'+jz+'</div></section>';
+}
+var BKEY=function(){return 'kf_bdg_'+S.khatma.start+'_'+(S.khatma.r||0)+'_'+(me||'')};
+function checkBadges(){var m=mem(me);if(!m||sheet||reading||welcome)return;
+  var seen={};try{seen=JSON.parse(localStorage.getItem(BKEY())||'{}')||{}}catch(e){}
+  var st=wStreak(m),sl=stLevel(st),ml=msLevel(m),ps=mem(me)?prStreak(me):0,news=null;
+  if(seen.s===undefined&&seen.m===undefined){seen={s:sl,m:ml,ps:ps>=7?1:0};try{localStorage.setItem(BKEY(),JSON.stringify(seen))}catch(e){}return}
+  if(ml>(seen.m||0))news={i:MSL[ml-1][1],t:'بلغتَ '+MSL[ml-1][2],q:ml===4?'ختمتَ كتاب الله، تقبّل الله منك وجعله شفيعاً لك.':'«خيركم من تعلّم القرآن وعلّمه» (رواه البخاري)'};
+  else if(sl>(seen.s||0))news={i:'⭐',t:'نجمة المداومة: '+STL[sl-1]+' '+(STL[sl-1]<=10?'أيام':'يوماً')+' متتالية',q:'«أحبُّ الأعمال إلى الله أدومُها وإن قلّ» (متفق عليه)'};
+  else if(ps>=7&&!seen.ps&&guards(m).length)news={i:'🕌',t:'حافظتَ على صلواتك الخمس 7 أيام متتالية',q:'«أحبُّ العمل إلى الله الصلاةُ على وقتها» (متفق عليه)'};
+  seen.m=Math.max(seen.m||0,ml);seen.s=Math.max(seen.s||0,sl);if(ps>=7)seen.ps=1;try{localStorage.setItem(BKEY(),JSON.stringify(seen))}catch(e){}
+  if(news){BNEW=news;sheet='bnew';render()}}
+var BNEW=null;
 function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
 function openVid(w){var f=w==='pin'?'fam-pin':'fam-intro',m=mem(me),o=document.createElement('div');o.className='vov';
   o.innerHTML='<video src="'+f+'.mp4" poster="'+f+'.jpg" playsinline controls autoplay preload="auto"></video>'+
@@ -960,7 +1025,7 @@ function vRace(){
   var rows=list.map(function(m,i){
     var s=stat(m);
     return '<div class="row'+(i===0&&m.p?' lead':'')+'" style="--h:'+hue(m.id)+'"><span class="rank num"><span>'+(i+1)+'</span></span>'+av(m)+
-      '<div class="who"><b>'+esc(m.name)+'<small class="num">ص '+m.p+'</small></b><div class="bar"><i style="width:'+(m.p/LAST*100).toFixed(1)+'%"></i></div></div>'+
+      '<div class="who"><b>'+esc(m.name)+'<small class="num">ص '+m.p+'</small></b><div class="bar"><i style="width:'+(m.p/LAST*100).toFixed(1)+'%"></i></div>'+miniBadges(m)+'</div>'+
       '<span class="st '+s[0]+'">'+s[1]+'</span><button class="ib" data-act="open" data-v="mem:'+m.id+'" aria-label="خيارات '+esc(m.name)+'">'+I('more')+'</button></div>';
   }).join('');
   var lead=list.length&&list[0].p?'في المقدمة: '+esc(list[0].name):M+' أفراد';
@@ -1055,6 +1120,8 @@ function vSheet(){
   }else if(k==='pinr'){
     h='<h3>إعادة ضبط رمز فرد</h3><p class="sub">لمن نسي رمزه. بعد إعادة الضبط يختار رمزاً جديداً حين يفتح التطبيق.</p>'+
       S.members.filter(function(x){return x.id!==me}).map(function(x){return x.k?'<button class="btn ghost pfr" data-act="pinr" data-v="'+x.id+'"><b>'+esc(x.name)+'</b><small>أعد الضبط</small></button>':'<div class="pfr nok"><b>'+esc(x.name)+'</b><small>لم يختر رمزاً بعد</small></div>'}).join('');
+  }else if(k==='bnew'&&BNEW){
+    h='<div class="bnew"><div class="bi">'+BNEW.i+'</div><p class="bh">'+esc(BNEW.t)+'</p><p>'+esc(BNEW.q)+'</p><p class="sub">بارك الله فيك، واصِل.</p></div><button class="btn" data-act="close">الحمد لله</button>';
   }else if(k==='pfol'){
     h='<h3>متابعة صلاة الأبناء</h3><p class="sub">اختر الابن أو البنت، ثم حدّد من يرى صلواته من الوالدين. صلوات كل فرد لا يراها غيره إلا من تختارهم هنا، ولا تدخل في سباق العائلة.</p>'+
       S.members.map(function(x){var gs=guards(x).map(function(id){var y=mem(id);return y?y.name:''}).filter(Boolean);
@@ -1159,7 +1226,7 @@ function setRead(p){var v=ver();VER=v.substr(0,p-1)+'1'+v.substr(p);try{localSto
 function need(p){return WC[p]?Math.max(20,Math.round(WC[p]*0.518)):9999}
 function dur(s){var m=Math.floor(s/60),r=s%60;return m?(m===1?'دقيقة':m===2?'دقيقتان':m+' دقائق')+(r?' و'+r+' ثانية':''):s+' ثانية'}
 function pct(p){return isRead(p)?100:Math.min(99,Math.floor((DW[p]||0)/need(p)*100))}
-function advance(){var m=mem(me);if(!m)return;var q=m.p;while(q<LAST&&isRead(q+1))q++;if(q>m.p){m.p=q;dropStaleBm();save()}}
+function advance(){var m=mem(me);if(!m)return;var q=m.p;while(q<LAST&&isRead(q+1))q++;if(q>m.p){m.p=q;dropStaleBm();histPush(m);save()}}
 function paintNum(p){var b=document.querySelector('#pg'+p+' .pnum');if(!b)return;var r=isRead(p);b.classList.toggle('done',r);b.style.setProperty('--pr',pct(p)+'%');b.setAttribute('aria-label','الصفحة '+p+(r?'، قُرئت':''))}
 setInterval(function(){
   if(!reading||!mem(me)||document.hidden||(sheet&&sheet.indexOf('mean')!==0))return;
@@ -1273,8 +1340,9 @@ function render(){
   var h=hijri();
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
-    (code?vWird()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 33</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    (code?vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 34</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+  if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
