@@ -550,6 +550,23 @@ html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
 .wel-pr .aw{font-family:'warsh',var(--display);font-size:1.15em;color:#f0d384}.wel-pr .ab{color:#e8c66f}
 .wel-pr small{display:inline-block;margin-inline-start:6px;font-size:12px;opacity:.75}
 html.big .prb{font-size:15px}html.big .prb span{width:50px;height:50px}html.big .wel-pr{font-size:17px}html.big .pr-m{font-size:16px}
+
+/* PIN lock */
+.lock{min-height:100vh;min-height:var(--vh,100dvh);display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(120% 80% at 50% 0%,#11604f,#0a3b31 55%,#062a22);color:#f3eedd}
+.lk-in{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.lk-in .appic{width:64px;height:64px;border-radius:16px;box-shadow:0 0 0 2px rgba(232,198,111,.5)}
+.lk-hi{font-size:15px;opacity:.9}.lk-hi b{color:#e8c66f}
+.lock h2{font-family:var(--display);font-size:24px;color:#f0d384;margin-top:4px}
+.lk-sub{font-size:13px;opacity:.8;min-height:18px}
+.lk-dots{display:flex;gap:16px;margin:10px 0 2px}.lk-dots i{width:16px;height:16px;border-radius:50%;border:2px solid #e8c66f}.lk-dots i.on{background:#e8c66f}
+.lk-dots.bad{animation:shk .35s}@keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.lk-err{min-height:20px;font-size:14px;color:#ffb4a3;font-weight:600}
+.lk-pad{display:grid;grid-template-columns:repeat(3,72px);gap:12px;margin:4px 0 10px;direction:ltr}
+.pk{width:72px;height:72px;border-radius:50%;border:1.5px solid rgba(232,198,111,.55);background:rgba(255,255,255,.07);color:#fff;font:600 28px/1 var(--body,inherit);cursor:pointer}
+.pk:active{background:rgba(232,198,111,.35)}
+.lk-sw{color:#e8c66f!important;font-size:14px}.lk-fg{font-size:12.5px;opacity:.75;margin-top:6px}
+html.big .pk{width:80px;height:80px;font-size:32px}html.big .lk-pad{grid-template-columns:repeat(3,80px)}html.big .lock h2{font-size:28px}
+.pfr.nok{display:flex;justify-content:space-between;padding:12px 16px;opacity:.6}
 </style></head><body><div id="root"></div><script>
 (function(){
 var Q={"si":[[1,1],[1,2],[3,50],[4,77],[6,106],[7,128],[8,151],[9,177],[10,187],[11,208],[11,221],[12,235],[13,249],[13,255],[14,262],[14,267],[15,282],[15,293],[16,305],[16,312],[17,322],[17,332],[18,342],[18,350],[18,359],[19,367],[19,377],[20,385],[20,396],[21,404],[21,411],[21,415],[21,418],[22,428],[22,434],[22,440],[23,446],[23,453],[23,458],[24,467],[24,477],[25,483],[25,489],[25,496],[25,499],[26,502],[26,507],[26,511],[26,515],[26,518],[26,520],[27,523],[27,526],[27,528],[27,531],[27,534],[27,537],[28,542],[28,545],[28,549],[28,551],[28,553],[28,554],[28,556],[28,558],[28,560],[29,562],[29,564],[29,566],[29,568],[29,570],[29,572],[29,574],[29,575],[29,577],[29,578],[29,580],[30,582],[30,583],[30,585],[30,586],[30,587],[30,587],[30,589],[30,590],[30,591],[30,591],[30,592],[30,593],[30,594],[30,595],[30,595],[30,596],[30,596],[30,597],[30,597],[30,598],[30,598],[30,599],[30,599],[30,600],[30,600],[30,601],[30,601],[30,601],[30,602],[30,602],[30,602],[30,603],[30,603],[30,603],[30,604],[30,604],[30,604]],"meta":[[1,21,1,1,147],[22,41,2,141,110],[42,61,2,251,125],[62,81,3,91,133],[82,101,4,24,123],[102,121,4,147,112],[121,141,5,84,150],[142,161,6,112,142],[162,181,7,87,160],[182,201,8,41,129],[201,221,9,94,151],[222,241,11,6,168],[242,261,12,53,157],[262,281,15,1,227],[282,301,17,1,183],[302,321,18,74,265],[322,341,21,1,187],[342,361,23,1,201],[362,381,25,21,340],[382,401,27,58,171],[402,421,29,46,176],[422,441,33,31,169],[442,461,36,27,354],[462,481,39,31,171],[482,502,41,46,239],[502,521,46,1,195],[522,541,51,31,397],[542,561,58,1,136],[562,581,67,1,430],[582,604,78,1,566]],"names":["الفَاتِحة","البَقَرَة","آل عِمران","النِّسَاء","المَائدة","الأنعَام","الأعرَاف","الأنفَال","التوبَة","يُونس","هُود","يُوسُف","الرَّعد","إبراهِيم","الحِجر","النَّحل","الإسرَاء","الكَهف","مَريَم","طه","الأنبيَاء","الحج","المؤمنُون","النور","الفُرقَان","الشعراء","النَّمل","القَصَص","العَنكبُوت","الرُّوم","لُقمَان","السَّجدة","الأحزَاب","سَبإ","فَاطِر","يسٓ","الصَّافَات","صٓ","الزُّمَر","غَافِر","فُصِّلَت","الشُّوري","الزُّخرُف","الدُّخان","الجاثِية","الأحقَاف","مُحمد","الفَتح","الحُجُرَات","قٓ","الذَّاريَات","الطُّور","النَّجم","القَمَر","الرَّحمٰن","الوَاقِعة","الحدِيد","المُجَادلة","الحَشر","المُمتَحنَة","الصَّف","الجُمعَة","المُنَافِقُونَ","التغَابُن","الطَّلَاق","التَّحرِيم","المُلك","القَلَم","الحَاقة","المَعَارج","نُوح","الجِن","المُزمل","المُدثر","القِيَامة","الإنسَان","المُرسَلات","النَّبَإ","النَّازعَات","عَبَسَ","التَّكوير","الانفِطَار","المُطَففين","الانشِقَاق","البُرُوج","الطَّارق","الأعلى","الغَاشِية","الفَجر","البَلَد","الشَّمس","اللَّيل","الضُّحى","الشَّرح","التِّين","العَلَق","القَدر","البَينَة","الزَّلزَلة","العَاديَات","القَارعَة","التَّكاثُر","العَصر","الهُمَزة","الفِيل","قُرَيش","المَاعُون","الكَوثر","الكافِرون","النَّصر","المَسَد","الإخلَاص","الفَلَق","النَّاس"],"bsm":"بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ","dua":"﴿رَبَّنَا تَقَبَّلْ مِنَّآ إِنَّكَ أَنتَ اَ۬لسَّمِيعُ اُ۬لْعَلِيمُ﴾","duaRef":"البقرة، الآية 126 برواية ورش"};
@@ -644,17 +661,17 @@ try{code=localStorage.getItem('kf_code')}catch(e){}
   if(m||s)try{history.replaceState(null,'',location.pathname)}catch(e){}
 })();
 function url(){return CFG.db.replace(/\/+$/,'')+'/k/'+code+'.json'}
-function toR(){var o={};S.members.forEach(function(m,i){o[m.id]={name:m.name,p:m.p,i:i,g:m.g||''}});return{khatma:S.khatma,members:o}}
+function toR(){var o={};S.members.forEach(function(m,i){o[m.id]={name:m.name,p:m.p,i:i,g:m.g||'',k:m.k||''}});return{khatma:S.khatma,members:o}}
 function fromR(r){
   var ms=[],id,x;
-  for(id in (r.members||{})){x=r.members[id];if(x&&x.name!=null)ms.push({id:id,name:String(x.name),p:Math.max(0,Math.min(LAST,+x.p||0)),i:+x.i||0,g:typeof x.g==='string'?x.g:''})}
+  for(id in (r.members||{})){x=r.members[id];if(x&&x.name!=null)ms.push({id:id,name:String(x.name),p:Math.max(0,Math.min(LAST,+x.p||0)),i:+x.i||0,g:typeof x.g==='string'?x.g:'',k:typeof x.k==='string'?x.k:''})}
   ms.sort(function(a,b){return a.i-b.i});
-  return{v:3,khatma:r.khatma&&r.khatma.start?r.khatma:S.khatma,members:ms.map(function(x){return{id:x.id,name:x.name,p:x.p,g:x.g}})};
+  return{v:3,khatma:r.khatma&&r.khatma.start?r.khatma:S.khatma,members:ms.map(function(x){return{id:x.id,name:x.name,p:x.p,g:x.g,k:x.k}})};
 }
 function diff(a,b){
   var d={},id,n=0;
   if(JSON.stringify(a.khatma)!==JSON.stringify(b.khatma)){d.khatma=b.khatma;n++}
-  for(id in b.members)['name','p','i','g'].forEach(function(f){if(!a.members[id]||(a.members[id][f]||'')!==(b.members[id][f]||'')){d['members/'+id+'/'+f]=b.members[id][f];n++}});
+  for(id in b.members)['name','p','i','g','k'].forEach(function(f){if(!a.members[id]||(a.members[id][f]||'')!==(b.members[id][f]||'')){d['members/'+id+'/'+f]=b.members[id][f];n++}});
   for(id in a.members)if(!b.members[id]){d['members/'+id]=null;n++}
   return n?d:null;
 }
@@ -787,6 +804,47 @@ function vKids(){
 function prLine(){var n=dayNo()+((S.khatma.start||'').length),q=n%2===0;
   if(q){var a=PRQ[(n>>1)%PRQ.length];return '<p class="wel-pr"><span class="ab">﴿</span><span class="aw">'+a[0]+'</span><span class="ab">﴾</span><small>'+a[1]+'</small></p>'}
   var h=PRH[(n>>1)%PRH.length];return '<p class="wel-pr">🕌 «'+h[0]+'» <small>'+h[1]+'</small></p>'}
+
+/* ---------- per-member PIN ---------- */
+var unlocked=null,pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,hidAt=0;
+function owner(){var o=S.khatma.own;if(!o&&famVid())o='mmwf6wd6v';return o||''}
+function pinHash(id,pin){var t=code+':'+id+':'+pin;
+  if(window.crypto&&crypto.subtle&&window.TextEncoder)return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b).slice(0,12),function(x){return(x<16?'0':'')+x.toString(16)}).join('')});
+  var h=5381;for(var i=0;i<t.length;i++)h=((h*33)^t.charCodeAt(i))>>>0;return Promise.resolve('d'+h.toString(16))}
+function needLock(){var m=mem(me);return !!(code&&m&&unlocked!==me)}
+function vLock(){
+  var m=mem(me),set=!m.k,ow=mem(owner()),dots='';
+  for(var i=0;i<4;i++)dots+='<i class="'+(i<pinBuf.length?'on':'')+'"></i>';
+  var keys=[1,2,3,4,5,6,7,8,9,'',0,'del'].map(function(k){return k===''?'<span></span>':'<button class="pk" data-act="pk" data-v="'+k+'"'+(k==='del'?' aria-label="امسح"':'')+'>'+(k==='del'?'⌫':k)+'</button>'}).join('');
+  var wait=pinWait>Date.now();
+  return '<div class="lock"><div class="lk-in"><img class="appic" src="icon2-192.png" alt=""><p class="lk-hi">السلام عليكم يا <b>'+esc(m.name)+'</b></p>'+
+    '<h2>'+(set?(pinFirst?'أعد كتابة الرمز للتأكيد':'اختر رمزك السري'):'اكتب رمزك السري')+'</h2>'+
+    '<p class="lk-sub">'+(set?'4 أرقام تحفظها، حتى لا يقرأ أحدٌ باسمك':'')+'</p>'+
+    '<div class="lk-dots'+(pinErr?' bad':'')+'">'+dots+'</div><p class="lk-err" role="alert">'+esc(wait?'انتظر قليلاً ثم حاول من جديد':pinErr)+'</p>'+
+    '<div class="lk-pad">'+keys+'</div>'+
+    '<button class="lnk lk-sw" data-act="me" data-v="">لستُ '+esc(m.name)+'؟ اختر اسمك</button>'+
+    (!set&&ow&&ow.id!==m.id?'<p class="lk-fg">نسيتَ رمزك؟ اطلب من '+esc(ow.name)+' إعادة ضبطه من «إدارة الختمة».</p>':'')+
+    '</div></div>';
+}
+function pinKey(k){
+  if(pinWait>Date.now())return;
+  if(k==='del'){pinBuf=pinBuf.slice(0,-1);pinErr='';render();return}
+  if(pinBuf.length>=4)return;pinBuf+=k;pinErr='';render();
+  if(pinBuf.length<4)return;
+  var m=mem(me),id=me,p=pinBuf;
+  setTimeout(function(){
+    if(!m.k){
+      if(!pinFirst){pinFirst=p;pinBuf='';render();return}
+      if(pinFirst!==p){pinFirst='';pinBuf='';pinErr='الرمزان مختلفان، اختر رمزك من جديد';render();return}
+      pinHash(id,p).then(function(h){m.k=h;unlocked=id;pinFirst='';pinBuf='';save()});return}
+    pinHash(id,p).then(function(h){
+      if(h===m.k){unlocked=id;pinFails=0;pinBuf='';render();window.scrollTo(0,0)}
+      else{pinFails++;pinBuf='';pinErr='الرمز غير صحيح';if(pinFails>=5){pinFails=0;pinWait=Date.now()+30000;setTimeout(render,30100)}render()}})},120);
+}
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){hidAt=Date.now();return}
+  if(hidAt&&Date.now()-hidAt>10*60000&&unlocked){unlocked=null;pinBuf='';if(reading&&typeof closeReader==='function')closeReader();render()}
+});
 function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
 function openVid(){var m=mem(me),o=document.createElement('div');o.className='vov';
   o.innerHTML='<video src="fam-intro.mp4" poster="fam-intro.jpg" playsinline controls autoplay preload="auto"></video>'+
@@ -902,6 +960,7 @@ function vAdmin(){
     (code?'<button class="btn ghost" data-act="open" data-v="invite">'+I('link')+'رابط العائلة لدعوة فرد</button>':'')+
     (code?'<button class="btn ghost" data-act="open" data-v="fbl">'+I('chat')+'ملاحظات العائلة على التطبيق</button>':'')+
     '<button class="btn ghost" data-act="open" data-v="pfol">🕌 متابعة صلاة الأبناء</button>'+
+    (me&&me===owner()?'<button class="btn ghost" data-act="open" data-v="pinr">🔑 إعادة ضبط رمز فرد</button>':'')+
     '<button class="btn ghost" data-act="open" data-v="fb">أرسل ملاحظة أو أبلغ عن خطأ</button>'+
     '<button class="btn ghost" data-act="open" data-v="new">ختمة جديدة</button>'+
     '<button class="btn ghost num" data-act="dl"'+(dl>0?' disabled':'')+'>'+(dl===-1?'المصحف محفوظ للقراءة دون إنترنت':dl===-2?'تعذّر التحميل، أعد المحاولة':dl>0?'جارٍ التحميل '+Math.min(60,dl)+' من 60':'حمّل المصحف للقراءة دون إنترنت')+'</button>');
@@ -975,6 +1034,9 @@ function vSheet(){
   }else if(k==='del'){
     m=mem(a);
     h='<h3>حذف '+esc(m.name)+'؟</h3><p class="sub">يُحذف من الختمة مع ما سجّله من قراءة.</p><button class="btn" data-act="delm" data-v="'+a+'">نعم، احذف</button>';
+  }else if(k==='pinr'){
+    h='<h3>إعادة ضبط رمز فرد</h3><p class="sub">لمن نسي رمزه. بعد إعادة الضبط يختار رمزاً جديداً حين يفتح التطبيق.</p>'+
+      S.members.filter(function(x){return x.id!==me}).map(function(x){return x.k?'<button class="btn ghost pfr" data-act="pinr" data-v="'+x.id+'"><b>'+esc(x.name)+'</b><small>أعد الضبط</small></button>':'<div class="pfr nok"><b>'+esc(x.name)+'</b><small>لم يختر رمزاً بعد</small></div>'}).join('');
   }else if(k==='pfol'){
     h='<h3>متابعة صلاة الأبناء</h3><p class="sub">اختر الابن أو البنت، ثم حدّد من يرى صلواته من الوالدين. صلوات كل فرد لا يراها غيره إلا من تختارهم هنا، ولا تدخل في سباق العائلة.</p>'+
       S.members.map(function(x){var gs=guards(x).map(function(id){var y=mem(id);return y?y.name:''}).filter(Boolean);
@@ -1187,13 +1249,14 @@ window.addEventListener('resize',function(){if(reading){var p=reading;filledSig=
 document.addEventListener('keydown',function(e){if(!reading||sheet)return;if(e.key==='ArrowLeft')goPage(reading+1);else if(e.key==='ArrowRight')goPage(reading-1)});
 function render(){
   if(welcome&&!reading&&code){root.innerHTML=vWelcome();return}
+  if(!welcome&&!reading&&needLock()){root.innerHTML=vLock();return}
   var m0=mem(me);if(m0&&m0.p>=LAST&&!sheet&&!reading){var dk=null;try{dk=localStorage.getItem(doneKey())}catch(e){}if(!dk)sheet='donec'}
   if(reading){if(!scroller()){goPage(reading);return}updateBars();refill();document.getElementById('shost').innerHTML=vSheet();return}
   var h=hijri();
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vWird()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 30</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 31</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
@@ -1207,7 +1270,9 @@ root.addEventListener('click',function(e){
   if(act==='notify'){enableNotif();return}
   if(act==='close'){if(el.classList.contains('scrim')&&e.target!==el)return;sheet=null;copied=false;render();return}
   if(act==='open'){sheet=v;copied=false;if(v==='fb'){fbSent=false;fbErr=''}if(v==='fbl')FB=null;render();return}
-  if(act==='me'){me=v||null;try{me?localStorage.setItem('kf_me',me):localStorage.removeItem('kf_me')}catch(_){}loadBm();dropStaleBm();syncSubMember();render();return}
+  if(act==='pk'){pinKey(v);return}
+  if(act==='pinr'){var rm=mem(v);if(rm&&me===owner()&&unlocked===me){rm.k='';sheet='pinr';save()}return}
+  if(act==='me'){pinBuf='';pinFirst='';pinErr='';me=v||null;try{me?localStorage.setItem('kf_me',me):localStorage.removeItem('kf_me')}catch(_){}loadBm();dropStaleBm();syncSubMember();render();return}
   if(act==='read'){goPage(Q.meta[+v-1][0]);return}
   if(act==='wird'){m=mem(me);if(m){var ra=resumeAt(m);goPage(ra.pg,ra.ay)}return}
   if(act==='resume'){if(pos&&pos.pg)goPage(pos.pg);return}
@@ -1270,7 +1335,7 @@ root.addEventListener('submit',function(e){
     if(!cn)return;
     var mid='m'+Date.now().toString(36);
     code=newCode();try{localStorage.setItem('kf_code',code);localStorage.setItem('kf_me',mid)}catch(_){}
-    S={v:3,khatma:{name:ck,start:iso(today()),days:cd,r:0},members:[{id:mid,name:cn,p:0}]};me=mid;prev=null;welcome=false;sheet='invite';
+    S={v:3,khatma:{name:ck,start:iso(today()),days:cd,r:0,own:mid},members:[{id:mid,name:cn,p:0}]};me=mid;unlocked=mid;prev=null;welcome=false;sheet='invite';
     loadBm();save();window.scrollTo(0,0);
   }else if(f==='gopg'){
     var g=parseInt(document.getElementById('goPage').value,10);if(g>=1&&g<=LAST)goPage(g);
