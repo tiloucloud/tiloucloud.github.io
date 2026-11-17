@@ -661,17 +661,17 @@ try{code=localStorage.getItem('kf_code')}catch(e){}
   if(m||s)try{history.replaceState(null,'',location.pathname)}catch(e){}
 })();
 function url(){return CFG.db.replace(/\/+$/,'')+'/k/'+code+'.json'}
-function toR(){var o={};S.members.forEach(function(m,i){o[m.id]={name:m.name,p:m.p,i:i,g:m.g||'',k:m.k||''}});return{khatma:S.khatma,members:o}}
+function toR(){var o={};S.members.forEach(function(m,i){o[m.id]={name:m.name,p:m.p,i:i,g:m.g||'',k:m.k||'',h:m.h||''}});return{khatma:S.khatma,members:o}}
 function fromR(r){
   var ms=[],id,x;
-  for(id in (r.members||{})){x=r.members[id];if(x&&x.name!=null)ms.push({id:id,name:String(x.name),p:Math.max(0,Math.min(LAST,+x.p||0)),i:+x.i||0,g:typeof x.g==='string'?x.g:'',k:typeof x.k==='string'?x.k:''})}
+  for(id in (r.members||{})){x=r.members[id];if(x&&x.name!=null)ms.push({id:id,name:String(x.name),p:Math.max(0,Math.min(LAST,+x.p||0)),i:+x.i||0,g:typeof x.g==='string'?x.g:'',k:typeof x.k==='string'?x.k:'',h:x.h?'1':''})}
   ms.sort(function(a,b){return a.i-b.i});
-  return{v:3,khatma:r.khatma&&r.khatma.start?r.khatma:S.khatma,members:ms.map(function(x){return{id:x.id,name:x.name,p:x.p,g:x.g,k:x.k}})};
+  return{v:3,khatma:r.khatma&&r.khatma.start?r.khatma:S.khatma,members:ms.map(function(x){return{id:x.id,name:x.name,p:x.p,g:x.g,k:x.k,h:x.h}})};
 }
 function diff(a,b){
   var d={},id,n=0;
   if(JSON.stringify(a.khatma)!==JSON.stringify(b.khatma)){d.khatma=b.khatma;n++}
-  for(id in b.members)['name','p','i','g','k'].forEach(function(f){if(!a.members[id]||(a.members[id][f]||'')!==(b.members[id][f]||'')){d['members/'+id+'/'+f]=b.members[id][f];n++}});
+  for(id in b.members)['name','p','i','g','k','h'].forEach(function(f){if(!a.members[id]||(a.members[id][f]||'')!==(b.members[id][f]||'')){d['members/'+id+'/'+f]=b.members[id][f];n++}});
   for(id in a.members)if(!b.members[id]){d['members/'+id]=null;n++}
   return n?d:null;
 }
@@ -806,24 +806,34 @@ function prLine(){var n=dayNo()+((S.khatma.start||'').length),q=n%2===0;
   var h=PRH[(n>>1)%PRH.length];return '<p class="wel-pr">🕌 «'+h[0]+'» <small>'+h[1]+'</small></p>'}
 
 /* ---------- per-member PIN ---------- */
-var unlocked=null,pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,hidAt=0;
+var unlocked=null,pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,hidAt=0,pinChange=false,home='',mine=[];
+try{home=localStorage.getItem('kf_home')||localStorage.getItem('kf_me')||'';if(home)localStorage.setItem('kf_home',home);mine=JSON.parse(localStorage.getItem('kf_mine')||'[]')||[]}catch(e){}
+function setHome(id){if(!home){home=id;try{localStorage.setItem('kf_home',id)}catch(e){}}if(mine.indexOf(id)<0){mine.push(id);try{localStorage.setItem('kf_mine',JSON.stringify(mine))}catch(e){}}}
 function owner(){var o=S.khatma.own;if(!o&&famVid())o='mmwf6wd6v';return o||''}
 function pinHash(id,pin){var t=code+':'+id+':'+pin;
   if(window.crypto&&crypto.subtle&&window.TextEncoder)return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b).slice(0,12),function(x){return(x<16?'0':'')+x.toString(16)}).join('')});
   var h=5381;for(var i=0;i<t.length;i++)h=((h*33)^t.charCodeAt(i))>>>0;return Promise.resolve('d'+h.toString(16))}
-function needLock(){var m=mem(me);return !!(code&&m&&unlocked!==me)}
+function gate(){var m=mem(me);if(!(code&&m))return 'open';
+  if(pinChange)return 'set';
+  if(me===home){if(!m.h){m.h='1';setTimeout(save,0)}return 'open'}
+  if(m.k)return unlocked===me?'open':'enter';
+  if(m.h)return 'blocked';
+  if(!home){setHome(me);m.h='1';setTimeout(save,0);return 'open'}
+  return unlocked===me?'open':'set'}
+function needLock(){return gate()!=='open'}
 function vLock(){
-  var m=mem(me),set=!m.k,ow=mem(owner()),dots='';
+  var m=mem(me),g=gate(),set=g==='set',dots='';
+  if(g==='blocked')return '<div class="lock"><div class="lk-in"><img class="appic" src="icon2-192.png" alt=""><p class="lk-hi">اسم <b>'+esc(m.name)+'</b> مرتبط بهاتف صاحبه</p><h2>لم يختر رمزه بعد</h2><p class="lk-sub" style="min-height:0">ليقرأ '+esc(m.name)+' من هذا الهاتف، يختار رمزه أولاً من هاتفه: «إدارة الختمة» ← «🔑 رمزي السري».</p><button class="gbtn" data-act="me" data-v="" style="margin-top:14px">اختر اسماً آخر</button></div></div>';
   for(var i=0;i<4;i++)dots+='<i class="'+(i<pinBuf.length?'on':'')+'"></i>';
   var keys=[1,2,3,4,5,6,7,8,9,'',0,'del'].map(function(k){return k===''?'<span></span>':'<button class="pk" data-act="pk" data-v="'+k+'"'+(k==='del'?' aria-label="امسح"':'')+'>'+(k==='del'?'⌫':k)+'</button>'}).join('');
   var wait=pinWait>Date.now();
   return '<div class="lock"><div class="lk-in"><img class="appic" src="icon2-192.png" alt=""><p class="lk-hi">السلام عليكم يا <b>'+esc(m.name)+'</b></p>'+
-    '<h2>'+(set?(pinFirst?'أعد كتابة الرمز للتأكيد':'اختر رمزك السري'):'اكتب رمزك السري')+'</h2>'+
-    '<p class="lk-sub">'+(set?'4 أرقام تحفظها، حتى لا يقرأ أحدٌ باسمك':'')+'</p>'+
+    '<h2>'+(set?(pinFirst?'أعد كتابة الرمز للتأكيد':(pinChange?'اختر رمزك الجديد':'اختر رمزك السري')):'اكتب رمزك السري')+'</h2>'+
+    '<p class="lk-sub">'+(set?'تكتبه فقط حين تقرأ من هاتف غير هاتفك':'هذا ليس هاتفك، فاكتب رمزك لتقرأ باسمك')+'</p>'+
     '<div class="lk-dots'+(pinErr?' bad':'')+'">'+dots+'</div><p class="lk-err" role="alert">'+esc(wait?'انتظر قليلاً ثم حاول من جديد':pinErr)+'</p>'+
     '<div class="lk-pad">'+keys+'</div>'+
-    '<button class="lnk lk-sw" data-act="me" data-v="">لستُ '+esc(m.name)+'؟ اختر اسمك</button>'+
-    (!set&&ow&&ow.id!==m.id?'<p class="lk-fg">نسيتَ رمزك؟ اطلب من '+esc(ow.name)+' إعادة ضبطه من «إدارة الختمة».</p>':'')+
+    (pinChange?'<button class="lnk lk-sw" data-act="pinx">إلغاء</button>':'<button class="lnk lk-sw" data-act="me" data-v="">لستُ '+esc(m.name)+'؟ اختر اسمك</button>')+
+    (!set?(mine.indexOf(m.id)>=0?'<button class="lnk lk-fg" data-act="pinchg">نسيتُ رمزي، أختار رمزاً جديداً</button>':'<p class="lk-fg">نسيتَ رمزك؟ غيّره من هاتفك أنت، من «إدارة الختمة» ← «تغيير رمزي السري».</p>'):'')+
     '</div></div>';
 }
 function pinKey(k){
@@ -833,10 +843,10 @@ function pinKey(k){
   if(pinBuf.length<4)return;
   var m=mem(me),id=me,p=pinBuf;
   setTimeout(function(){
-    if(!m.k){
+    if(!m.k||pinChange){
       if(!pinFirst){pinFirst=p;pinBuf='';render();return}
       if(pinFirst!==p){pinFirst='';pinBuf='';pinErr='الرمزان مختلفان، اختر رمزك من جديد';render();return}
-      pinHash(id,p).then(function(h){m.k=h;unlocked=id;pinFirst='';pinBuf='';save()});return}
+      pinHash(id,p).then(function(h){m.k=h;m.h='1';unlocked=id;pinFirst='';pinBuf='';pinChange=false;if(mine.indexOf(id)<0){mine.push(id);try{localStorage.setItem('kf_mine',JSON.stringify(mine))}catch(e){}}save()});return}
     pinHash(id,p).then(function(h){
       if(h===m.k){unlocked=id;pinFails=0;pinBuf='';render();window.scrollTo(0,0)}
       else{pinFails++;pinBuf='';pinErr='الرمز غير صحيح';if(pinFails>=5){pinFails=0;pinWait=Date.now()+30000;setTimeout(render,30100)}render()}})},120);
@@ -960,7 +970,7 @@ function vAdmin(){
     (code?'<button class="btn ghost" data-act="open" data-v="invite">'+I('link')+'رابط العائلة لدعوة فرد</button>':'')+
     (code?'<button class="btn ghost" data-act="open" data-v="fbl">'+I('chat')+'ملاحظات العائلة على التطبيق</button>':'')+
     '<button class="btn ghost" data-act="open" data-v="pfol">🕌 متابعة صلاة الأبناء</button>'+
-    (me&&me===owner()?'<button class="btn ghost" data-act="open" data-v="pinr">🔑 إعادة ضبط رمز فرد</button>':'')+
+    (me&&(me===home||unlocked===me)?'<button class="btn ghost" data-act="pinchg">🔑 '+(mem(me)&&mem(me).k?'تغيير رمزي السري':'رمزي السري (للقراءة من هاتف آخر)')+'</button>':'')+
     '<button class="btn ghost" data-act="open" data-v="fb">أرسل ملاحظة أو أبلغ عن خطأ</button>'+
     '<button class="btn ghost" data-act="open" data-v="new">ختمة جديدة</button>'+
     '<button class="btn ghost num" data-act="dl"'+(dl>0?' disabled':'')+'>'+(dl===-1?'المصحف محفوظ للقراءة دون إنترنت':dl===-2?'تعذّر التحميل، أعد المحاولة':dl>0?'جارٍ التحميل '+Math.min(60,dl)+' من 60':'حمّل المصحف للقراءة دون إنترنت')+'</button>');
@@ -1256,7 +1266,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vWird()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 31</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 32</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
 window.addEventListener('appinstalled',function(){dpr=null;noInst=true;if(!reading)render()});
@@ -1271,8 +1281,9 @@ root.addEventListener('click',function(e){
   if(act==='close'){if(el.classList.contains('scrim')&&e.target!==el)return;sheet=null;copied=false;render();return}
   if(act==='open'){sheet=v;copied=false;if(v==='fb'){fbSent=false;fbErr=''}if(v==='fbl')FB=null;render();return}
   if(act==='pk'){pinKey(v);return}
-  if(act==='pinr'){var rm=mem(v);if(rm&&me===owner()&&unlocked===me){rm.k='';sheet='pinr';save()}return}
-  if(act==='me'){pinBuf='';pinFirst='';pinErr='';me=v||null;try{me?localStorage.setItem('kf_me',me):localStorage.removeItem('kf_me')}catch(_){}loadBm();dropStaleBm();syncSubMember();render();return}
+  if(act==='pinchg'){if(me===home||unlocked===me||mine.indexOf(me)>=0){pinChange=true;pinBuf='';pinFirst='';pinErr='';sheet=null;render();window.scrollTo(0,0)}return}
+  if(act==='pinx'){pinChange=false;pinBuf='';pinFirst='';pinErr='';render();return}
+  if(act==='me'){pinBuf='';pinFirst='';pinErr='';pinChange=false;unlocked=null;me=v||null;try{me?localStorage.setItem('kf_me',me):localStorage.removeItem('kf_me')}catch(_){}loadBm();dropStaleBm();syncSubMember();render();return}
   if(act==='read'){goPage(Q.meta[+v-1][0]);return}
   if(act==='wird'){m=mem(me);if(m){var ra=resumeAt(m);goPage(ra.pg,ra.ay)}return}
   if(act==='resume'){if(pos&&pos.pg)goPage(pos.pg);return}
