@@ -1,4 +1,4 @@
-var C='kf-v41';
+var C='kf-v42';
 self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(['./','warsh.woff2','manifest.webmanifest','icon2-192.png','fonts/reem-kufi-arabic-700.woff2','fonts/ibm-plex-sans-arabic-arabic-400.woff2','fonts/ibm-plex-sans-arabic-arabic-600.woff2'])}).then(function(){return self.skipWaiting()}))});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(x){return x!==C}).map(function(x){return caches.delete(x)}))}).then(function(){return self.clients.claim()}))});
 self.addEventListener('push',function(e){
