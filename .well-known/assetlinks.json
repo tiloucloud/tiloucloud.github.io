@@ -11,5 +11,17 @@
         "14:93:14:E4:16:CC:03:28:93:9F:E6:44:DC:6C:E2:D2:27:AF:07:CA:55:EC:0F:10:F6:3E:9C:F2:7E:2C:FB:66"
       ]
     }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tiloucloud.adhkar",
+      "sha256_cert_fingerprints": [
+        "FD:49:DC:92:48:84:FD:FE:D9:E9:D6:5F:D4:AC:F0:3C:5D:DC:89:78:C6:FC:E0:B8:B2:F2:F6:A7:7F:D9:E8:E0"
+      ]
+    }
   }
 ]

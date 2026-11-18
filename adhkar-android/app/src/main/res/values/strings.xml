@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appName">أذكار العائلة</string>
+    <string name="launchUrl">https://tiloucloud.github.io/adhkar/</string>
+    <string name="providerAuthority">com.tiloucloud.adhkar.fileprovider</string>
+    <string name="assetStatements" translatable="false">[{ \"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://tiloucloud.github.io\"}}]</string>
+</resources>
