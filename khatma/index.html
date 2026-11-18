@@ -743,7 +743,11 @@ function sync(){
     if(prev&&edits!==e0)return;
     var before=JSON.stringify(S);
     S=fromR(r);prev=toR();cache();prMerge(r.pr);histMerge(r.hist);var rqc=rqMerge(r.rq);
-    if(pendAdd&&pendAdd.length&&amOwner()&&owner()){var pas=pendAdd;pendAdd=null;pas.forEach(function(pa,i){var ex=null;S.members.forEach(function(x){if(x.name===pa.n)ex=x});if(ex){if(pa.p>ex.p)ex.p=Math.min(pa.p,LAST)}else S.members.push({id:'m'+Date.now().toString(36)+i,name:pa.n,p:Math.min(pa.p,LAST)})});edits++;cache();return fetch(url(),{method:'PATCH',body:JSON.stringify(diff(prev,toR())||{})}).then(function(){prev=toR();render()})}
+    if(pendAdd&&pendAdd.length){
+      if(amOwner()&&owner()){var pas=pendAdd;pendAdd=null;var did=[],had=[];pas.forEach(function(pa,i){var ex=null;S.members.forEach(function(x){if(x.name===pa.n)ex=x});if(ex){if(pa.p>ex.p){ex.p=Math.min(pa.p,LAST);did.push(pa.n+' ← '+ex.p)}else had.push(pa.n)}else{S.members.push({id:'m'+Date.now().toString(36)+i,name:pa.n,p:Math.min(pa.p,LAST)});did.push(pa.n)}});edits++;cache();showNote(did.length?('✅ تمّ: '+did.join('، ')+(had.length?' (موجودون أصلاً: '+had.join('، ')+')':'')):('الأسماء موجودة أصلاً في القائمة: '+had.join('، ')),true);
+        return fetch(url(),{method:'PATCH',body:JSON.stringify(diff(prev,toR())||{})}).then(function(){prev=toR();render()})}
+      else{var oo=mem(owner());showNote('لم تتم الإضافة: هذا الرابط لا يعمل إلا على هاتف صاحب الختمة'+(oo?' وهو '+oo.name:'')+'. اختر اسمه '+(me?'(الاسم الحالي على هذا الهاتف: '+((mem(me)||{}).name||'؟')+') ':'')+'ثم افتح الرابط من جديد.',false);pendAdd=null}
+    }
     if((JSON.stringify(S)!==before||rqc)&&!sheet)render();
   }).catch(function(){online=false}).then(function(){syncing=false;if(was!==online&&!sheet&&!reading)render();if(prev&&diff(prev,toR())&&online)setTimeout(sync,500)});
 }
@@ -863,6 +867,8 @@ var unlocked=null,pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,hidAt=0,p
 try{home=localStorage.getItem('kf_home')||localStorage.getItem('kf_me')||'';if(home)localStorage.setItem('kf_home',home);mine=JSON.parse(localStorage.getItem('kf_mine')||'[]')||[]}catch(e){}
 function setHome(id){if(!home){home=id;try{localStorage.setItem('kf_home',id)}catch(e){}}if(mine.indexOf(id)<0){mine.push(id);try{localStorage.setItem('kf_mine',JSON.stringify(mine))}catch(e){}}}
 function owner(){var o=S.khatma.own;if(!o&&famVid())o='mmwf6wd6v';return o||''}
+function showNote(t,ok){var d=document.getElementById('kfnote');if(!d){d=document.createElement('div');d.id='kfnote';d.setAttribute('role','status');d.style.cssText='position:fixed;z-index:99;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 10px);padding:12px 14px;border-radius:14px;font:600 15px/1.7 inherit;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35)';document.body.appendChild(d)}
+  d.style.background=ok?'#d9f2e3':'#fde3df';d.style.color=ok?'#0b4a2a':'#7a1a10';d.textContent=t;d.style.display='block';clearTimeout(d._t);d._t=setTimeout(function(){d.style.display='none'},14000)}
 function amOwner(){var o=owner();return !o||(me===o&&(me===home||unlocked===me))}
 var rqPre='',RQ={},rqKind='add',rqSent=false,rqBusy=false,rqErr='';
 function rqMerge(d){var b=JSON.stringify(RQ);RQ=d&&typeof d==='object'?d:{};return b!==JSON.stringify(RQ)}
@@ -1399,7 +1405,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 43</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 44</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
