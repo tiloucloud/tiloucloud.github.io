@@ -129,3 +129,5 @@ html.big .dt{font-size:23px}html.big .dq{font-size:28px}
 .cel h2{font-family:var(--display);color:var(--brand);font-size:24px}
 .cs{font-weight:700;color:var(--gold)}
 .cq{font-size:14px;color:var(--muted)}
+.nok{text-align:center}
+.err{color:#b3261e;font-size:14px}

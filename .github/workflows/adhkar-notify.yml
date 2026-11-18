@@ -1,0 +1,41 @@
+name: Adhkar reminders
+
+on:
+  schedule:
+    - cron: '18 6 * * *'   # morning adhkar, ~06:18 UTC
+    - cron: '52 15 * * *'  # evening adhkar, ~15:52 UTC
+    - cron: '27 20 * * *'  # bedtime adhkar, ~20:27 UTC
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: 'am = morning, pm = evening, nt = bedtime'
+        required: true
+        default: 'am'
+      dry:
+        description: 'yes = only print what would be sent'
+        required: false
+        default: 'yes'
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Install
+        working-directory: adhkar-push
+        run: npm install --no-audit --no-fund
+      - name: Send
+        working-directory: adhkar-push
+        env:
+          DB: https://khatma-16d1b-default-rtdb.firebaseio.com
+          SITE: https://tiloucloud.github.io/adhkar/
+          VAPID_PUBLIC: BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc
+          VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
+          DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
+          SLOT: ${{ github.event.inputs.slot || (github.event.schedule == '18 6 * * *' && 'am' || (github.event.schedule == '52 15 * * *' && 'pm' || 'nt')) }}
+          DRY_RUN: ${{ github.event.inputs.dry == 'yes' && '1' || '' }}
+          FORCE: ${{ github.event.inputs.slot && '1' || '' }}
+        run: node send.js
