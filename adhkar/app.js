@@ -266,4 +266,6 @@ if(!me&&code&&ls0('kf_code')===code&&ls0('kf_me')){me=ls0('kf_me');ls('ad_me',me
 if(!home&&code&&ls0('kf_code')===code&&ls0('kf_home')){home=ls0('kf_home');ls('ad_home',home);if(mine.indexOf(home)<0){mine.push(home);ls('ad_mine',JSON.stringify(mine))}}
 if(me&&!home&&code&&!linked){setHome(me)}
 render();pull();
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(function(){});
+if('serviceWorker' in navigator){var hadCtl=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',function(){if(hadCtl&&!window.__rl){window.__rl=1;location.reload()}});
+  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(r){try{r.update()}catch(e){}}).catch(function(){})}
