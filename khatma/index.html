@@ -724,8 +724,15 @@ function cache(){try{localStorage.setItem('kf_site',JSON.stringify(S))}catch(e){
 function sync(){
   if(!code||!CFG.db||syncing)return;
   syncing=true;
-  var e0=edits,d=prev?diff(prev,toR()):null,sent=d?JSON.stringify(toR()):null,was=online;
-  var p=d?fetch(url(),{method:'PATCH',body:JSON.stringify(d)}).then(function(r){if(!r.ok)throw 0;prev=JSON.parse(sent)}):Promise.resolve();
+  var e0=edits,d=prev?diff(prev,toR()):null,sent=null,was=online;
+  /* never let a stale phone move someone's progress backwards: reading adds pages, so take the larger of local and server */
+  var pk=d?Object.keys(d).filter(function(k){return /^members\/[^/]+\/p$/.test(k)}):[];
+  var pre=pk.length?fetch(url(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(r0){
+    if(!r0||!r0.members)return;
+    pk.forEach(function(k){var id=k.split('/')[1],rm=r0.members[id],pv=prev.members[id];
+      if(rm&&pv&&(+d[k]||0)>(+pv.p||0)&&(+rm.p||0)>(+d[k]||0)){d[k]=+rm.p;S.members.forEach(function(m){if(m.id===id)m.p=Math.min(LAST,+rm.p)});edits++}})
+  }).catch(function(){}):Promise.resolve();
+  var p=pre.then(function(){if(!d)return;sent=JSON.stringify(toR());return fetch(url(),{method:'PATCH',body:JSON.stringify(d)}).then(function(r){if(!r.ok)throw 0;prev=JSON.parse(sent)})});
   p.then(function(){return fetch(url(),{cache:'no-store'})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){
     online=true;
     if(!r||!r.members){
@@ -736,7 +743,7 @@ function sync(){
     if(prev&&edits!==e0)return;
     var before=JSON.stringify(S);
     S=fromR(r);prev=toR();cache();prMerge(r.pr);histMerge(r.hist);var rqc=rqMerge(r.rq);
-    if(pendAdd&&pendAdd.length&&amOwner()&&owner()){var pas=pendAdd;pendAdd=null;pas.forEach(function(pa,i){if(!S.members.some(function(x){return x.name===pa.n}))S.members.push({id:'m'+Date.now().toString(36)+i,name:pa.n,p:Math.min(pa.p,LAST)})});edits++;cache();return fetch(url(),{method:'PATCH',body:JSON.stringify(diff(prev,toR())||{})}).then(function(){prev=toR();render()})}
+    if(pendAdd&&pendAdd.length&&amOwner()&&owner()){var pas=pendAdd;pendAdd=null;pas.forEach(function(pa,i){var ex=null;S.members.forEach(function(x){if(x.name===pa.n)ex=x});if(ex){if(pa.p>ex.p)ex.p=Math.min(pa.p,LAST)}else S.members.push({id:'m'+Date.now().toString(36)+i,name:pa.n,p:Math.min(pa.p,LAST)})});edits++;cache();return fetch(url(),{method:'PATCH',body:JSON.stringify(diff(prev,toR())||{})}).then(function(){prev=toR();render()})}
     if((JSON.stringify(S)!==before||rqc)&&!sheet)render();
   }).catch(function(){online=false}).then(function(){syncing=false;if(was!==online&&!sheet&&!reading)render();if(prev&&diff(prev,toR())&&online)setTimeout(sync,500)});
 }
@@ -1392,7 +1399,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 42</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 43</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
