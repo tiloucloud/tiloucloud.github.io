@@ -22,7 +22,8 @@ function newCode(){var a='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz234567
 /* ---------- state ---------- */
 var code=(location.hash.match(/[#&]a=([A-Za-z0-9_-]{12,64})/)||[])[1]||ls('ad_code')||'';
 var SEED=null;try{var sd=(location.hash.match(/[#&]seed=([A-Za-z0-9+\/=_-]+)/)||[])[1];if(sd)SEED=JSON.parse(decodeURIComponent(escape(atob(sd.replace(/-/g,'+').replace(/_/g,'/')))))}catch(e){}
-if(code)ls('ad_code',code);
+var HU=(location.hash.match(/[#&]u=([A-Za-z0-9_-]{1,40})/)||[])[1]||'',HH=/[#&]hh=1/.test(location.hash);
+if(code)ls('ad_code',code);if(code&&HU){ls('ad_me',HU);if(HH&&!ls('ad_home')){ls('ad_home',HU);var mm0=jget('ad_mine',[]);if(mm0.indexOf(HU)<0){mm0.push(HU);ls('ad_mine',JSON.stringify(mm0))}}}
 if(location.hash)history.replaceState(null,'',location.pathname);
 var S=jget('ad_S_'+code,null)||{info:{name:'',start:iso(today())},members:[]},DONE=jget('ad_D_'+code,{}),PEND={};
 var me=ls('ad_me')||null,home=ls('ad_home')||'',linked=false,OWN='',rqMsg='',rqKind='add',mine=jget('ad_mine',[]),unlocked=null,hidAt=0;
@@ -99,7 +100,7 @@ function gate(){var m=mem(me);if(!(code&&m))return 'open';
   return unlocked===me?'open':'set'}
 function vLock(){
   var m=mem(me),g=gate(),set=g==='set',dots='';
-  if(g==='blocked')return '<div class="lock"><div class="lk-in"><img class="appic" src="icon-192.png" alt=""><p class="lk-hi">اسم <b>'+esc(m.name)+'</b> مرتبط بهاتف صاحبه</p><h2>لم يختر رمزه بعد</h2><p class="lk-sub">ليذكر '+esc(m.name)+' من هذا الهاتف، يختار رمزه أولاً من هاتفه: «العائلة» ← «🔑 رمزي السري».</p><button class="gbtn" data-act="me" data-v="">اختر اسماً آخر</button></div></div>';
+  if(g==='blocked')return '<div class="lock"><div class="lk-in"><img class="appic" src="icon-192.png" alt=""><p class="lk-hi">اسم <b>'+esc(m.name)+'</b> مرتبط بهاتف صاحبه</p><h2>لم يختر رمزه بعد</h2><p class="lk-sub">إن كان هذا هاتف '+esc(m.name)+' نفسه، فافتح «ختمتنا العائلية» ثم اضغط بطاقة «أذكار العائلة» فيها. وإن كان هاتف غيره، فيختار '+esc(m.name)+' رمزه أولاً من هاتفه: «العائلة» ← «🔑 رمزي السري».</p><a class="gbtn" style="text-decoration:none;text-align:center" href="../khatma/">افتح ختمتنا العائلية</a><button class="gbtn" data-act="me" data-v="">اختر اسماً آخر</button></div></div>';
   for(var i=0;i<4;i++)dots+='<i class="'+(i<pinBuf.length?'on':'')+'"></i>';
   var keys=[1,2,3,4,5,6,7,8,9,'',0,'del'].map(function(k){return k===''?'<span></span>':'<button class="pk" data-act="pk" data-v="'+k+'"'+(k==='del'?' aria-label="امسح"':'')+'>'+(k==='del'?'⌫':k)+'</button>'}).join('');
   var wait=pinWait>Date.now();
