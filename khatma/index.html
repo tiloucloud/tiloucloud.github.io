@@ -681,14 +681,15 @@ function stat(m){
 }
 function rng(a,b){return '<bdi dir="ltr" class="num">'+a+(b>a?' – '+b:'')+'</bdi>'}
 
-var CFG={db:"https://khatma-16d1b-default-rtdb.firebaseio.com"},code=null,seed=null,prev=null,online=false,syncing=false,edits=0,dl=0;
+var CFG={db:"https://khatma-16d1b-default-rtdb.firebaseio.com"},code=null,seed=null,pendAdd=null,prev=null,online=false,syncing=false,edits=0,dl=0;
 if(CFG.db.indexOf('http')!==0)CFG.db='';
 try{code=localStorage.getItem('kf_code')}catch(e){}
 (function(){
   var h=location.hash.slice(1),m=/(?:^|&)k=([A-Za-z0-9_-]{6,64})/.exec(h),s=/(?:^|&)seed=([A-Za-z0-9_-]+)/.exec(h);
   if(m){code=m[1];try{localStorage.setItem('kf_code',code)}catch(e){}}
   if(s)try{seed=JSON.parse(decodeURIComponent(escape(atob(s[1].replace(/-/g,'+').replace(/_/g,'/')))))}catch(e){seed=null}
-  if(m||s)try{history.replaceState(null,'',location.pathname)}catch(e){}
+  var ad=/(?:^|&)add=([^&]+)/.exec(h);if(ad)try{var q=decodeURIComponent(ad[1]).split('|');pendAdd={n:q[0].trim().slice(0,24),p:Math.max(0,parseInt(q[1],10)||0)}}catch(e){}
+  if(m||s||ad)try{history.replaceState(null,'',location.pathname)}catch(e){}
 })();
 function url(){return CFG.db.replace(/\/+$/,'')+'/k/'+code+'.json'}
 function toR(){var o={};S.members.forEach(function(m,i){o[m.id]={name:m.name,p:m.p,i:i,g:m.g||'',k:m.k||'',h:m.h||''}});return{khatma:S.khatma,members:o}}
@@ -721,6 +722,7 @@ function sync(){
     if(prev&&edits!==e0)return;
     var before=JSON.stringify(S);
     S=fromR(r);prev=toR();cache();prMerge(r.pr);histMerge(r.hist);var rqc=rqMerge(r.rq);
+    if(pendAdd&&pendAdd.n&&amOwner()&&owner()){var pa=pendAdd;pendAdd=null;if(!S.members.some(function(x){return x.name===pa.n}))S.members.push({id:'m'+Date.now().toString(36),name:pa.n,p:Math.min(pa.p,LAST)});edits++;cache();return fetch(url(),{method:'PATCH',body:JSON.stringify(diff(prev,toR())||{})}).then(function(){prev=toR();render()})}
     if((JSON.stringify(S)!==before||rqc)&&!sheet)render();
   }).catch(function(){online=false}).then(function(){syncing=false;if(was!==online&&!sheet&&!reading)render();if(prev&&diff(prev,toR())&&online)setTimeout(sync,500)});
 }
@@ -1375,7 +1377,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 35</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 36</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
