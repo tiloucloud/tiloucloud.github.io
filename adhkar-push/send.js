@@ -77,7 +77,13 @@ async function main() {
     for (const c of await listCodes()) {
       const r = await fetch(DB + '/k/' + c + '/ad.json');
       if (!r.ok) { console.log('read failed for one family:', r.status); continue; }
-      jobs.push({ code: c, ad: await r.json() });
+      const ad = (await r.json()) || {};
+      if (!ad.members) { // linked to the khatma family: same members
+        const mr = await fetch(DB + '/k/' + c + '/members.json');
+        if (mr.ok) ad.members = (await mr.json()) || undefined;
+        ad.info = ad.info || { name: 'أذكار عائلتنا' };
+      }
+      jobs.push({ code: c, ad });
     }
   }
   if (!DRY) { if (!PRIV || !PUB) throw new Error('VAPID keys are required'); webpush.setVapidDetails(SITE, PUB, PRIV); }

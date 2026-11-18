@@ -131,3 +131,4 @@ html.big .dt{font-size:23px}html.big .dq{font-size:28px}
 .cq{font-size:14px;color:var(--muted)}
 .nok{text-align:center}
 .err{color:#b3261e;font-size:14px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.seg button{padding:10px 4px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:600}.seg button.on{background:var(--deep-2);color:#fff;border-color:transparent}

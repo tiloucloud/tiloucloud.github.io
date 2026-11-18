@@ -25,7 +25,7 @@ var SEED=null;try{var sd=(location.hash.match(/[#&]seed=([A-Za-z0-9+\/=_-]+)/)||
 if(code)ls('ad_code',code);
 if(location.hash)history.replaceState(null,'',location.pathname);
 var S=jget('ad_S_'+code,null)||{info:{name:'',start:iso(today())},members:[]},DONE=jget('ad_D_'+code,{}),PEND={};
-var me=ls('ad_me')||null,home=ls('ad_home')||'',mine=jget('ad_mine',[]),unlocked=null,hidAt=0;
+var me=ls('ad_me')||null,home=ls('ad_home')||'',linked=false,OWN='',rqMsg='',rqKind='add',mine=jget('ad_mine',[]),unlocked=null,hidAt=0;
 var view='home',sess=null,pIdx=0,sheet=null,welcome=!!code,celeb=null;
 var pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,pinChange=false;
 if(ls('ad_big')==='1')document.documentElement.classList.add('big');
@@ -34,17 +34,23 @@ function cache(){ls('ad_S_'+code,JSON.stringify(S));ls('ad_D_'+code,JSON.stringi
 
 /* ---------- sync ---------- */
 function api(path,method,body){if(!DB||!code)return Promise.reject();return fetch(DB+'/k/'+code+'/ad'+path+'.json',{method:method||'GET',body:body==null?undefined:JSON.stringify(body),cache:'no-store'}).then(function(r){if(!r.ok)throw r.status;return r.json()})}
-function pull(){if(!code)return;api('').then(function(r){
-  if(!r){if(SEED&&SEED.m&&!S.members.length){S={info:{name:String(SEED.n||'أذكار عائلتنا').slice(0,40),start:iso(today())},members:SEED.m.slice(0,40).map(function(n,i){return{id:'s'+i+Date.now().toString(36),name:String(n).slice(0,24),i:i,k:'',h:''}})};SEED=null;cache();render()}if(S.members.length)pushAll();return}
-  var ms=[],m=r.members||{};for(var id in m){var x=m[id];if(x&&x.name)ms.push({id:id,name:String(x.name),i:+x.i||0,k:x.k||'',h:x.h?'1':''})}
+function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
+function gj(path){return fetch(DB+'/k/'+code+path+'.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw r.status;return r.json()})}
+function pull(){if(!code||!DB)return;
+  Promise.all([gj('/ad'),gj('/members'),gj('/khatma')]).then(function(R){
+  var r=R[0]||{},km=R[1],kh=R[2]||{},ms=[],m;
+  if(km&&typeof km==='object'&&Object.keys(km).length){linked=true;m=km;OWN=kh.own||(famVid()?'mmwf6wd6v':'')}
+  else{linked=false;m=r.members||{};OWN=(r.info&&r.info.own)||''}
+  if(!km&&!r.members){if(S.members.length)pushAll();return}
+  for(var id in m){var x=m[id];if(x&&x.name)ms.push({id:id,name:String(x.name),i:+x.i||0,k:x.k||'',h:x.h?'1':''})}
   ms.sort(function(a,b){return a.i-b.i});
-  S={info:{name:(r.info&&r.info.name)||'',start:(r.info&&r.info.start)||iso(today())},members:ms};
+  S={info:{name:(r.info&&r.info.name)||(linked?'أذكار عائلتنا':''),start:(r.info&&r.info.start)||iso(today()),own:OWN},members:ms};
   var d=r.done||{},o={};for(var a in d){o[a]={};for(var b in d[a])o[a][b]=+d[a][b]||0}
   for(var k in PEND){var q=PEND[k];o[q.m]=o[q.m]||{};o[q.m][q.d]=(o[q.m][q.d]||0)|q.v}
   DONE=o;cache();render()}).catch(function(){})}
-function pushAll(){var m={};S.members.forEach(function(x,i){m[x.id]={name:x.name,i:i,k:x.k||'',h:x.h||''}});api('','PATCH',{info:S.info,members:m}).catch(function(){})}
-function putMember(x){api('/members/'+x.id,'PUT',{name:x.name,i:S.members.indexOf(x),k:x.k||'',h:x.h||''}).catch(function(){})}
-function delMember(id){api('/members/'+id,'DELETE').catch(function(){})}
+function pushAll(){if(linked)return;var m={};S.members.forEach(function(x,i){m[x.id]={name:x.name,i:i,k:x.k||'',h:x.h||''}});api('','PATCH',{info:{name:S.info.name,start:S.info.start,own:S.info.own||OWN||''},members:m}).catch(function(){})}
+function putMember(x){if(linked){fetch(DB+'/k/'+code+'/members/'+x.id+'.json',{method:'PATCH',body:JSON.stringify({k:x.k||'',h:x.h||''})}).catch(function(){});return}api('/members/'+x.id,'PUT',{name:x.name,i:S.members.indexOf(x),k:x.k||'',h:x.h||''}).catch(function(){})}
+function delMember(id){if(linked)return;api('/members/'+id,'DELETE').catch(function(){})}
 function markDone(bit){if(!me)return;var d=dayIso(0),cur=(DONE[me]&&DONE[me][d])||0,v=cur|(1<<bit);if(v===cur)return;
   (DONE[me]=DONE[me]||{})[d]=v;var key=me+d+bit;PEND[key]={m:me,d:d,v:v};cache();
   api('/done/'+me+'/'+d,'PUT',v).then(function(){delete PEND[key]}).catch(function(){})}
@@ -172,13 +178,18 @@ function vRace(){
       ['ص','م','ن'].map(function(l,j){return '<i class="'+((v>>j)&1?'on':'')+'">'+l+'</i>'}).join('')+'</span></div>'+
       '<span class="rs num">'+(st?'⭐'+st:'—')+'<small>هذا الأسبوع '+weekCount(m.id)+'</small></span></div>'}).join('')+
     '<p class="sub">الترتيب بأيام المداومة على أذكار الصباح والمساء. ص: الصباح، م: المساء، ن: النوم.</p></section>'}
+function canManage(){return !linked&&(!OWN||(me===OWN&&(me===home||unlocked===me)))}
+var RQK={add:'إضافة فرد',ren:'تعديل اسم',del:'حذف فرد'};
 function vFamily(){
-  var m=mem(me);
+  var m=mem(me),own=mem(OWN),on=own?own.name:'صاحب المجموعة';
+  var mg=canManage()?'<form class="form" data-form="add"><input id="addN" maxlength="24" placeholder="اسم فرد جديد" autocomplete="off"><button class="btn" type="submit">أضف</button></form>':
+    (linked?'<p class="sub">أسماء العائلة هي نفسها في «ختمتنا العائلية»، ويديرها '+esc(on)+' وحده حفاظاً على القائمة.</p>':'<p class="sub">إضافة الأفراد وحذفهم بيد '+esc(on)+' وحده.</p>')+
+    (linked&&DB?'<form class="stack" data-form="rq"><div class="seg">'+['add','ren','del'].map(function(x){return '<button type="button" class="'+(rqKind===x?'on':'')+'" data-act="rqk" data-v="'+x+'">'+RQK[x]+'</button>'}).join('')+'</div><input id="rqText" maxlength="200" placeholder="'+({add:'اسم الفرد الذي تريد إضافته',ren:'الاسم الحالي ← الاسم الصحيح',del:'اسم الفرد وسبب حذفه'})[rqKind]+'" autocomplete="off"><button class="btn" type="submit">أرسل الطلب إلى '+esc(on)+'</button>'+(rqMsg?'<p class="sub nok">'+esc(rqMsg)+'</p>':'')+'</form>':'');
   return '<details class="card fam"'+(sheet==='fam'?' open':'')+'><summary><h2 class="ctitle">العائلة</h2></summary><div class="stack">'+
     '<button class="btn ghost" data-act="invite">🔗 رابط دعوة العائلة</button>'+
     (m&&(me===home||unlocked===me)?'<button class="btn ghost" data-act="pinchg">🔑 '+(m.k?'تغيير رمزي السري':'رمزي السري (للذكر من هاتف آخر)')+'</button>':'')+
-    '<form class="form" data-form="add"><input id="addN" maxlength="24" placeholder="اسم فرد جديد" autocomplete="off"><button class="btn" type="submit">أضف</button></form>'+
-    '<ul class="ml">'+S.members.map(function(x){return '<li><span>'+esc(x.name)+'</span><button class="lnk" data-act="del" data-v="'+x.id+'">حذف</button></li>'}).join('')+'</ul>'+
+    mg+
+    '<ul class="ml">'+S.members.map(function(x){return '<li><span>'+esc(x.name)+(x.id===OWN?' <small>(صاحب المجموعة)</small>':'')+'</span>'+(canManage()?'<button class="lnk" data-act="del" data-v="'+x.id+'">حذف</button>':'')+'</li>'}).join('')+'</ul>'+
     '<p class="sub">التطبيق مجاني وبلا إعلانات. <a href="../khatma/privacy.html">الخصوصية</a></p></div></details>'}
 function itemsFor(k,p){return AD[k].filter(function(it){return !it.only||(it.only==='fm'?(p===0||p===3):it.only==='f'?p===0:true)}).map(function(it){
   var n=it.n;if(it.n3==='fm'&&(p===0||p===3))n=3;return {t:it.t,q:it.q,qn:it.qn,f:it.f,n:n,info:it.info}})}
@@ -222,6 +233,7 @@ function render(){
 document.addEventListener('click',function(e){
   var t=e.target.closest('[data-act]');if(!t)return;var a=t.dataset.act,v=t.dataset.v;
   if(a==='notif'){enableNotif();return}
+  if(a==='rqk'){var tx=document.getElementById('rqText');rqKind=v;rqMsg='';sheet='fam';render();return}
   if(a==='enter'){welcome=false;render();window.scrollTo(0,0);return}
   if(a==='pk'){pinKey(v);return}
   if(a==='pinchg'){if(me===home||unlocked===me||mine.indexOf(me)>=0){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0)}return}
@@ -235,7 +247,7 @@ document.addEventListener('click',function(e){
   if(a==='big'){var b=document.documentElement.classList.toggle('big');ls('ad_big',b?'1':'0');render();return}
   if(a==='invite'){var url=location.origin+location.pathname.replace(/index\.html$/,'')+'#a='+code,txt='أحبتي، انضموا إلى «أذكار العائلة» لنتنافس في المداومة على الأذكار:\n'+url;
     if(navigator.share)navigator.share({title:'أذكار العائلة',text:txt}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');return}
-  if(a==='del'){var x=mem(v);if(x&&confirm('حذف '+x.name+' من العائلة؟')){S.members=S.members.filter(function(y){return y.id!==v});delMember(v);if(me===v){me=null;ls('ad_me',null)}cache();sheet='fam';render()}return}
+  if(a==='del'){if(!canManage())return;var x=mem(v);if(x&&confirm('حذف '+x.name+' من العائلة؟')){S.members=S.members.filter(function(y){return y.id!==v});delMember(v);if(me===v){me=null;ls('ad_me',null)}cache();sheet='fam';render()}return}
 });
 document.addEventListener('submit',function(e){
   var f=e.target.dataset.form;if(!f)return;e.preventDefault();
@@ -243,10 +255,15 @@ document.addEventListener('submit',function(e){
     if(!m){document.getElementById('joinErr').textContent='الرابط أو الرمز غير صحيح';return}
     code=m[1];ls('ad_code',code);S={info:{name:'',start:iso(today())},members:[]};DONE={};welcome=true;render();pull();return}
   if(f==='create'){var n=document.getElementById('cMe').value.trim(),fn=document.getElementById('cName').value.trim()||'أذكار عائلتنا';if(!n)return;
-    var id=rid();code=newCode();ls('ad_code',code);S={info:{name:fn,start:iso(today())},members:[{id:id,name:n,i:0,k:'',h:'1'}]};DONE={};
+    var id=rid();code=newCode();ls('ad_code',code);S={info:{name:fn,start:iso(today()),own:id},members:[{id:id,name:n,i:0,k:'',h:'1'}]};OWN=id;DONE={};
     me=id;ls('ad_me',id);setHome(id);welcome=false;cache();pushAll();render();return}
-  if(f==='add'){var nm=document.getElementById('addN').value.trim();if(!nm)return;var x={id:rid(),name:nm,i:S.members.length,k:'',h:''};S.members.push(x);putMember(x);cache();sheet='fam';render();return}
+  if(f==='rq'){var t=(document.getElementById('rqText').value||'').trim(),mm=mem(me);if(t.length<2){rqMsg='اكتب تفاصيل الطلب أولاً.';sheet='fam';render();return}
+    var rid2='r'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    fetch(DB+'/k/'+code+'/rq/'+rid2+'.json',{method:'PUT',body:JSON.stringify({t:rqKind,x:t.slice(0,300),m:me||'',n:mm?mm.name:'',at:Date.now()})}).then(function(r){if(!r.ok)throw 0;rqMsg='وصل طلبك، جزاك الله خيراً.'}).catch(function(){rqMsg='تعذّر الإرسال، حاول مرة أخرى.'}).then(function(){sheet='fam';render()});return}
+  if(f==='add'){if(!canManage())return;var nm=document.getElementById('addN').value.trim();if(!nm)return;var x={id:rid(),name:nm,i:S.members.length,k:'',h:''};S.members.push(x);putMember(x);cache();sheet='fam';render();return}
 });
-if(me&&!home&&code){setHome(me)}
+if(!me&&code&&ls0('kf_code')===code&&ls0('kf_me')){me=ls0('kf_me');ls('ad_me',me)}
+if(!home&&code&&ls0('kf_code')===code&&ls0('kf_home')){home=ls0('kf_home');ls('ad_home',home);if(mine.indexOf(home)<0){mine.push(home);ls('ad_mine',JSON.stringify(mine))}}
+if(me&&!home&&code&&!linked){setHome(me)}
 render();pull();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(function(){});
