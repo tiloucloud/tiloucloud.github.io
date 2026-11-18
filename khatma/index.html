@@ -1037,8 +1037,6 @@ function loadFb(){
   if(!code||!CFG.db)return;
   fetch(fbUrl(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){FB=Object.keys(d||{}).map(function(k){var x=d[k];x.id=k;return x}).sort(function(p,q){return (q.at||0)-(p.at||0)});if(sheet==='fbl')render()}).catch(function(){FB=[];if(sheet==='fbl')render()});
 }
-function vAdk(){if(!code||!mem(me))return '';
-  return '<button class="adk" data-act="adk"><span class="adk-i">📿</span><span><b>أذكار العائلة</b><small>أذكار الصباح والمساء والنوم، وسباق المداومة</small></span><span class="adk-g">افتح ‹</span></button>'}
 function vInstall(){
   if(isSA||noInst)return '';
   return '<section class="inst"><img class="appic" src="icon2-192.png" alt=""><span class="itx"><b>ثبّت التطبيق</b><small>افتحه بلمسة من شاشتك الرئيسية</small></span>'+
@@ -1391,8 +1389,8 @@ function render(){
   var h=hijri();
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
-    (code?vRqNote()+vWird()+vBadges()+vPray()+vKids()+vAdk()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 40</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    (code?vRqNote()+vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 41</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
@@ -1402,7 +1400,6 @@ root.addEventListener('toggle',function(e){var k=e.target.getAttribute&&e.target
 root.addEventListener('click',function(e){
   var el=e.target.closest('[data-act]');if(!el||!root.contains(el))return;
   var act=el.getAttribute('data-act'),v=el.getAttribute('data-v'),m;
-  if(act==='adk'){var hm=(me&&me===home)?'&hh=1':'';location.href='/adhkar/#a='+code+'&u='+me+hm;return}
   if(act==='vid'){openVid(v);return}else if(act==='pray'){prSet(+v);return}else if(act==='gtog'){gTog(v);return}else if(act==='enter'){welcome=false;try{localStorage.setItem('kf_wc',(+localStorage.getItem('kf_wc')||0)+1)}catch(_){}render();window.scrollTo(0,0);return}
   if(act==='donex'){if(el.classList.contains('scrim')&&e.target!==el)return;try{localStorage.setItem(doneKey(),'1')}catch(_){}sheet=null;render();return}
   if(act==='notify'){enableNotif();return}

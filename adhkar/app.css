@@ -132,3 +132,4 @@ html.big .dt{font-size:23px}html.big .dq{font-size:28px}
 .nok{text-align:center}
 .err{color:#b3261e;font-size:14px}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.seg button{padding:10px 4px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:13.5px;font-weight:600}.seg button.on{background:var(--deep-2);color:#fff;border-color:transparent}
+.rqs{border:1px solid var(--gold-l);border-radius:14px;padding:10px 12px;background:#fff8e4;color:#4d3a07}.rqs h3{font-size:15px;margin-bottom:6px}.rq{padding:8px 0;border-top:1px dashed #e8c66f}.rqa{display:flex;gap:10px;align-items:center;margin-top:4px}.rqa .btn{padding:8px 14px}

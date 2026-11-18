@@ -22,6 +22,8 @@ function newCode(){var a='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz234567
 /* ---------- state ---------- */
 var code=(location.hash.match(/[#&]a=([A-Za-z0-9_-]{12,64})/)||[])[1]||ls('ad_code')||'';
 var SEED=null;try{var sd=(location.hash.match(/[#&]seed=([A-Za-z0-9+\/=_-]+)/)||[])[1];if(sd)SEED=JSON.parse(decodeURIComponent(escape(atob(sd.replace(/-/g,'+').replace(/_/g,'/')))))}catch(e){}
+var SEED=null;try{var sd=(location.hash.match(/[#&]seed=([A-Za-z0-9_-]+)/)||[])[1];if(sd)SEED=JSON.parse(decodeURIComponent(escape(atob(sd.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-sd.length%4)%4)))))}catch(e){}
+var RQ={};
 var HU=(location.hash.match(/[#&]u=([A-Za-z0-9_-]{1,40})/)||[])[1]||'',HH=/[#&]hh=1/.test(location.hash);
 if(code)ls('ad_code',code);if(code&&HU){ls('ad_me',HU);if(HH&&!ls('ad_home')){ls('ad_home',HU);var mm0=jget('ad_mine',[]);if(mm0.indexOf(HU)<0){mm0.push(HU);ls('ad_mine',JSON.stringify(mm0))}}}
 if(location.hash)history.replaceState(null,'',location.pathname);
@@ -38,14 +40,20 @@ function api(path,method,body){if(!DB||!code)return Promise.reject();return fetc
 function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
 function gj(path){return fetch(DB+'/k/'+code+path+'.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw r.status;return r.json()})}
 function pull(){if(!code||!DB)return;
-  Promise.all([gj('/ad'),gj('/members'),gj('/khatma')]).then(function(R){
+  Promise.all([gj('/ad'),gj('/members'),gj('/khatma'),gj('/rq')]).then(function(R){
   var r=R[0]||{},km=R[1],kh=R[2]||{},ms=[],m;
   if(km&&typeof km==='object'&&Object.keys(km).length){linked=true;m=km;OWN=kh.own||(famVid()?'mmwf6wd6v':'')}
   else{linked=false;m=r.members||{};OWN=(r.info&&r.info.own)||''}
-  if(!km&&!r.members){if(S.members.length)pushAll();return}
+  if(!km&&!r.members){
+    if(SEED&&SEED.m&&!S.members.length){var b0=Date.now().toString(36),oi=+SEED.o;
+      S={info:{name:String(SEED.n||'أذكار عائلتنا').slice(0,40),start:iso(today()),own:''},members:SEED.m.slice(0,40).map(function(n,i){return{id:'s'+i+b0,name:String(n).slice(0,24),i:i,k:'',h:''}})};SEED=null;
+      var ow=S.members[oi];if(ow){OWN=ow.id;S.info.own=OWN;ow.h='1';me=OWN;ls('ad_me',me);home=OWN;ls('ad_home',home);mine=[OWN];ls('ad_mine',JSON.stringify(mine))}
+      cache();pushAll();render()}
+    else if(S.members.length)pushAll();return}
   for(var id in m){var x=m[id];if(x&&x.name)ms.push({id:id,name:String(x.name),i:+x.i||0,k:x.k||'',h:x.h?'1':''})}
   ms.sort(function(a,b){return a.i-b.i});
   S={info:{name:(r.info&&r.info.name)||(linked?'أذكار عائلتنا':''),start:(r.info&&r.info.start)||iso(today()),own:OWN},members:ms};
+  RQ=(linked?R[3]:r.rq)||{};
   var d=r.done||{},o={};for(var a in d){o[a]={};for(var b in d[a])o[a][b]=+d[a][b]||0}
   for(var k in PEND){var q=PEND[k];o[q.m]=o[q.m]||{};o[q.m][q.d]=(o[q.m][q.d]||0)|q.v}
   DONE=o;cache();render()}).catch(function(){})}
@@ -180,16 +188,19 @@ function vRace(){
       '<span class="rs num">'+(st?'⭐'+st:'—')+'<small>هذا الأسبوع '+weekCount(m.id)+'</small></span></div>'}).join('')+
     '<p class="sub">الترتيب بأيام المداومة على أذكار الصباح والمساء. ص: الصباح، م: المساء، ن: النوم.</p></section>'}
 function canManage(){return !linked&&(!OWN||(me===OWN&&(me===home||unlocked===me)))}
+function rqList(){return Object.keys(RQ||{}).map(function(k){var x=RQ[k]||{};x.id=k;return x}).sort(function(a,b){return (a.at||0)-(b.at||0)})}
+function vReqs(){var L=rqList();if(!L.length)return '';
+  return '<div class="rqs"><h3>📩 طلبات الأفراد</h3>'+L.map(function(x){return '<div class="rq"><p><b>'+esc(RQK[x.t]||'طلب')+'</b> · '+esc(x.n||'')+'<br>'+esc(x.x||'')+'</p><div class="rqa">'+(x.t==='add'?'<button class="btn" data-act="rqadd" data-v="'+x.id+'">أضِف</button>':'')+'<button class="lnk" data-act="rqdone" data-v="'+x.id+'">'+(x.t==='add'?'تجاهل':'تمّ')+'</button></div></div>'}).join('')+'</div>'}
 var RQK={add:'إضافة فرد',ren:'تعديل اسم',del:'حذف فرد'};
 function vFamily(){
   var m=mem(me),own=mem(OWN),on=own?own.name:'صاحب المجموعة';
   var mg=canManage()?'<form class="form" data-form="add"><input id="addN" maxlength="24" placeholder="اسم فرد جديد" autocomplete="off"><button class="btn" type="submit">أضف</button></form>':
-    (linked?'<p class="sub">أسماء العائلة هي نفسها في «ختمتنا العائلية»، ويديرها '+esc(on)+' وحده حفاظاً على القائمة.</p>':'<p class="sub">إضافة الأفراد وحذفهم بيد '+esc(on)+' وحده.</p>')+
-    (linked&&DB?'<form class="stack" data-form="rq"><div class="seg">'+['add','ren','del'].map(function(x){return '<button type="button" class="'+(rqKind===x?'on':'')+'" data-act="rqk" data-v="'+x+'">'+RQK[x]+'</button>'}).join('')+'</div><input id="rqText" maxlength="200" placeholder="'+({add:'اسم الفرد الذي تريد إضافته',ren:'الاسم الحالي ← الاسم الصحيح',del:'اسم الفرد وسبب حذفه'})[rqKind]+'" autocomplete="off"><button class="btn" type="submit">أرسل الطلب إلى '+esc(on)+'</button>'+(rqMsg?'<p class="sub nok">'+esc(rqMsg)+'</p>':'')+'</form>':'');
+    (linked?'<p class="sub">أسماء العائلة هي نفسها في «ختمتنا العائلية»، ويديرها '+esc(on)+' وحده حفاظاً على القائمة.</p>':'<p class="sub">إضافة الأفراد وحذفهم وتعديل أسمائهم بيد '+esc(on)+' وحده حفاظاً على القائمة. أرسل طلبك وسيصله.</p>')+
+    (DB?'<form class="stack" data-form="rq"><div class="seg">'+['add','ren','del'].map(function(x){return '<button type="button" class="'+(rqKind===x?'on':'')+'" data-act="rqk" data-v="'+x+'">'+RQK[x]+'</button>'}).join('')+'</div><input id="rqText" maxlength="200" placeholder="'+({add:'اسم الفرد الذي تريد إضافته',ren:'الاسم الحالي ← الاسم الصحيح',del:'اسم الفرد وسبب حذفه'})[rqKind]+'" autocomplete="off"><button class="btn" type="submit">أرسل الطلب إلى '+esc(on)+'</button>'+(rqMsg?'<p class="sub nok">'+esc(rqMsg)+'</p>':'')+'</form>':'');
   return '<details class="card fam"'+(sheet==='fam'?' open':'')+'><summary><h2 class="ctitle">العائلة</h2></summary><div class="stack">'+
     '<button class="btn ghost" data-act="invite">🔗 رابط دعوة العائلة</button>'+
     (m&&(me===home||unlocked===me)?'<button class="btn ghost" data-act="pinchg">🔑 '+(m.k?'تغيير رمزي السري':'رمزي السري (للذكر من هاتف آخر)')+'</button>':'')+
-    mg+
+    mg+(canManage()?vReqs():'')+
     '<ul class="ml">'+S.members.map(function(x){return '<li><span>'+esc(x.name)+(x.id===OWN?' <small>(صاحب المجموعة)</small>':'')+'</span>'+(canManage()?'<button class="lnk" data-act="del" data-v="'+x.id+'">حذف</button>':'')+'</li>'}).join('')+'</ul>'+
     '<p class="sub">التطبيق مجاني وبلا إعلانات. <a href="../khatma/privacy.html">الخصوصية</a></p></div></details>'}
 function itemsFor(k,p){return AD[k].filter(function(it){return !it.only||(it.only==='fm'?(p===0||p===3):it.only==='f'?p===0:true)}).map(function(it){
@@ -234,6 +245,8 @@ function render(){
 document.addEventListener('click',function(e){
   var t=e.target.closest('[data-act]');if(!t)return;var a=t.dataset.act,v=t.dataset.v;
   if(a==='notif'){enableNotif();return}
+  if(a==='rqdone'){delete RQ[v];fetch(DB+'/k/'+code+'/ad/rq/'+v+'.json',{method:'DELETE'}).catch(function(){});sheet='fam';render();return}
+  if(a==='rqadd'){if(!canManage())return;var rx=RQ[v],nm0=rx&&String(rx.x||'').trim().slice(0,24);if(nm0){var x0={id:rid(),name:nm0,i:S.members.length,k:'',h:''};S.members.push(x0);putMember(x0);cache()}delete RQ[v];fetch(DB+'/k/'+code+'/ad/rq/'+v+'.json',{method:'DELETE'}).catch(function(){});sheet='fam';render();return}
   if(a==='rqk'){var tx=document.getElementById('rqText');rqKind=v;rqMsg='';sheet='fam';render();return}
   if(a==='enter'){welcome=false;render();window.scrollTo(0,0);return}
   if(a==='pk'){pinKey(v);return}
@@ -260,7 +273,7 @@ document.addEventListener('submit',function(e){
     me=id;ls('ad_me',id);setHome(id);welcome=false;cache();pushAll();render();return}
   if(f==='rq'){var t=(document.getElementById('rqText').value||'').trim(),mm=mem(me);if(t.length<2){rqMsg='اكتب تفاصيل الطلب أولاً.';sheet='fam';render();return}
     var rid2='r'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-    fetch(DB+'/k/'+code+'/rq/'+rid2+'.json',{method:'PUT',body:JSON.stringify({t:rqKind,x:t.slice(0,300),m:me||'',n:mm?mm.name:'',at:Date.now()})}).then(function(r){if(!r.ok)throw 0;rqMsg='وصل طلبك، جزاك الله خيراً.'}).catch(function(){rqMsg='تعذّر الإرسال، حاول مرة أخرى.'}).then(function(){sheet='fam';render()});return}
+    fetch(DB+'/k/'+code+(linked?'':'/ad')+'/rq/'+rid2+'.json',{method:'PUT',body:JSON.stringify({t:rqKind,x:t.slice(0,300),m:me||'',n:mm?mm.name:'',at:Date.now()})}).then(function(r){if(!r.ok)throw 0;rqMsg='وصل طلبك، جزاك الله خيراً.'}).catch(function(){rqMsg='تعذّر الإرسال، حاول مرة أخرى.'}).then(function(){sheet='fam';render()});return}
   if(f==='add'){if(!canManage())return;var nm=document.getElementById('addN').value.trim();if(!nm)return;var x={id:rid(),name:nm,i:S.members.length,k:'',h:''};S.members.push(x);putMember(x);cache();sheet='fam';render();return}
 });
 if(!me&&code&&ls0('kf_code')===code&&ls0('kf_me')){me=ls0('kf_me');ls('ad_me',me)}
