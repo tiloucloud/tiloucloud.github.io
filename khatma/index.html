@@ -982,7 +982,7 @@ var BNEW=null;
 function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
 function openVid(w){var f=w==='pin'?'fam-pin':w==='upd'?'fam-upd':w==='join'?'fam-join':'fam-intro',m=mem(me),o=document.createElement('div');o.className='vov';
   o.innerHTML='<video src="'+f+'.mp4" poster="'+f+'.jpg" playsinline controls autoplay preload="auto"></video>'+
-   '<div class="vov-bar"><button class="ib vov-x" aria-label="إغلاق">✕</button>'+(w==='join'?'':'<button class="gbtn vov-go">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button>')+'</div>';
+   '<div class="vov-bar"><button class="ib vov-x" aria-label="إغلاق">✕</button>'+(w==='join'&&!document.querySelector('[data-act=enter]')?'':'<button class="gbtn vov-go">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button>')+'</div>';
   document.body.appendChild(o);var v=o.querySelector('video');try{var pr=v.play();pr&&pr.catch(function(){})}catch(e){}
   function shut(){try{v.pause()}catch(e){}o.remove()}
   o.querySelector('.vov-x').onclick=shut;
@@ -996,7 +996,8 @@ function vWelcome(){
     '<div class="wel-meta num"><span>'+K.days+' يوماً</span><span>'+pagesN(daily())+' كل يوم</span><span>اليوم '+Math.max(1,dayNo())+'</span></div>'+
     (famVid()?'<div class="wel-vids"><button class="wel-vid" data-act="vid" data-v="intro" aria-label="شاهد فيديو ختمتنا"><span class="wv-th"><img src="fam-intro.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>فيديو ختمتنا</b><small>40 ثانية</small></span></button>'+
       '<button class="wel-vid" data-act="vid" data-v="pin" aria-label="شاهد شرح الرمز السري"><span class="wv-th"><img src="fam-pin.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>لا يقرأ أحدٌ باسمك 🔒</b><small>شرح بالخطوات · دقيقة ونصف</small></span></button>'+
-      '<button class="wel-vid wv-new" data-act="vid" data-v="upd" aria-label="شاهد فيديو التحديث"><span class="wv-th"><img src="fam-upd.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>تحديث: القائمة محفوظة 🔒</b><small>لماذا صارت الإضافة بيد صاحب الختمة · دقيقة</small></span></button></div>':'')+
+      '<button class="wel-vid wv-new" data-act="vid" data-v="upd" aria-label="شاهد فيديو التحديث"><span class="wv-th"><img src="fam-upd.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>تحديث: القائمة محفوظة 🔒</b><small>لماذا صارت الإضافة بيد صاحب الختمة · دقيقة</small></span></button>'+
+      '<button class="wel-vid wv-new" data-act="vid" data-v="join" aria-label="شاهد كيف ينضم من لم يدخل بعد"><span class="wv-th"><img src="fam-join.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>كيف ينضمّ من لم يدخل بعد؟ 🔗</b><small>الصق الرمز وانضم · دقيقة</small></span></button></div>':'')+
     prLine()+'<div class="wel-msg">'+esc(fill(s.b))+'</div>'+
     '<button class="gbtn wel-go" data-act="enter">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button>'+
   '</div></div>';
@@ -1416,7 +1417,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 47</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 48</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
