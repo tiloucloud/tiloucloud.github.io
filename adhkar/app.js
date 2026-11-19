@@ -90,6 +90,26 @@ function dget(id,o){return (DONE[id]&&DONE[id][dayIso(o)])||0}
 function dayOk(id,o){var v=dget(id,o);return (v&3)===3}
 function streak(id){var n=0,o=dayOk(id,0)?0:1;for(;o<400&&dayOk(id,o);o++)n++;return n}
 function stLevel(n){var l=0;STL.forEach(function(x,i){if(n>=x)l=i+1});return l}
+var MSL=[[10,'🌱','بداية طيبة'],[30,'🌿','ثبات'],[100,'🌳','مئة ذِكر'],[300,'🌙','ثلاثمئة'],[1000,'🏅','ألف ذِكر']],PDL=[[1,'🕌','يوم كامل للصلوات'],[7,'🕋','أسبوع كامل'],[30,'🌟','شهر كامل']];
+function totSess(id){var n=0,o=DONE[id]||{};for(var k in o)n+=bits(o[k]&7);return n}
+function prayDays(id){var n=0,o=DONE[id]||{};for(var k in o)if(((o[k]>>3)&31)===31)n++;return n}
+function lvl(L,n){var l=0;L.forEach(function(x,i){if(n>=x[0])l=i+1});return l}
+function famAllDone(){return S.members.length>1&&S.members.every(function(m){return (dget(m.id,0)&3)===3})}
+function bdState(id){return {st:stLevel(streak(id)),ms:lvl(MSL,totSess(id)),pd:lvl(PDL,prayDays(id))}}
+function vBadges(){
+  var m=mem(me);if(!m)return '';
+  var st=streak(me),sl=stLevel(st),n=totSess(me),ml=lvl(MSL,n),pd=prayDays(me),pl=lvl(PDL,pd);
+  var stars=STL.map(function(x,i){return '<li class="'+(i<sl?'on':'')+'"><b>⭐</b><small class="num">'+x+' '+daysWord(x)+'</small></li>'}).join('');
+  var ms=MSL.map(function(x,i){return '<li class="'+(i<ml?'on':'')+'"><b>'+x[1]+'</b><small>'+x[2]+'</small></li>'}).join('');
+  var ps=PDL.map(function(x,i){return '<li class="'+(i<pl?'on':'')+'"><b>'+x[1]+'</b><small>'+x[2]+'</small></li>'}).join('');
+  var nx=MSL[ml];
+  return '<section class="card bdg">'+(famAllDone()?'<p class="famok">🌟 العائلة كلها أتمّت أذكار اليوم، بارك الله فيكم</p>':'')+
+    '<h2 class="ctitle">علاماتي</h2>'+
+    '<h3>المداومة</h3><ul class="bl">'+stars+'</ul>'+
+    '<h3>مراحل الذكر <small class="num">'+n+' جلسة</small></h3><ul class="bl bl5">'+ms+'</ul>'+(nx?'<p class="bt">بقي <b class="num">'+(nx[0]-n)+'</b> جلسة للعلامة التالية</p>':'')+
+    '<h3>أذكار الصلوات <small class="num">'+pd+' يوماً</small></h3><ul class="bl">'+ps+'</ul>'+
+    '<p class="bq">«أحبُّ الأعمال إلى الله أدومُها وإن قلّ» <small>متفق عليه</small></p></section>';
+}
 function weekStart(){var d=today(),w=(d.getDay()+1)%7;d.setDate(d.getDate()-w);return d}
 function weekCount(id){var ws=weekStart(),n=0,d=new Date(ws);while(d<=today()){var v=(DONE[id]&&DONE[id][iso(d)])||0;n+=bits(v&7);d.setDate(d.getDate()+1)}return n}
 function famGoal(){var t=S.members.length*7*3,n=0;S.members.forEach(function(m){n+=weekCount(m.id)});return [n,t]}
@@ -175,7 +195,7 @@ function vHome(){
     '<div class="tiles">'+tile('m',0,m)+tile('e',1,m)+tile('s',2,m)+'</div>'+
     '<p class="hl">أذكار بعد الصلاة</p><div class="pr-row">'+pr+'</div>'+
     '<div class="strk"><span class="stars">'+stars+'</span><span>'+(st?'داومتَ على أذكار الصباح والمساء '+st+' '+daysWord(st)+(nx?'، بقي '+(nx-st)+' للنجمة التالية':''):'أتمّ أذكار الصباح والمساء اليوم لتبدأ سلسلة المداومة')+'</span></div></section>'+
-    vGoal()+vRace()+vNotif()+vFamily();
+    vBadges()+vGoal()+vRace()+vNotif()+vFamily();
 }
 function vGoal(){var g=famGoal(),pct=g[1]?Math.min(100,Math.round(g[0]/g[1]*100)):0,ok=g[1]&&g[0]>=g[1];
   return '<section class="card goal"><h2 class="ctitle">هدف العائلة هذا الأسبوع</h2><div class="gbar"><i style="width:'+pct+'%"></i></div>'+
@@ -203,7 +223,7 @@ function vFamily(){
     (m&&(me===home||unlocked===me)?'<button class="btn ghost" data-act="pinchg">🔑 '+(m.k?'تغيير رمزي السري':'رمزي السري (للذكر من هاتف آخر)')+'</button>':'')+
     mg+(canManage()?vReqs():'')+
     '<ul class="ml">'+S.members.map(function(x){return '<li><span>'+esc(x.name)+(x.id===OWN?' <small>(صاحب المجموعة)</small>':'')+'</span>'+(canManage()?'<button class="lnk" data-act="del" data-v="'+x.id+'">حذف</button>':'')+'</li>'}).join('')+'</ul>'+
-    '<p class="sub">التطبيق مجاني وبلا إعلانات. <a href="../khatma/privacy.html">الخصوصية</a></p></div></details>'}
+    '<p class="sub">التطبيق مجاني وبلا إعلانات. <a href="privacy.html">الخصوصية</a></p></div></details>'}
 function itemsFor(k,p){return AD[k].filter(function(it){return !it.only||(it.only==='fm'?(p===0||p===3):it.only==='f'?p===0:true)}).map(function(it){
   var n=it.n;if(it.n3==='fm'&&(p===0||p===3))n=3;return {t:it.t,q:it.q,qn:it.qn,f:it.f,n:n,info:it.info}})}
 function progKey(){return 'ad_pg_'+me+'_'+dayIso(0)+'_'+sess+(sess==='p'?pIdx:'')}
@@ -228,11 +248,12 @@ function tapItem(i){var its=itemsFor(sess,pIdx),pg=jget(progKey(),{}),it=its[i];
   if(c+1>=it.n){var nx=null;for(var j=i+1;j<its.length;j++)if((pg[j]||0)<its[j].n){nx=j;break}
     if(nx!==null)setTimeout(function(){var el=document.getElementById('dk'+nx);if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},250)}
   if(all)finishSession()}
-function finishSession(){var bit=sess==='m'?0:sess==='e'?1:sess==='s'?2:3+pIdx,before=stLevel(streak(me));markDone(bit);var after=stLevel(streak(me)),st=streak(me);
-  celeb={t:'تقبّل الله منك',s:SES[sess].t+(sess==='p'?' · '+PRN[pIdx]:''),star:after>before?STL[after-1]:0,st:st};view='home';render();window.scrollTo(0,0)}
+function finishSession(){var bit=sess==='m'?0:sess==='e'?1:sess==='s'?2:3+pIdx,b0=bdState(me),before=b0.st;markDone(bit);var b1=bdState(me),after=b1.st,st=streak(me),nb=[];
+  if(b1.ms>b0.ms)nb.push(MSL[b1.ms-1][1]+' '+MSL[b1.ms-1][2]);if(b1.pd>b0.pd)nb.push(PDL[b1.pd-1][1]+' '+PDL[b1.pd-1][2]);
+  celeb={t:'تقبّل الله منك',s:SES[sess].t+(sess==='p'?' · '+PRN[pIdx]:''),star:after>before?STL[after-1]:0,st:st,nb:nb};view='home';render();window.scrollTo(0,0)}
 function vCeleb(){if(!celeb)return '';var c=celeb;
   return '<div class="cel" role="dialog"><div class="cel-in"><div class="ci">'+(c.star?'⭐':'🤍')+'</div><h2>'+esc(c.t)+'</h2><p>أتممتَ '+esc(c.s)+'</p>'+
-    (c.star?'<p class="cs">نجمة المداومة: '+c.star+' '+daysWord(c.star)+' متتالية</p>':'')+
+    (c.star?'<p class="cs">نجمة المداومة: '+c.star+' '+daysWord(c.star)+' متتالية</p>':'')+(c.nb&&c.nb.length?c.nb.map(function(x){return '<p class="cs">علامة جديدة: '+esc(x)+'</p>'}).join(''):'')+
     '<p class="cq">«أحبُّ الأعمال إلى الله أدومُها وإن قلّ» (متفق عليه)</p><button class="gbtn" data-act="cel">الحمد لله</button></div></div>'}
 function render(){
   if(!code){root.innerHTML=vJoin();return}
