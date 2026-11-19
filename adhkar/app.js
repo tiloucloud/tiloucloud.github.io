@@ -29,7 +29,7 @@ if(code)ls('ad_code',code);if(code&&HU){ls('ad_me',HU);if(HH&&!ls('ad_home')){ls
 if(location.hash)history.replaceState(null,'',location.pathname);
 var S=jget('ad_S_'+code,null)||{info:{name:'',start:iso(today())},members:[]},DONE=jget('ad_D_'+code,{}),PEND={};
 var me=ls('ad_me')||null,home=ls('ad_home')||'',linked=false,OWN='',rqMsg='',rqKind='add',mine=jget('ad_mine',[]),unlocked=null,hidAt=0;
-var view='home',sess=null,pIdx=0,sheet=null,welcome=!!code,celeb=null;
+var view='home',sess=null,pIdx=0,pi=0,thOpen=false,TH=ls('ad_th')||'auto',sheet=null,welcome=!!code,celeb=null;
 var pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,pinChange=false;
 var FSZ=[1,1.15,1.3,1.5],FL=parseInt(ls('ad_fs'),10);if(!(FL>=0&&FL<=3))FL=ls('ad_big')==='1'?2:0;
 function applyFs(){var z=FSZ[FL];document.documentElement.style.zoom=z===1?'':String(z)}applyFs();
@@ -228,27 +228,33 @@ function vFamily(){
     '<p class="sub">التطبيق مجاني وبلا إعلانات. <a href="privacy.html">الخصوصية</a></p></div></details>'}
 function itemsFor(k,p){return AD[k].filter(function(it){return !it.only||(it.only==='fm'?(p===0||p===3):it.only==='f'?p===0:true)}).map(function(it){
   var n=it.n;if(it.n3==='fm'&&(p===0||p===3))n=3;return {t:it.t,q:it.q,qn:it.qn,f:it.f,n:n,info:it.info}})}
+var THS=[['auto','تلقائي','#eef0f4','#141d2b'],['white','أبيض','#ffffff','#000000'],['cream','كريمي','#f6efd9','#2b2113'],['yellow','أصفر فاتح','#fff59d','#000000'],['dark','داكن','#121a27','#e6ebf2'],['black','أسود','#000000','#ffffff'],['ybk','أصفر على أسود','#000000','#ffe14d'],['blue','أزرق','#0b2a4a','#ffffff']];
 function progKey(){return 'ad_pg_'+me+'_'+dayIso(0)+'_'+sess+(sess==='p'?pIdx:'')}
 function vSession(){
   var its=itemsFor(sess,pIdx),pg=jget(progKey(),{}),done=0;
   its.forEach(function(it,i){if((pg[i]||0)>=it.n)done++});
   var s=SES[sess],title=s.t+(sess==='p'?' · '+PRN[pIdx]:'');
   var cards=its.map(function(it,i){var c=Math.min(pg[i]||0,it.n),left=it.n-c,ok=left<=0;
-    return '<article class="dk'+(ok?' ok':'')+'" id="dk'+i+'" data-act="tap" data-v="'+i+'">'+
+    return '<div class="pgi"><article class="dk'+(ok?' ok':'')+'" id="dk'+i+'" data-act="tap" data-v="'+i+'">'+
       (it.qn?'<p class="qn">'+esc(it.qn)+'</p>':'')+'<p class="dt">'+esc(it.t)+'</p>'+(it.q?'<p class="dq">﴿'+esc(it.q)+'﴾</p>':'')+
       (it.f?'<p class="df">'+esc(it.f)+'</p>':'')+
-      '<div class="dc"><span class="dn">'+(ok?'✓ تمّ':(it.n>1?'بقي <b class="num">'+left+'</b> من '+it.n:'مرة واحدة'))+'</span><span class="cb'+(ok?' ok':'')+'">'+(ok?'✓':'<b class="num">'+left+'</b>')+'</span></div></article>'}).join('');
-  return '<div class="sv"><header class="sh"><button class="ib" data-act="home" aria-label="رجوع">→</button><div><h1>'+title+'</h1><div class="sp"><i style="width:'+(its.length?done/its.length*100:0)+'%"></i></div></div><span class="num sc">'+done+'/'+its.length+'</span></header>'+
-    '<p class="hint">اضغط على الذِّكر بعد كل مرة تقوله، ويُحسب لك تلقائياً.</p><div class="dks">'+cards+'</div>'+
-    '<button class="btn ghost" data-act="reset">إعادة البدء</button></div>';
+      '<div class="dc"><span class="dn">'+(ok?'✓ تمّ':(it.n>1?'بقي <b class="num">'+left+'</b> من '+it.n:'مرة واحدة'))+'</span><span class="cb'+(ok?' ok':'')+'">'+(ok?'✓':'<b class="num">'+left+'</b>')+'</span></div></article></div>'}).join('');
+  var bar=thOpen?'<div class="thbar">'+THS.map(function(x){return '<button class="sw'+(TH===x[0]?' on':'')+'" data-act="th" data-v="'+x[0]+'" style="background:'+x[2]+';color:'+x[3]+'"><b>أ</b><small>'+x[1]+'</small></button>'}).join('')+'<button class="sw fz" data-act="big"><b>أ+</b><small>حجم الخط</small></button></div>':'';
+  return '<div class="sv" data-th="'+TH+'"><header class="sh"><button class="ib" data-act="home" aria-label="رجوع">→</button><div><h1>'+title+'</h1><div class="sp"><i style="width:'+(its.length?done/its.length*100:0)+'%"></i></div></div><span class="num sc">'+done+'/'+its.length+'</span><button class="ib" data-act="thm" aria-label="الخلفية والخط">🎨</button></header>'+bar+
+    '<p class="hint">اضغط على الذِّكر بعد كل مرة تقوله · اسحب يميناً أو يساراً للتنقل</p><div class="pgr" id="pgr">'+cards+'</div>'+
+    '<footer class="pf"><button class="pn" data-act="pg" data-v="-1">→ السابق</button><span class="num" id="pgl">'+(pi+1)+' / '+its.length+'</span><button class="pn" data-act="pg" data-v="1">التالي ←</button><button class="lnk rs0" data-act="reset">إعادة البدء</button></footer></div>';
 }
+function afterSess(){var p=document.getElementById('pgr');if(!p)return;var n=p.children.length;if(pi>=n)pi=n-1;if(pi<0)pi=0;
+  if(p.children[pi])p.children[pi].scrollIntoView({behavior:'instant',inline:'start',block:'nearest'});
+  var tm;p.addEventListener('scroll',function(){clearTimeout(tm);tm=setTimeout(function(){var w=p.clientWidth||1,k=Math.round(Math.abs(p.scrollLeft)/w);if(k>=n)k=n-1;pi=k;var l=document.getElementById('pgl');if(l)l.textContent=(k+1)+' / '+n},90)},{passive:true})}
+function goPg(k,smooth){var p=document.getElementById('pgr');if(!p)return;if(k<0||k>=p.children.length)return;pi=k;p.children[k].scrollIntoView({behavior:smooth?'smooth':'instant',inline:'start',block:'nearest'});var l=document.getElementById('pgl');if(l)l.textContent=(k+1)+' / '+p.children.length}
 function tapItem(i){var its=itemsFor(sess,pIdx),pg=jget(progKey(),{}),it=its[i];if(!it)return;
   var c=pg[i]||0;if(c>=it.n)return;pg[i]=c+1;ls(progKey(),JSON.stringify(pg));
   try{navigator.vibrate&&navigator.vibrate(c+1>=it.n?[20,40,30]:12)}catch(e){}
   var all=its.every(function(x,j){return (pg[j]||0)>=x.n});
-  var y=window.scrollY;render();window.scrollTo(0,y);
+  render();
   if(c+1>=it.n){var nx=null;for(var j=i+1;j<its.length;j++)if((pg[j]||0)<its[j].n){nx=j;break}
-    if(nx!==null)setTimeout(function(){var el=document.getElementById('dk'+nx);if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},250)}
+    if(nx!==null&&!all)setTimeout(function(){goPg(nx,true)},300)}
   if(all)finishSession()}
 function finishSession(){var bit=sess==='m'?0:sess==='e'?1:sess==='s'?2:3+pIdx,b0=bdState(me),before=b0.st;markDone(bit);var b1=bdState(me),after=b1.st,st=streak(me),nb=[];
   if(b1.ms>b0.ms)nb.push(MSL[b1.ms-1][1]+' '+MSL[b1.ms-1][2]);if(b1.pd>b0.pd)nb.push(PDL[b1.pd-1][1]+' '+PDL[b1.pd-1][2]);
@@ -264,7 +270,7 @@ function render(){
   if(welcome){document.documentElement.style.zoom='';root.innerHTML=vWelcome();fitWel();return}
   applyFs();
   if(gate()!=='open'){root.innerHTML=vLock();return}
-  if(view==='sess'&&me){root.innerHTML=vSession();return}
+  if(view==='sess'&&me){root.innerHTML=vSession();afterSess();return}
   root.innerHTML='<div class="wrap">'+hdr()+vHome()+'</div>'+vCeleb();
 }
 
@@ -282,10 +288,13 @@ document.addEventListener('click',function(e){
   if(a==='pinchg'){if(me===home||unlocked===me||mine.indexOf(me)>=0){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0)}return}
   if(a==='pinx'){pinChange=false;pinBuf='';pinFirst='';pinErr='';render();return}
   if(a==='me'){pinBuf='';pinFirst='';pinErr='';pinChange=false;unlocked=null;me=v||null;view='home';if(me)ls('ad_me',me);else ls('ad_me',null);syncSubMember();render();window.scrollTo(0,0);return}
-  if(a==='sess'){sess=v;pIdx=+(t.dataset.p||0);view='sess';render();window.scrollTo(0,0);return}
+  if(a==='sess'){sess=v;pIdx=+(t.dataset.p||0);view='sess';thOpen=false;pi=0;(function(){var its=itemsFor(sess,pIdx),pg=jget(progKey(),{});for(var q=0;q<its.length;q++)if((pg[q]||0)<its[q].n){pi=q;break}})();render();window.scrollTo(0,0);return}
   if(a==='home'){view='home';render();window.scrollTo(0,0);return}
   if(a==='tap'){tapItem(+v);return}
-  if(a==='reset'){ls(progKey(),null);render();window.scrollTo(0,0);return}
+  if(a==='pg'){goPg(pi+(+v),true);return}
+  if(a==='thm'){thOpen=!thOpen;render();return}
+  if(a==='th'){TH=v;ls('ad_th',v);render();return}
+  if(a==='reset'){ls(progKey(),null);pi=0;render();window.scrollTo(0,0);return}
   if(a==='cel'){celeb=null;render();return}
   if(a==='big'){FL=(FL+1)%4;ls('ad_fs',String(FL));applyFs();render();return}
   if(a==='invite'){var url=location.origin+location.pathname.replace(/index\.html$/,'')+'#a='+code,txt='أحبتي، انضموا إلى «أذكار العائلة» لنتنافس في المداومة على الأذكار:\n'+url;

@@ -82,7 +82,7 @@ input{padding:12px 14px;border:1px solid var(--line);border-radius:12px;backgrou
 .fam .stack{margin-top:12px}
 .ml{list-style:none}.ml li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
 /* session */
-.sv{max-width:640px;margin:0 auto;padding:0 12px 40px}
+.sv{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);padding:0 12px;max-width:none}
 .sh{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:10px 2px;background:var(--bg)}
 .sh>div{flex:1;min-width:0}
 .sh h1{font-family:var(--display);font-size:22px;color:var(--brand);line-height:1.3}
@@ -155,3 +155,29 @@ input{padding:12px 14px;border:1px solid var(--line);border-radius:12px;backgrou
 .vx{position:absolute;top:8px;left:8px;z-index:2;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:20px}
 .wvids{display:flex;gap:8px;width:100%}.wvids .wvid{flex:1;width:auto;min-width:0;padding:6px;gap:8px}
 .wvids .wvid img{width:34px;height:60px}.wvids .wvid b{font-size:16px}.wvids .wvid small{font-size:13px}
+
+/* horizontal reader + reading themes */
+.sv>*{width:100%;max-width:680px;margin-left:auto;margin-right:auto}
+.sv .sh{flex:none}.sv .hint{flex:none;font-size:14.5px;margin:0 auto 6px}
+.pgr{flex:1;min-height:0;max-width:none;width:calc(100% + 24px);margin:0 -12px;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.pgr::-webkit-scrollbar{display:none}
+.pgi{flex:0 0 100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;padding:4px 12px 12px;display:flex}
+.pgi .dk{margin:auto;width:100%;max-width:680px;min-height:0}
+.pf{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 max(10px,env(safe-area-inset-bottom));flex-wrap:wrap}
+.pn{flex:1;min-width:0;height:52px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;font-size:17px;cursor:pointer}
+.pf .num{font-weight:700;color:var(--muted);min-width:64px;text-align:center}
+.rs0{width:100%;text-align:center;font-size:14.5px;color:var(--muted);margin-top:0}
+.thbar{flex:none;display:flex;gap:6px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none}
+.sw{flex:0 0 auto;min-width:76px;height:62px;border-radius:14px;border:2px solid #8a93a3;display:flex;flex-direction:column;align-items:center;justify-content:center;font:inherit;cursor:pointer}
+.sw b{font-size:24px;line-height:1.1}.sw small{font-size:12.5px;line-height:1.2}.sw.on{border:3px solid #e0a82e;box-shadow:0 0 0 2px #e0a82e}
+.sw.fz{background:var(--surface);color:var(--ink)}
+.sv[data-th=white]{--bg:#fff;--surface:#fff;--ink:#000;--muted:#333;--line:#bbb;--track:#ddd;--brand:#000;--gold:#6b4a00;--deep-2:#1b3d78;--ok:#0b6b3a;--ok-s:#e0f2e7}
+.sv[data-th=cream]{--bg:#f6efd9;--surface:#fbf6e6;--ink:#2b2113;--muted:#5a4a30;--line:#d8cba6;--track:#e6dcbc;--brand:#4a3511;--gold:#7a5410;--deep-2:#6b4a1c;--ok:#2f6b3a;--ok-s:#e3ecc9}
+.sv[data-th=yellow]{--bg:#fff59d;--surface:#fffbd0;--ink:#000;--muted:#3a3500;--line:#c9bd4a;--track:#e8dc72;--brand:#000;--gold:#5a4300;--deep-2:#1b3d78;--ok:#0b6b3a;--ok-s:#e1f2b8}
+.sv[data-th=dark]{--bg:#0a0f18;--surface:#121a27;--ink:#e6ebf2;--muted:#a9b4c5;--line:#2a374c;--track:#1b2534;--brand:#a9c4ef;--gold:#d8b25c;--deep-2:#1a3766;--ok:#4fc18a;--ok-s:#123224}
+.sv[data-th=black]{--bg:#000;--surface:#000;--ink:#fff;--muted:#d6d6d6;--line:#666;--track:#333;--brand:#fff;--gold:#ffd24d;--deep-2:#2a5db0;--ok:#2fb56d;--ok-s:#06210f}
+.sv[data-th=ybk]{--bg:#000;--surface:#000;--ink:#ffe14d;--muted:#d9bf3c;--line:#8a7a20;--track:#3a3300;--brand:#ffe14d;--gold:#fff08a;--deep-2:#c9a400;--ok:#ffe14d;--ok-s:#1a1600}
+.sv[data-th=blue]{--bg:#0b2a4a;--surface:#103659;--ink:#fff;--muted:#c4d6ea;--line:#2c5683;--track:#1b4673;--brand:#ffffff;--gold:#ffd98a;--deep-2:#2f7fd1;--ok:#59d39a;--ok-s:#0e4a3a}
+.sv[data-th=ybk] .cb,.sv[data-th=ybk] .cb b{color:#000}.sv[data-th=ybk] .cb.ok{color:#000}
+.sv[data-th=white] .dq,.sv[data-th=yellow] .dq,.sv[data-th=cream] .dq{color:var(--ink)}
+.sv[data-th=black] .dk,.sv[data-th=ybk] .dk{border-width:2px}
