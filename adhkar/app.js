@@ -180,7 +180,8 @@ function vWelcome(){
     '<p class="tnf"><span class="ab">﴿</span><span class="aw">فَاذْكُرُونِےٓ أَذْكُرْكُمْ</span><span class="ab">﴾</span></p></div>'+
     '<div class="wel-msg">'+(m?'السلام عليكم يا '+esc(m.name)+'.\n':'السلام عليكم، أحبتي وعائلتي الكريمة والمباركة.\n')+
     'قال رسول الله ﷺ: «مَثَلُ الذي يذكر ربَّه والذي لا يذكر ربَّه مَثَلُ الحيِّ والميِّت» (رواه البخاري).\n\nهدف العائلة هذا الأسبوع: '+g[0]+' من '+g[1]+' ('+pct+'%)</div>'+
-    '<button class="wvid" data-act="vid" data-v="ad-why"><img src="ad-why.jpg" alt=""><span><b>▶ لماذا الأذكار؟</b><small>فيديو قصير · 50 ثانية</small></span></button>'+
+    '<div class="wvids"><button class="wvid" data-act="vid" data-v="ad-why"><img src="ad-why.jpg" alt=""><span><b>▶ لماذا الأذكار؟</b><small>50 ثانية</small></span></button>'+
+    '<button class="wvid" data-act="vid" data-v="ad-how"><img src="ad-how.jpg" alt=""><span><b>▶ كيف نستعمله؟</b><small>68 ثانية</small></span></button></div>'+
     '<button class="gbtn wel-go" data-act="enter">'+(m?'ادخل يا '+esc(m.name):'ادخل')+'</button></div></div>';
 }
 function chips(){return S.members.map(function(m){return '<button class="chip" data-act="me" data-v="'+m.id+'">'+esc(m.name)+'</button>'}).join('')}
