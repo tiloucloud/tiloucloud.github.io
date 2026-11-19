@@ -129,7 +129,7 @@ function gate(){var m=mem(me);if(!(code&&m))return 'open';
   return unlocked===me?'open':'set'}
 function vLock(){
   var m=mem(me),g=gate(),set=g==='set',dots='';
-  if(g==='blocked')return '<div class="lock"><div class="lk-in"><img class="appic" src="icon-192.png" alt=""><p class="lk-hi">اسم <b>'+esc(m.name)+'</b> مرتبط بهاتف صاحبه</p><h2>لم يختر رمزه بعد</h2><p class="lk-sub">إن كان هذا هاتف '+esc(m.name)+' نفسه، فافتح «ختمتنا العائلية» ثم اضغط بطاقة «أذكار العائلة» فيها. وإن كان هاتف غيره، فيختار '+esc(m.name)+' رمزه أولاً من هاتفه: «العائلة» ← «🔑 رمزي السري».</p><a class="gbtn" style="text-decoration:none;text-align:center" href="../khatma/">افتح ختمتنا العائلية</a><button class="gbtn" data-act="me" data-v="">اختر اسماً آخر</button></div></div>';
+  if(g==='blocked')return '<div class="lock"><div class="lk-in"><img class="appic" src="icon-192.png" alt=""><p class="lk-hi">اسم <b>'+esc(m.name)+'</b> مرتبط بهاتف صاحبه</p><h2>لم يختر رمزه بعد</h2><p class="lk-sub">إن كان هذا هاتف '+esc(m.name)+' نفسه، فافتح «ختمتنا العائلية» ثم اضغط بطاقة «أذكار العائلة» فيها. وإن كان هاتف غيره، فيختار '+esc(m.name)+' رمزه أولاً من هاتفه: «إدارة العائلة» ← «🔑 رمزي السري».</p><a class="gbtn" style="text-decoration:none;text-align:center" href="../khatma/">افتح ختمتنا العائلية</a><button class="gbtn" data-act="me" data-v="">اختر اسماً آخر</button></div></div>';
   for(var i=0;i<4;i++)dots+='<i class="'+(i<pinBuf.length?'on':'')+'"></i>';
   var keys=[1,2,3,4,5,6,7,8,9,'',0,'del'].map(function(k){return k===''?'<span></span>':'<button class="pk" data-act="pk" data-v="'+k+'"'+(k==='del'?' aria-label="امسح"':'')+'>'+(k==='del'?'⌫':k)+'</button>'}).join('');
   var wait=pinWait>Date.now();
@@ -139,7 +139,7 @@ function vLock(){
     '<div class="lk-dots'+(pinErr?' bad':'')+'">'+dots+'</div><p class="lk-err" role="alert">'+esc(wait?'انتظر قليلاً ثم حاول من جديد':pinErr)+'</p>'+
     '<div class="lk-pad">'+keys+'</div>'+
     (pinChange?'<button class="lnk lk-sw" data-act="pinx">إلغاء</button>':'<button class="lnk lk-sw" data-act="me" data-v="">لستُ '+esc(m.name)+'؟ اختر اسمك</button>')+
-    (!set?(mine.indexOf(m.id)>=0?'<button class="lnk lk-fg" data-act="pinchg">نسيتُ رمزي، أختار رمزاً جديداً</button>':'<p class="lk-fg">نسيتَ رمزك؟ غيّره من هاتفك أنت: «العائلة» ← «🔑 رمزي السري».</p>'):'')+
+    (!set?(mine.indexOf(m.id)>=0?'<button class="lnk lk-fg" data-act="pinchg">نسيتُ رمزي، أختار رمزاً جديداً</button>':'<p class="lk-fg">نسيتَ رمزك؟ غيّره من هاتفك أنت: «إدارة العائلة» ← «🔑 رمزي السري».</p>'):'')+
     '</div></div>';
 }
 function pinKey(k){
@@ -187,7 +187,7 @@ function tile(k,bit,m){var d=(dget(m.id,0)>>bit)&1,s=SES[k];
   return '<button class="tile'+(d?' done':'')+'" data-act="sess" data-v="'+k+'"><span class="ti">'+(d?'✓':s.i)+'</span><b>'+s.t+'</b><small>'+(d?'تقبّل الله':s.w)+'</small></button>'}
 function vHome(){
   var m=mem(me);
-  if(!m)return '<section class="card stack"><h2 class="ctitle">من أنت؟</h2><p class="sub">'+(S.members.length?'اختر اسمك مرة واحدة، ويتذكرك هاتفك بعدها.':'أضف أفراد العائلة من «العائلة» في الأسفل.')+'</p><div class="chips">'+chips()+'</div></section>'+vFamily();
+  if(!m)return '<section class="card stack"><h2 class="ctitle">من أنت؟</h2><p class="sub">'+(S.members.length?'اختر اسمك مرة واحدة، ويتذكرك هاتفك بعدها.':'أضف أفراد العائلة من «إدارة العائلة» في الأسفل.')+'</p><div class="chips">'+chips()+'</div></section>'+vFamily();
   var v=dget(me,0),st=streak(me),sl=stLevel(st),nx=STL[sl];
   var pr='';for(var i=0;i<5;i++)pr+='<button class="prb'+((v>>(3+i))&1?' on':'')+'" data-act="sess" data-v="p" data-p="'+i+'"><span>'+((v>>(3+i))&1?'✓':'')+'</span>'+PRN[i]+'</button>';
   var stars=STL.map(function(x,i){return '<i class="'+(i<sl?'on':'')+'" title="'+x+' '+daysWord(x)+'">⭐</i>'}).join('');
@@ -218,7 +218,7 @@ function vFamily(){
   var mg=canManage()?'<form class="form" data-form="add"><input id="addN" maxlength="24" placeholder="اسم فرد جديد" autocomplete="off"><button class="btn" type="submit">أضف</button></form>':
     (linked?'<p class="sub">أسماء العائلة هي نفسها في «ختمتنا العائلية»، ويديرها '+esc(on)+' وحده حفاظاً على القائمة.</p>':'<p class="sub">إضافة الأفراد وحذفهم وتعديل أسمائهم بيد '+esc(on)+' وحده حفاظاً على القائمة. أرسل طلبك وسيصله.</p>')+
     (DB?'<form class="stack" data-form="rq"><div class="seg">'+['add','ren','del'].map(function(x){return '<button type="button" class="'+(rqKind===x?'on':'')+'" data-act="rqk" data-v="'+x+'">'+RQK[x]+'</button>'}).join('')+'</div><input id="rqText" maxlength="200" placeholder="'+({add:'اسم الفرد الذي تريد إضافته',ren:'الاسم الحالي ← الاسم الصحيح',del:'اسم الفرد وسبب حذفه'})[rqKind]+'" autocomplete="off"><button class="btn" type="submit">أرسل الطلب إلى '+esc(on)+'</button>'+(rqMsg?'<p class="sub nok">'+esc(rqMsg)+'</p>':'')+'</form>':'');
-  return '<details class="card fam"'+(sheet==='fam'?' open':'')+'><summary><h2 class="ctitle">العائلة</h2></summary><div class="stack">'+
+  return '<details class="card fam"'+(sheet==='fam'?' open':'')+'><summary><h2 class="ctitle">⚙️ إدارة العائلة</h2></summary><div class="stack">'+
     '<button class="btn ghost" data-act="invite">🔗 رابط دعوة العائلة</button>'+
     (m&&(me===home||unlocked===me)?'<button class="btn ghost" data-act="pinchg">🔑 '+(m.k?'تغيير رمزي السري':'رمزي السري (للذكر من هاتف آخر)')+'</button>':'')+
     mg+(canManage()?vReqs():'')+
