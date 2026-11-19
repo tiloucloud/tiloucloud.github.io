@@ -31,7 +31,8 @@ var S=jget('ad_S_'+code,null)||{info:{name:'',start:iso(today())},members:[]},DO
 var me=ls('ad_me')||null,home=ls('ad_home')||'',linked=false,OWN='',rqMsg='',rqKind='add',mine=jget('ad_mine',[]),unlocked=null,hidAt=0;
 var view='home',sess=null,pIdx=0,sheet=null,welcome=!!code,celeb=null;
 var pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,pinChange=false;
-if(ls('ad_big')==='1')document.documentElement.classList.add('big');
+var FSZ=[1,1.15,1.3,1.5],FL=parseInt(ls('ad_fs'),10);if(!(FL>=0&&FL<=3))FL=ls('ad_big')==='1'?2:0;
+function applyFs(){var z=FSZ[FL];document.documentElement.style.zoom=z===1?'':String(z)}applyFs();
 function mem(id){for(var i=0;i<S.members.length;i++)if(S.members[i].id===id)return S.members[i];return null}
 function cache(){ls('ad_S_'+code,JSON.stringify(S));ls('ad_D_'+code,JSON.stringify(DONE))}
 
@@ -144,7 +145,7 @@ document.addEventListener('visibilitychange',function(){
 
 /* ---------- views ---------- */
 function hdr(){return '<header class="top"><div class="brand"><img class="appic" src="icon-192.png" alt=""><div><h1>أذكار العائلة</h1><p>'+esc(S.info.name)+'</p></div></div>'+
-  '<button class="ib" data-act="big" aria-label="تكبير الخط">'+(document.documentElement.classList.contains('big')?'أ-':'أ+')+'</button></header>'+
+  '<button class="ib fsb" data-act="big" aria-label="حجم الخط: المستوى '+(FL+1)+' من 4. اضغط للتغيير"><b>أ</b><span class="fsd">'+[0,1,2,3].map(function(i){return '<i'+(i<=FL?' class="on"':'')+'></i>'}).join('')+'</span></button></header>'+
   '<p class="tnf"><span class="ab">﴿</span><span class="aw">أَلَا بِذِكْرِ اِ۬للَّهِ تَطْمَئِنُّ اُ۬لْقُلُوبُۖ</span><span class="ab">﴾</span></p>'}
 function vJoin(){
   return '<div class="wrap">'+hdr().replace('<p></p>','<p>للعائلة</p>')+'<section class="card stack"><h2 class="ctitle">ابدأ أذكار عائلتك</h2><p class="sub">أنشئ مجموعة لعائلتك، ثم أرسل رابطها لأهلك، فيذكر كلٌّ منكم أذكاره، وتتنافسون في المداومة.</p>'+
@@ -258,7 +259,7 @@ document.addEventListener('click',function(e){
   if(a==='tap'){tapItem(+v);return}
   if(a==='reset'){ls(progKey(),null);render();window.scrollTo(0,0);return}
   if(a==='cel'){celeb=null;render();return}
-  if(a==='big'){var b=document.documentElement.classList.toggle('big');ls('ad_big',b?'1':'0');render();return}
+  if(a==='big'){FL=(FL+1)%4;ls('ad_fs',String(FL));applyFs();render();return}
   if(a==='invite'){var url=location.origin+location.pathname.replace(/index\.html$/,'')+'#a='+code,txt='أحبتي، انضموا إلى «أذكار العائلة» لنتنافس في المداومة على الأذكار:\n'+url;
     if(navigator.share)navigator.share({title:'أذكار العائلة',text:txt}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');return}
   if(a==='del'){if(!canManage())return;var x=mem(v);if(x&&confirm('حذف '+x.name+' من العائلة؟')){S.members=S.members.filter(function(y){return y.id!==v});delMember(v);if(me===v){me=null;ls('ad_me',null)}cache();sheet='fam';render()}return}
