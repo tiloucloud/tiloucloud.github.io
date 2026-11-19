@@ -180,6 +180,7 @@ function vWelcome(){
     '<p class="tnf"><span class="ab">﴿</span><span class="aw">فَاذْكُرُونِےٓ أَذْكُرْكُمْ</span><span class="ab">﴾</span></p></div>'+
     '<div class="wel-msg">'+(m?'السلام عليكم يا '+esc(m.name)+'.\n':'السلام عليكم، أحبتي وعائلتي الكريمة والمباركة.\n')+
     'قال رسول الله ﷺ: «مَثَلُ الذي يذكر ربَّه والذي لا يذكر ربَّه مَثَلُ الحيِّ والميِّت» (رواه البخاري).\n\nهدف العائلة هذا الأسبوع: '+g[0]+' من '+g[1]+' ('+pct+'%)</div>'+
+    '<button class="wvid" data-act="vid" data-v="ad-why"><img src="ad-why.jpg" alt=""><span><b>▶ لماذا الأذكار؟</b><small>فيديو قصير · 50 ثانية</small></span></button>'+
     '<button class="gbtn wel-go" data-act="enter">'+(m?'ادخل يا '+esc(m.name):'ادخل')+'</button></div></div>';
 }
 function chips(){return S.members.map(function(m){return '<button class="chip" data-act="me" data-v="'+m.id+'">'+esc(m.name)+'</button>'}).join('')}
@@ -273,6 +274,8 @@ document.addEventListener('click',function(e){
   if(a==='rqdone'){delete RQ[v];fetch(DB+'/k/'+code+'/ad/rq/'+v+'.json',{method:'DELETE'}).catch(function(){});sheet='fam';render();return}
   if(a==='rqadd'){if(!canManage())return;var rx=RQ[v],nm0=rx&&String(rx.x||'').trim().slice(0,24);if(nm0){var x0={id:rid(),name:nm0,i:S.members.length,k:'',h:''};S.members.push(x0);putMember(x0);cache()}delete RQ[v];fetch(DB+'/k/'+code+'/ad/rq/'+v+'.json',{method:'DELETE'}).catch(function(){});sheet='fam';render();return}
   if(a==='rqk'){var tx=document.getElementById('rqText');rqKind=v;rqMsg='';sheet='fam';render();return}
+  if(a==='vid'){var o=document.createElement('div');o.className='vov';o.innerHTML='<div class="vbx"><button class="vx" data-act="vclose" aria-label="إغلاق">✕</button><video src="'+t.dataset.v+'.mp4" poster="'+t.dataset.v+'.jpg" controls autoplay playsinline></video></div>';document.body.appendChild(o);return}
+  if(a==='vclose'){var ov=document.querySelector('.vov');if(ov){var vv=ov.querySelector('video');vv&&vv.pause();ov.remove()}return}
   if(a==='enter'){welcome=false;render();window.scrollTo(0,0);return}
   if(a==='pk'){pinKey(v);return}
   if(a==='pinchg'){if(me===home||unlocked===me||mine.indexOf(me)>=0){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0)}return}
