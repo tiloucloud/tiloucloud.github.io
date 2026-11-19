@@ -1415,7 +1415,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 45</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 46</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
@@ -1495,8 +1495,8 @@ root.addEventListener('submit',function(e){
     var rn=document.getElementById('renName').value.trim(),rm=mem(e.target.getAttribute('data-v'));
     if(!rn||!rm)return;rm.name=rn;sheet=null;save();
   }else if(f==='join'){
-    var jv=document.getElementById('joinIn').value.trim(),jm=/k=([A-Za-z0-9_-]{6,64})/.exec(jv)||/^([A-Za-z0-9_-]{6,64})$/.exec(jv);
-    if(!jm){document.getElementById('joinErr').textContent='لم أجد رمز العائلة في ما لصقته. انسخ الرابط كاملاً من رسالة واتساب.';return}
+    var jin=e.target.querySelector('input'),jerr=e.target.nextElementSibling,jv=jin.value.trim(),jm=/k=([A-Za-z0-9_-]{6,64})/.exec(jv)||/^([A-Za-z0-9_-]{6,64})$/.exec(jv);
+    if(!jm){if(jerr)jerr.textContent='لم أجد رمز العائلة في ما لصقته. انسخ الرابط كاملاً من رسالة واتساب.';return}
     if(jm[1]===code){sheet=null;render();return}
     code=jm[1];try{localStorage.setItem('kf_code',code);localStorage.removeItem('kf_me');localStorage.removeItem('kf_home')}catch(_){}me=null;unlocked=null;home='';sheet=null;prev=null;welcome=true;render();sync();
   }else if(f==='create'){
