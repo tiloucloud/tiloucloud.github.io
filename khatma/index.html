@@ -697,7 +697,7 @@ function stat(m){
 }
 function rng(a,b){return '<bdi dir="ltr" class="num">'+a+(b>a?' – '+b:'')+'</bdi>'}
 
-var CFG={db:"__DB__"},code=null,seed=null,pendAdd=null,prev=null,online=false,syncing=false,edits=0,dl=0;
+var CFG={db:"https://khatma-16d1b-default-rtdb.firebaseio.com"},code=null,seed=null,pendAdd=null,prev=null,online=false,syncing=false,edits=0,dl=0;
 if(CFG.db.indexOf('http')!==0)CFG.db='';
 try{code=localStorage.getItem('kf_code')}catch(e){}
 (function(){
