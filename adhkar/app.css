@@ -144,3 +144,5 @@ input{padding:12px 14px;border:1px solid var(--line);border-radius:12px;backgrou
 @media (prefers-color-scheme:dark){.bl li.on{background:linear-gradient(180deg,#4b3d12,#2e2508);border-color:#a8873a;color:#f4e3b0}}
 
 .wel-ic{width:96px;height:96px}.wel-in{gap:12px}
+
+.wel-ic{width:min(96px,12vh);height:min(96px,12vh)}.wel-msg{padding:12px 14px}

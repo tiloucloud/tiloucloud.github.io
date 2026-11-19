@@ -255,9 +255,12 @@ function vCeleb(){if(!celeb)return '';var c=celeb;
   return '<div class="cel" role="dialog"><div class="cel-in"><div class="ci">'+(c.star?'⭐':'🤍')+'</div><h2>'+esc(c.t)+'</h2><p>أتممتَ '+esc(c.s)+'</p>'+
     (c.star?'<p class="cs">نجمة المداومة: '+c.star+' '+daysWord(c.star)+' متتالية</p>':'')+(c.nb&&c.nb.length?c.nb.map(function(x){return '<p class="cs">علامة جديدة: '+esc(x)+'</p>'}).join(''):'')+
     '<p class="cq">«أحبُّ الأعمال إلى الله أدومُها وإن قلّ» (متفق عليه)</p><button class="gbtn" data-act="cel">الحمد لله</button></div></div>'}
+function fitWel(){var e=root.querySelector('.wel-in');if(!e)return;e.style.zoom='';var room=window.innerHeight-32,h=e.offsetHeight;if(h>room&&h>0)e.style.zoom=String(Math.max(.6,room/h))}
+window.addEventListener('resize',function(){if(welcome)fitWel()});
 function render(){
   if(!code){root.innerHTML=vJoin();return}
-  if(welcome){root.innerHTML=vWelcome();return}
+  if(welcome){document.documentElement.style.zoom='';root.innerHTML=vWelcome();fitWel();return}
+  applyFs();
   if(gate()!=='open'){root.innerHTML=vLock();return}
   if(view==='sess'&&me){root.innerHTML=vSession();return}
   root.innerHTML='<div class="wrap">'+hdr()+vHome()+'</div>'+vCeleb();
