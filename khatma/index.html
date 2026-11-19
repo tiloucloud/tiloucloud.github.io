@@ -980,13 +980,13 @@ function checkBadges(){var m=mem(me);if(!m||sheet||reading||welcome)return;
   if(news){BNEW=news;sheet='bnew';render()}}
 var BNEW=null;
 function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
-function openVid(w){var f=w==='pin'?'fam-pin':w==='upd'?'fam-upd':'fam-intro',m=mem(me),o=document.createElement('div');o.className='vov';
+function openVid(w){var f=w==='pin'?'fam-pin':w==='upd'?'fam-upd':w==='join'?'fam-join':'fam-intro',m=mem(me),o=document.createElement('div');o.className='vov';
   o.innerHTML='<video src="'+f+'.mp4" poster="'+f+'.jpg" playsinline controls autoplay preload="auto"></video>'+
-   '<div class="vov-bar"><button class="ib vov-x" aria-label="إغلاق">✕</button><button class="gbtn vov-go">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button></div>';
+   '<div class="vov-bar"><button class="ib vov-x" aria-label="إغلاق">✕</button>'+(w==='join'?'':'<button class="gbtn vov-go">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button>')+'</div>';
   document.body.appendChild(o);var v=o.querySelector('video');try{var pr=v.play();pr&&pr.catch(function(){})}catch(e){}
   function shut(){try{v.pause()}catch(e){}o.remove()}
   o.querySelector('.vov-x').onclick=shut;
-  o.querySelector('.vov-go').onclick=function(){shut();var b=document.querySelector('[data-act=enter]');if(b)b.click()};
+  var vg=o.querySelector('.vov-go');if(vg)vg.onclick=function(){shut();var b=document.querySelector('[data-act=enter]');if(b)b.click()};
   v.addEventListener('ended',function(){o.classList.add('done')})}
 function vWelcome(){
   var n=0;try{n=+localStorage.getItem('kf_wc')||0}catch(e){}
@@ -1059,15 +1059,16 @@ function vInstall(){
   return '<section class="inst"><img class="appic" src="icon2-192.png" alt=""><span class="itx"><b>ثبّت التطبيق</b><small>افتحه بلمسة من شاشتك الرئيسية</small></span>'+
     '<button class="btn sm" data-act="install">'+I('dl')+'ثبّت</button><button class="ib x" data-act="noinst" aria-label="إخفاء">×</button></section>';
 }
+function joinVid(){return '<button type="button" class="btn ghost" data-act="vid" data-v="join">▶ شاهد كيف تنضمّ (دقيقة)</button>'}
 function joinForm(){return '<form class="form" data-form="join"><input id="joinIn" dir="ltr" autocomplete="off" placeholder="الصق هنا رمز العائلة أو الرابط" aria-label="رابط العائلة أو رمزها"><button class="btn" type="submit">انضم</button></form><p class="sub" id="joinErr"></p>'}
 function solo(){return code&&S.members.length<=1}
 function vSolo(){
   if(!solo())return '';
-  return '<section class="card stack onb soloc"><h2 class="ctitle">هل أهلك بدؤوا ختمتهم؟</h2><p class="sub">أنت الآن وحدك في ختمة خاصة بك. إن كان عندك رمز العائلة فالصقه هنا لتنضمّ إليهم وتراهم ويرونك.</p>'+joinForm()+'</section>';
+  return '<section class="card stack onb soloc"><h2 class="ctitle">هل أهلك بدؤوا ختمتهم؟</h2><p class="sub">أنت الآن وحدك في ختمة خاصة بك. إن كان عندك رمز العائلة فالصقه هنا لتنضمّ إليهم وتراهم ويرونك.</p>'+joinForm()+joinVid()+'</section>';
 }
 function vJoin(){
   return '<section class="card stack onb"><h2 class="ctitle">انضم إلى ختمة عائلتك</h2><p class="sub">إن كان أهلك قد بدؤوا ختمتهم، فاطلب منهم رابطها أو رمزها والصقه هنا، فترى تقدّم الجميع ويرونك.</p>'+
-    joinForm()+'</section>'+
+    joinForm()+joinVid()+'</section>'+
     '<details class="card onb2"><summary><h2 class="ctitle">أبدأ ختمة جديدة لعائلتي</h2></summary><div class="stack"><p class="sub warn">⚠️ لا تنشئ ختمة جديدة إن كان أحد من أهلك قد بدأ ختمة، فتصير وحدك في ختمة منفصلة لا يراك فيها أحد.</p>'+
     '<form class="stack" data-form="create"><label>اسمك<input id="cMe" maxlength="24" required autocomplete="off" placeholder="مثلاً: أبو محمد"></label>'+
     '<label>اسم الختمة<input id="cName" maxlength="40" value="ختمتنا العائلية" required></label>'+
@@ -1415,7 +1416,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 46</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 47</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
