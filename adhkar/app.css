@@ -181,3 +181,13 @@ input{padding:12px 14px;border:1px solid var(--line);border-radius:12px;backgrou
 .sv[data-th=ybk] .cb,.sv[data-th=ybk] .cb b{color:#000}.sv[data-th=ybk] .cb.ok{color:#000}
 .sv[data-th=white] .dq,.sv[data-th=yellow] .dq,.sv[data-th=cream] .dq{color:var(--ink)}
 .sv[data-th=black] .dk,.sv[data-th=ybk] .dk{border-width:2px}
+
+/* no accidental double-tap zoom (pinch zoom still works) */
+html,body,.sv,.dk,.pgr,.pgi{touch-action:manipulation}
+.au{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-top:12px}
+.au .ab{font:inherit;font-size:16px;font-weight:700;border:2px solid var(--deep-2);background:transparent;color:var(--deep-2);border-radius:14px;padding:10px 14px;min-height:46px;cursor:pointer}
+.au .ab.go{background:var(--deep-2);color:#fff;width:100%}
+.au.on .at{font-size:18px;flex:1 1 100%;text-align:center}
+.au .ab.stop{border-color:#b3261e;color:#b3261e}
+.sv[data-th] .au .ab:not(.go){color:inherit;border-color:currentColor}
+.sv[data-th] .au .ab.stop{color:#b3261e;border-color:#b3261e}

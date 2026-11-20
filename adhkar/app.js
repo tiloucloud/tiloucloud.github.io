@@ -238,7 +238,7 @@ function vSession(){
     return '<div class="pgi"><article class="dk'+(ok?' ok':'')+'" id="dk'+i+'" data-act="tap" data-v="'+i+'">'+
       (it.qn?'<p class="qn">'+esc(it.qn)+'</p>':'')+'<p class="dt">'+esc(it.t)+'</p>'+(it.q?'<p class="dq">﴿'+esc(it.q)+'﴾</p>':'')+
       (it.f?'<p class="df">'+esc(it.f)+'</p>':'')+
-      '<div class="dc"><span class="dn">'+(ok?'✓ تمّ':(it.n>1?'بقي <b class="num">'+left+'</b> من '+it.n:'مرة واحدة'))+'</span><span class="cb'+(ok?' ok':'')+'">'+(ok?'✓':'<b class="num">'+left+'</b>')+'</span></div></article></div>'}).join('');
+      autoUi(it,i,ok)+'<div class="dc"><span class="dn">'+(ok?'✓ تمّ':(it.n>1?'بقي <b class="num">'+left+'</b> من '+it.n:'مرة واحدة'))+'</span><span class="cb'+(ok?' ok':'')+'">'+(ok?'✓':'<b class="num">'+left+'</b>')+'</span></div></article></div>'}).join('');
   var bar=thOpen?'<div class="thbar">'+THS.map(function(x){return '<button class="sw'+(TH===x[0]?' on':'')+'" data-act="th" data-v="'+x[0]+'" style="background:'+x[2]+';color:'+x[3]+'"><b>أ</b><small>'+x[1]+'</small></button>'}).join('')+'<button class="sw fz" data-act="big"><b>أ+</b><small>حجم الخط</small></button></div>':'';
   return '<div class="sv" data-th="'+TH+'"><header class="sh"><button class="ib" data-act="home" aria-label="رجوع">→</button><div><h1>'+title+'</h1><div class="sp"><i style="width:'+(its.length?done/its.length*100:0)+'%"></i></div></div><span class="num sc">'+done+'/'+its.length+'</span><button class="ib" data-act="thm" aria-label="الخلفية والخط">🎨</button></header>'+bar+
     '<p class="hint">اضغط على الذِّكر بعد كل مرة تقوله · اسحب يميناً أو يساراً للتنقل</p><div class="pgr" id="pgr">'+cards+'</div>'+
@@ -248,6 +248,31 @@ function afterSess(){var p=document.getElementById('pgr');if(!p)return;var n=p.c
   if(p.children[pi])p.children[pi].scrollIntoView({behavior:'instant',inline:'start',block:'nearest'});
   var tm;p.addEventListener('scroll',function(){clearTimeout(tm);tm=setTimeout(function(){var w=p.clientWidth||1,k=Math.round(Math.abs(p.scrollLeft)/w);if(k>=n)k=n-1;pi=k;var l=document.getElementById('pgl');if(l)l.textContent=(k+1)+' / '+n},90)},{passive:true})}
 function goPg(k,smooth){var p=document.getElementById('pgr');if(!p)return;if(k<0||k>=p.children.length)return;pi=k;p.children[k].scrollIntoView({behavior:smooth?'smooth':'instant',inline:'start',block:'nearest'});var l=document.getElementById('pgl');if(l)l.textContent=(k+1)+' / '+p.children.length}
+
+/* ---- timed reading for long counts (screen kept awake) ---- */
+var AUTO=null,AWL=null;
+function aSpd(){var v=parseFloat(ls('ad_spd')||'1');return v>=.5&&v<=2.5?v:1}
+function aPer(it){var w=String(it.t||'').trim().split(/\s+/).length;return Math.max(1.6,(w/2.4+0.9)*aSpd())}
+function aFmt(sec){sec=Math.max(0,Math.round(sec));var m=Math.floor(sec/60),r=sec%60;return m+':'+(r<10?'0':'')+r}
+function autoUi(it,i,ok){if(ok||it.n<10)return '';
+  var per=aPer(it);
+  if(AUTO&&AUTO.i===i){var rem=(it.n-Math.min((jget(progKey(),{})[i]||0),it.n))*per;
+    return '<div class="au on"><span class="at">⏱ المتبقي <b class="num" id="atm">'+aFmt(rem)+'</b></span><button class="ab" data-act="aspd" data-v="-1" aria-label="أبطأ">أبطأ</button><button class="ab" data-act="aspd" data-v="1" aria-label="أسرع">أسرع</button><button class="ab stop" data-act="astop">⏸ إيقاف</button></div>'}
+  var rem0=(it.n-Math.min((jget(progKey(),{})[i]||0),it.n))*per;
+  return '<div class="au"><button class="ab go" data-act="astart" data-v="'+i+'">⏱ اقرأ بعدّاد المدة · ≈ '+aFmt(rem0)+'</button></div>'}
+function aLock(){if(AWL||!('wakeLock' in navigator))return;try{navigator.wakeLock.request('screen').then(function(l){AWL=l;l.addEventListener('release',function(){if(AWL===l)AWL=null});if(!AUTO)aUnlock()}).catch(function(){})}catch(e){}}
+function aUnlock(){if(AWL){try{AWL.release()}catch(e){}AWL=null}}
+function aStop(rerender){if(AUTO){clearTimeout(AUTO.tm);AUTO=null}aUnlock();if(rerender!==false&&view==='sess')render()}
+function aTick(){if(!AUTO)return;var i=AUTO.i,its=itemsFor(sess,pIdx),it=its[i],card=document.getElementById('dk'+i);
+  if(!it||!card||view!=='sess'||document.hidden){aStop(false);return}
+  var pg=jget(progKey(),{}),c=pg[i]||0;if(c>=it.n){aStop();return}
+  if(c+1>=it.n){aStop(false);tapItem(i);return}
+  pg[i]=c+1;ls(progKey(),JSON.stringify(pg));try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}
+  var left=it.n-(c+1),dn=card.querySelector('.dn'),cb=card.querySelector('.cb b'),tm=document.getElementById('atm');
+  if(dn)dn.innerHTML='بقي <b class="num">'+left+'</b> من '+it.n;if(cb)cb.textContent=left;if(tm)tm.textContent=aFmt(left*aPer(it));
+  AUTO.tm=setTimeout(aTick,aPer(it)*1000)}
+function aStart(i){var its=itemsFor(sess,pIdx),it=its[i];if(!it)return;aStop(false);AUTO={i:i,tm:null};aLock();render();AUTO.tm=setTimeout(aTick,aPer(it)*1000)}
+document.addEventListener('visibilitychange',function(){if(document.hidden&&AUTO)aStop(false);});
 function tapItem(i){var its=itemsFor(sess,pIdx),pg=jget(progKey(),{}),it=its[i];if(!it)return;
   var c=pg[i]||0;if(c>=it.n)return;pg[i]=c+1;ls(progKey(),JSON.stringify(pg));
   try{navigator.vibrate&&navigator.vibrate(c+1>=it.n?[20,40,30]:12)}catch(e){}
@@ -256,7 +281,7 @@ function tapItem(i){var its=itemsFor(sess,pIdx),pg=jget(progKey(),{}),it=its[i];
   if(c+1>=it.n){var nx=null;for(var j=i+1;j<its.length;j++)if((pg[j]||0)<its[j].n){nx=j;break}
     if(nx!==null&&!all)setTimeout(function(){goPg(nx,true)},300)}
   if(all)finishSession()}
-function finishSession(){var bit=sess==='m'?0:sess==='e'?1:sess==='s'?2:3+pIdx,b0=bdState(me),before=b0.st;markDone(bit);var b1=bdState(me),after=b1.st,st=streak(me),nb=[];
+function finishSession(){aStop(false);var bit=sess==='m'?0:sess==='e'?1:sess==='s'?2:3+pIdx,b0=bdState(me),before=b0.st;markDone(bit);var b1=bdState(me),after=b1.st,st=streak(me),nb=[];
   if(b1.ms>b0.ms)nb.push(MSL[b1.ms-1][1]+' '+MSL[b1.ms-1][2]);if(b1.pd>b0.pd)nb.push(PDL[b1.pd-1][1]+' '+PDL[b1.pd-1][2]);
   celeb={t:'تقبّل الله منك',s:SES[sess].t+(sess==='p'?' · '+PRN[pIdx]:''),star:after>before?STL[after-1]:0,st:st,nb:nb};view='home';render();window.scrollTo(0,0)}
 function vCeleb(){if(!celeb)return '';var c=celeb;
@@ -288,9 +313,12 @@ document.addEventListener('click',function(e){
   if(a==='pinchg'){if(me===home||unlocked===me||mine.indexOf(me)>=0){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0)}return}
   if(a==='pinx'){pinChange=false;pinBuf='';pinFirst='';pinErr='';render();return}
   if(a==='me'){pinBuf='';pinFirst='';pinErr='';pinChange=false;unlocked=null;me=v||null;view='home';if(me)ls('ad_me',me);else ls('ad_me',null);syncSubMember();render();window.scrollTo(0,0);return}
-  if(a==='sess'){sess=v;pIdx=+(t.dataset.p||0);view='sess';thOpen=false;pi=0;(function(){var its=itemsFor(sess,pIdx),pg=jget(progKey(),{});for(var q=0;q<its.length;q++)if((pg[q]||0)<its[q].n){pi=q;break}})();render();window.scrollTo(0,0);return}
-  if(a==='home'){view='home';render();window.scrollTo(0,0);return}
+  if(a==='sess'){aStop(false);sess=v;pIdx=+(t.dataset.p||0);view='sess';thOpen=false;pi=0;(function(){var its=itemsFor(sess,pIdx),pg=jget(progKey(),{});for(var q=0;q<its.length;q++)if((pg[q]||0)<its[q].n){pi=q;break}})();render();window.scrollTo(0,0);return}
+  if(a==='home'){aStop(false);view='home';render();window.scrollTo(0,0);return}
   if(a==='tap'){tapItem(+v);return}
+  if(a==='astart'){aStart(+v);return}
+  if(a==='astop'){aStop();return}
+  if(a==='aspd'){var sp=aSpd()*(+v>0?0.8:1.25);sp=Math.min(2.5,Math.max(.5,sp));ls('ad_spd',String(sp));if(AUTO){var it2=itemsFor(sess,pIdx)[AUTO.i];clearTimeout(AUTO.tm);AUTO.tm=setTimeout(aTick,aPer(it2)*1000)}render();return}
   if(a==='pg'){goPg(pi+(+v),true);return}
   if(a==='thm'){thOpen=!thOpen;render();return}
   if(a==='th'){TH=v;ls('ad_th',v);render();return}
