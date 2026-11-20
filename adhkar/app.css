@@ -210,3 +210,5 @@ html,body,.sv,.dk,.pgr,.pgi{touch-action:manipulation}
 .sv[data-th=black] .pgi .dk,.sv[data-th=ybk] .pgi .dk{border-width:2.5px}
 
 .ver{text-align:center;font-size:12px;opacity:.5;margin:14px 0 6px}
+
+.race .row{flex-wrap:wrap}.race .row.hid{opacity:.55}.race .ctl{flex-basis:100%;display:flex;gap:8px;margin:2px 0 4px;padding-inline-start:40px}.race .ctl button{font:inherit;font-size:12.5px;background:transparent;color:inherit;border:1px solid rgba(217,178,90,.55);border-radius:10px;padding:3px 10px;cursor:pointer}

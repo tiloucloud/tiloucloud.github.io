@@ -52,15 +52,15 @@ function pull(){if(!code||!DB)return;
       var ow=S.members[oi];if(ow){OWN=ow.id;S.info.own=OWN;ow.h='1';me=OWN;ls('ad_me',me);home=OWN;ls('ad_home',home);mine=[OWN];ls('ad_mine',JSON.stringify(mine))}
       cache();pushAll();render()}
     else if(S.members.length)pushAll();return}
-  for(var id in m){var x=m[id];if(x&&x.name)ms.push({id:id,name:String(x.name),i:+x.i||0,k:x.k||'',h:x.h?'1':''})}
+  for(var id in m){var x=m[id];if(x&&x.name)ms.push({id:id,name:String(x.name),i:+x.i||0,k:x.k||'',h:x.h?'1':'',x:x.x?'1':''})}
   ms.sort(function(a,b){return a.i-b.i});
   S={info:{name:(r.info&&r.info.name)||(linked?'أذكار عائلتنا':''),start:(r.info&&r.info.start)||iso(today()),own:OWN},members:ms};
   RQ=(linked?R[3]:r.rq)||{};
   var d=r.done||{},o={};for(var a in d){o[a]={};for(var b in d[a])o[a][b]=+d[a][b]||0}
   for(var k in PEND){var q=PEND[k];o[q.m]=o[q.m]||{};o[q.m][q.d]=(o[q.m][q.d]||0)|q.v}
   DONE=o;cache();render()}).catch(function(){})}
-function pushAll(){if(linked)return;var m={};S.members.forEach(function(x,i){m[x.id]={name:x.name,i:i,k:x.k||'',h:x.h||''}});api('','PATCH',{info:{name:S.info.name,start:S.info.start,own:S.info.own||OWN||''},members:m}).catch(function(){})}
-function putMember(x){if(linked){fetch(DB+'/k/'+code+'/members/'+x.id+'.json',{method:'PATCH',body:JSON.stringify({k:x.k||'',h:x.h||''})}).catch(function(){});return}api('/members/'+x.id,'PUT',{name:x.name,i:S.members.indexOf(x),k:x.k||'',h:x.h||''}).catch(function(){})}
+function pushAll(){if(linked)return;var m={};S.members.forEach(function(x,i){m[x.id]={name:x.name,i:i,k:x.k||'',h:x.h||'',x:x.x||''}});api('','PATCH',{info:{name:S.info.name,start:S.info.start,own:S.info.own||OWN||''},members:m}).catch(function(){})}
+function putMember(x){if(linked){fetch(DB+'/k/'+code+'/members/'+x.id+'.json',{method:'PATCH',body:JSON.stringify({k:x.k||'',h:x.h||''})}).catch(function(){});return}api('/members/'+x.id,'PUT',{name:x.name,i:S.members.indexOf(x),k:x.k||'',h:x.h||'',x:x.x||''}).catch(function(){})}
 function delMember(id){if(linked)return;api('/members/'+id,'DELETE').catch(function(){})}
 function markDone(bit){if(!me)return;var d=dayIso(0),cur=(DONE[me]&&DONE[me][d])||0,v=cur|(1<<bit);if(v===cur)return;
   (DONE[me]=DONE[me]||{})[d]=v;var key=me+d+bit;PEND[key]={m:me,d:d,v:v};cache();
@@ -95,7 +95,7 @@ var MSL=[[10,'🌱','بداية طيبة'],[30,'🌿','ثبات'],[100,'🌳','�
 function totSess(id){var n=0,o=DONE[id]||{};for(var k in o)n+=bits(o[k]&7);return n}
 function prayDays(id){var n=0,o=DONE[id]||{};for(var k in o)if(((o[k]>>3)&31)===31)n++;return n}
 function lvl(L,n){var l=0;L.forEach(function(x,i){if(n>=x[0])l=i+1});return l}
-function famAllDone(){return S.members.length>1&&S.members.every(function(m){return (dget(m.id,0)&3)===3})}
+function famAllDone(){return vis().length>1&&vis().every(function(m){return (dget(m.id,0)&3)===3})}
 function bdState(id){return {st:stLevel(streak(id)),ms:lvl(MSL,totSess(id)),pd:lvl(PDL,prayDays(id))}}
 function vBadges(){
   var m=mem(me);if(!m)return '';
@@ -113,7 +113,8 @@ function vBadges(){
 }
 function weekStart(){var d=today(),w=(d.getDay()+1)%7;d.setDate(d.getDate()-w);return d}
 function weekCount(id){var ws=weekStart(),n=0,d=new Date(ws);while(d<=today()){var v=(DONE[id]&&DONE[id][iso(d)])||0;n+=bits(v&7);d.setDate(d.getDate()+1)}return n}
-function famGoal(){var t=S.members.length*7*3,n=0;S.members.forEach(function(m){n+=weekCount(m.id)});return [n,t]}
+function vis(){return S.members.filter(function(m){return !m.x})}
+function famGoal(){var L=vis(),t=L.length*7*3,n=0;L.forEach(function(m){n+=weekCount(m.id)});return [n,t]}
 function daysWord(n){return n===1?'يوم':n===2?'يومان':n<=10?'أيام':'يوماً'}
 
 /* ---------- PIN / phone owner ---------- */
@@ -207,11 +208,11 @@ function vGoal(){var g=famGoal(),pct=g[1]?Math.min(100,Math.round(g[0]/g[1]*100)
     '<p class="gt"><b class="num">'+g[0]+'</b> من <span class="num">'+g[1]+'</span> ذِكراً (صباح ومساء ونوم لكل فرد) · <b>'+pct+'%</b></p>'+
     (ok?'<p class="famok">🌟 بلغت العائلة هدف الأسبوع، بارك الله فيكم</p>':'<p class="sub">يبدأ الأسبوع يوم السبت. كل ذِكر يُتمّه أيّ فرد يقرّب العائلة من الهدف.</p>')+'</section>'}
 function vRace(){
-  var list=S.members.slice().sort(function(a,b){return streak(b.id)-streak(a.id)||weekCount(b.id)-weekCount(a.id)});
+  var adm=canManage(),list=(adm?S.members:vis()).slice().sort(function(a,b){return streak(b.id)-streak(a.id)||weekCount(b.id)-weekCount(a.id)});
   return '<section class="card race"><h2 class="ctitle">سباق المداومة</h2>'+list.map(function(m,i){var v=dget(m.id,0),st=streak(m.id);
-    return '<div class="row"><span class="rk num">'+(i+1)+'</span><div class="who"><b>'+esc(m.name)+(m.id===me?' <small>(أنت)</small>':'')+'</b><span class="td">'+
+    return '<div class="row'+(m.x?' hid':'')+'"><span class="rk num">'+(i+1)+'</span><div class="who"><b>'+esc(m.name)+(m.id===me?' <small>(أنت)</small>':'')+(m.x?' <small>(مخفي)</small>':'')+'</b><span class="td">'+
       ['ص','م','ن'].map(function(l,j){return '<i class="'+((v>>j)&1?'on':'')+'">'+l+'</i>'}).join('')+'</span></div>'+
-      '<span class="rs num">'+(st?'⭐'+st:'—')+'<small>هذا الأسبوع '+weekCount(m.id)+'</small></span></div>'}).join('')+
+      '<span class="rs num">'+(st?'⭐'+st:'—')+'<small>هذا الأسبوع '+weekCount(m.id)+'</small></span>'+(adm?'<div class="ctl"><button data-act="rhide" data-v="'+m.id+'">'+(m.x?'👁 أظهر':'🙈 أخفِ')+'</button>'+((m.k||m.h)&&m.id!==OWN?'<button data-act="rpin" data-v="'+m.id+'">🔑 صفّر الرمز</button>':'')+'</div>':'')+'</div>'}).join('')+
     '<p class="sub">الترتيب بأيام المداومة على أذكار الصباح والمساء. ص: الصباح، م: المساء، ن: النوم.</p></section>'}
 function canManage(){return !linked&&(!OWN||(me===OWN&&(me===home||unlocked===me)))}
 function rqList(){return Object.keys(RQ||{}).map(function(k){var x=RQ[k]||{};x.id=k;return x}).sort(function(a,b){return (a.at||0)-(b.at||0)})}
@@ -312,6 +313,8 @@ document.addEventListener('click',function(e){
   if(a==='vid'){var o=document.createElement('div');o.className='vov';o.innerHTML='<div class="vbx"><button class="vx" data-act="vclose" aria-label="إغلاق">✕</button><video src="'+t.dataset.v+'.mp4" poster="'+t.dataset.v+'.jpg" controls autoplay playsinline></video></div>';document.body.appendChild(o);return}
   if(a==='vclose'){var ov=document.querySelector('.vov');if(ov){var vv=ov.querySelector('video');vv&&vv.pause();ov.remove()}return}
   if(a==='enter'){welcome=false;render();window.scrollTo(0,0);return}
+  if(a==='rhide'){if(!canManage())return;var hm=mem(v);if(hm){hm.x=hm.x?'':'1';putMember(hm);cache();render()}return}
+  if(a==='rpin'){if(!canManage())return;var pm=mem(v);if(pm&&confirm('تصفير الرمز السري لـ «'+pm.name+'»؟ سيختار رمزه من جديد عند دخوله.')){pm.k='';pm.h='';putMember(pm);cache();render()}return}
   if(a==='claim'){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0);return}
   if(a==='pk'){pinKey(v);return}
   if(a==='pinchg'){if(me===home||unlocked===me||mine.indexOf(me)>=0){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0)}return}
