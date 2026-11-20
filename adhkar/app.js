@@ -30,7 +30,7 @@ if(code)ls('ad_code',code);if(code&&HU){ls('ad_me',HU);if(HH&&!ls('ad_home')){ls
 if(location.hash)history.replaceState(null,'',location.pathname);
 var S=jget('ad_S_'+code,null)||{info:{name:'',start:iso(today())},members:[]},DONE=jget('ad_D_'+code,{}),PEND={};
 var me=ls('ad_me')||null,home=ls('ad_home')||'',linked=false,OWN='',rqMsg='',rqKind='add',mine=jget('ad_mine',[]),unlocked=null,hidAt=0;
-var view='home',sess=null,pIdx=0,pi=0,thOpen=false,TH=ls('ad_th')||'auto',sheet=null,welcome=!!code,celeb=null;
+var editId=null,view='home',sess=null,pIdx=0,pi=0,thOpen=false,TH=ls('ad_th')||'auto',sheet=null,welcome=!!code,celeb=null;
 var pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,pinChange=false;
 var FSZ=[1,1.15,1.3,1.5],FL=parseInt(ls('ad_fs'),10);if(!(FL>=0&&FL<=3))FL=ls('ad_big')==='1'?2:0;
 function applyFs(){var z=FSZ[FL];document.documentElement.style.zoom=z===1?'':String(z)}applyFs();
@@ -207,12 +207,20 @@ function vGoal(){var g=famGoal(),pct=g[1]?Math.min(100,Math.round(g[0]/g[1]*100)
   return '<section class="card goal"><h2 class="ctitle">هدف العائلة هذا الأسبوع</h2><div class="gbar"><i style="width:'+pct+'%"></i></div>'+
     '<p class="gt"><b class="num">'+g[0]+'</b> من <span class="num">'+g[1]+'</span> ذِكراً (صباح ومساء ونوم لكل فرد) · <b>'+pct+'%</b></p>'+
     (ok?'<p class="famok">🌟 بلغت العائلة هدف الأسبوع، بارك الله فيكم</p>':'<p class="sub">يبدأ الأسبوع يوم السبت. كل ذِكر يُتمّه أيّ فرد يقرّب العائلة من الهدف.</p>')+'</section>'}
+function vEdit(m){
+  var rows='';
+  for(var o=0;o<14;o++){var d=dayIso(o),v=(DONE[m.id]&&DONE[m.id][d])||0,dt=new Date();dt.setDate(dt.getDate()-o);
+    var lab=o===0?'اليوم':o===1?'أمس':dt.toLocaleDateString('ar',{weekday:'short',day:'numeric',month:'numeric'});
+    var ch=['ص','م','ن'].map(function(l,b){return '<i class="'+((v>>b)&1?'on':'')+'" data-act="dtog" data-v="'+m.id+'|'+d+'|'+b+'">'+l+'</i>'}).join('')+'<em></em>'+PRN.map(function(l,b){return '<i class="pr '+((v>>(b+3))&1?'on':'')+'" data-act="dtog" data-v="'+m.id+'|'+d+'|'+(b+3)+'">'+['فج','ظه','عص','مغ','عش'][b]+'</i>'}).join('');
+    rows+='<div class="dr"><span class="dl">'+lab+'</span><span class="dc">'+ch+'</span></div>'}
+  return '<div class="ed"><form class="form" data-form="ren" data-id="'+m.id+'"><input id="renN" maxlength="24" value="'+esc(m.name)+'" autocomplete="off"><button class="btn" type="submit">حفظ الاسم</button></form>'+
+    '<p class="sub">أيام '+esc(m.name)+' (آخر 14 يوماً): اضغط الحرف ليُسجَّل أو يُلغى. ص صباح · م مساء · ن نوم، ثم الصلوات: فج ظه عص مغ عش.</p>'+rows+'</div>'}
 function vRace(){
   var adm=canManage(),list=(adm?S.members:vis()).slice().sort(function(a,b){return streak(b.id)-streak(a.id)||weekCount(b.id)-weekCount(a.id)});
   return '<section class="card race"><h2 class="ctitle">سباق المداومة</h2>'+list.map(function(m,i){var v=dget(m.id,0),st=streak(m.id);
     return '<div class="row'+(m.x?' hid':'')+'"><span class="rk num">'+(i+1)+'</span><div class="who"><b>'+esc(m.name)+(m.id===me?' <small>(أنت)</small>':'')+(m.x?' <small>(مخفي)</small>':'')+'</b><span class="td">'+
       ['ص','م','ن'].map(function(l,j){return '<i class="'+((v>>j)&1?'on':'')+'">'+l+'</i>'}).join('')+'</span></div>'+
-      '<span class="rs num">'+(st?'⭐'+st:'—')+'<small>هذا الأسبوع '+weekCount(m.id)+'</small></span>'+(adm?'<div class="ctl">'+((m.k||m.h)&&m.id!==OWN?'<button data-act="rpin" data-v="'+m.id+'">🔑 صفّر الرمز</button>':'')+'</div>':'')+'</div>'}).join('')+
+      '<span class="rs num">'+(st?'⭐'+st:'—')+'<small>هذا الأسبوع '+weekCount(m.id)+'</small></span>'+(adm?'<div class="ctl"><button data-act="redit" data-v="'+m.id+'">'+(editId===m.id?'✕ أغلق':'✏️ تعديل')+'</button>'+((m.k||m.h)&&m.id!==OWN?'<button data-act="rpin" data-v="'+m.id+'">🔑 صفّر الرمز</button>':'')+'</div>':'')+'</div>'+(adm&&editId===m.id?vEdit(m):'')}).join('')+
     '<p class="sub">الترتيب بأيام المداومة على أذكار الصباح والمساء. ص: الصباح، م: المساء، ن: النوم.</p></section>'}
 function canManage(){return !linked&&(!OWN||(me===OWN&&(me===home||unlocked===me)))}
 function rqList(){return Object.keys(RQ||{}).map(function(k){var x=RQ[k]||{};x.id=k;return x}).sort(function(a,b){return (a.at||0)-(b.at||0)})}
@@ -314,6 +322,8 @@ document.addEventListener('click',function(e){
   if(a==='vclose'){var ov=document.querySelector('.vov');if(ov){var vv=ov.querySelector('video');vv&&vv.pause();ov.remove()}return}
   if(a==='enter'){welcome=false;render();window.scrollTo(0,0);return}
   if(a==='rhide'){if(!canManage())return;var hm=mem(v);if(hm){hm.x=hm.x?'':'1';putMember(hm);cache();render()}return}
+  if(a==='redit'){if(!canManage())return;editId=editId===v?null:v;render();return}
+  if(a==='dtog'){if(!canManage())return;var pp=v.split('|'),eid=pp[0],ed=pp[1],eb=+pp[2],cu=(DONE[eid]&&DONE[eid][ed])||0,nv=cu^(1<<eb);(DONE[eid]=DONE[eid]||{})[ed]=nv;cache();api('/done/'+eid+'/'+ed,'PUT',nv).catch(function(){});render();return}
   if(a==='rpin'){if(!canManage())return;var pm=mem(v);if(pm&&confirm('تصفير الرمز السري لـ «'+pm.name+'»؟ سيختار رمزه من جديد عند دخوله.')){pm.k='';pm.h='';putMember(pm);cache();render()}return}
   if(a==='claim'){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0);return}
   if(a==='pk'){pinKey(v);return}
@@ -347,6 +357,7 @@ document.addEventListener('submit',function(e){
   if(f==='rq'){var t=(document.getElementById('rqText').value||'').trim(),mm=mem(me);if(t.length<2){rqMsg='اكتب تفاصيل الطلب أولاً.';sheet='fam';render();return}
     var rid2='r'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
     fetch(DB+'/k/'+code+(linked?'':'/ad')+'/rq/'+rid2+'.json',{method:'PUT',body:JSON.stringify({t:rqKind,x:t.slice(0,300),m:me||'',n:mm?mm.name:'',at:Date.now()})}).then(function(r){if(!r.ok)throw 0;rqMsg='وصل طلبك، جزاك الله خيراً.'}).catch(function(){rqMsg='تعذّر الإرسال، حاول مرة أخرى.'}).then(function(){sheet='fam';render()});return}
+  if(f==='ren'){if(!canManage())return;var rm=mem(e.target.dataset.id),rn=(document.getElementById('renN').value||'').trim().slice(0,24);if(rm&&rn){rm.name=rn;putMember(rm);cache();render()}return}
   if(f==='add'){if(!canManage())return;var nm=document.getElementById('addN').value.trim();if(!nm)return;var x={id:rid(),name:nm,i:S.members.length,k:'',h:''};S.members.push(x);putMember(x);cache();sheet='fam';render();return}
 });
 if(!me&&code&&ls0('kf_code')===code&&ls0('kf_me')){me=ls0('kf_me');ls('ad_me',me)}

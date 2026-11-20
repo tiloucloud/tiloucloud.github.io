@@ -212,3 +212,12 @@ html,body,.sv,.dk,.pgr,.pgi{touch-action:manipulation}
 .ver{text-align:center;font-size:12px;opacity:.5;margin:14px 0 6px}
 
 .race .row{flex-wrap:wrap}.race .row.hid{opacity:.55}.race .ctl{flex-basis:100%;display:flex;gap:8px;margin:2px 0 4px;padding-inline-start:40px}.race .ctl button{font:inherit;font-size:12.5px;background:transparent;color:inherit;border:1px solid rgba(217,178,90,.55);border-radius:10px;padding:3px 10px;cursor:pointer}
+
+.race .ed{flex-basis:100%;background:rgba(217,178,90,.10);border-radius:14px;padding:10px;margin:4px 0 8px}
+.race .ed .form{display:flex;gap:8px;margin-bottom:6px}.race .ed .form input{flex:1;min-width:0}
+.race .dr{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px dashed rgba(128,128,128,.3)}
+.race .dl{flex:0 0 74px;font-size:13px}.race .dc{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.race .dc i{font-style:normal;display:grid;place-items:center;min-width:28px;height:28px;padding:0 3px;border-radius:8px;border:1px solid rgba(128,128,128,.45);font-size:13px;cursor:pointer;user-select:none}
+.race .dc i.on{background:var(--gold);border-color:var(--gold);color:#2a1d00;font-weight:700}
+.race .dc em{width:6px}
+.race .dr{flex-direction:column;align-items:flex-start;gap:4px}.race .dl{flex:none;font-weight:600}.race .dc{flex-wrap:nowrap;gap:3px}.race .dc i{min-width:26px;font-size:12px;padding:0 2px}
