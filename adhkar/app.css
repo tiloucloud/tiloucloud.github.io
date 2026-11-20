@@ -221,3 +221,4 @@ html,body,.sv,.dk,.pgr,.pgi{touch-action:manipulation}
 .race .dc i.on{background:var(--gold);border-color:var(--gold);color:#2a1d00;font-weight:700}
 .race .dc em{width:6px}
 .race .dr{flex-direction:column;align-items:flex-start;gap:4px}.race .dl{flex:none;font-weight:600}.race .dc{flex-wrap:nowrap;gap:3px}.race .dc i{min-width:26px;font-size:12px;padding:0 2px}
+#pgl{direction:ltr;unicode-bidi:isolate}
