@@ -129,7 +129,7 @@ function gate(){var m=mem(me);if(!(code&&m))return 'open';
   return unlocked===me?'open':'set'}
 function vLock(){
   var m=mem(me),g=gate(),set=g==='set',dots='';
-  if(g==='blocked')return '<div class="lock"><div class="lk-in"><img class="appic" src="icon-192.png" alt=""><p class="lk-hi">اسم <b>'+esc(m.name)+'</b> مرتبط بهاتف صاحبه</p><h2>لم يختر رمزه بعد</h2><p class="lk-sub">إن كان هذا هاتف '+esc(m.name)+' نفسه، فافتح «ختمتنا العائلية» ثم اضغط بطاقة «أذكار العائلة» فيها. وإن كان هاتف غيره، فيختار '+esc(m.name)+' رمزه أولاً من هاتفه: «إدارة العائلة» ← «🔑 رمزي السري».</p><a class="gbtn" style="text-decoration:none;text-align:center" href="../khatma/">افتح ختمتنا العائلية</a><button class="gbtn" data-act="me" data-v="">اختر اسماً آخر</button></div></div>';
+  if(g==='blocked')return '<div class="lock"><div class="lk-in"><img class="appic" src="icon-192.png" alt=""><p class="lk-hi">اسم <b>'+esc(m.name)+'</b> سبق اختياره من هاتف آخر</p><h2>لم يُنشأ رمزه بعد</h2><p class="lk-sub">إن كان هذا هاتفك أنت يا '+esc(m.name)+'، فاختر رمزاً سرياً من 4 أرقام ليبقى اسمك محفوظاً لك وحدك. وإن كنت غيره فاختر اسمك.</p><button class="gbtn" data-act="claim">هذا هاتفي: اختر رمزي السري</button><button class="gbtn" data-act="me" data-v="">اختر اسماً آخر</button></div></div>';
   for(var i=0;i<4;i++)dots+='<i class="'+(i<pinBuf.length?'on':'')+'"></i>';
   var keys=[1,2,3,4,5,6,7,8,9,'',0,'del'].map(function(k){return k===''?'<span></span>':'<button class="pk" data-act="pk" data-v="'+k+'"'+(k==='del'?' aria-label="امسح"':'')+'>'+(k==='del'?'⌫':k)+'</button>'}).join('');
   var wait=pinWait>Date.now();
@@ -309,6 +309,7 @@ document.addEventListener('click',function(e){
   if(a==='vid'){var o=document.createElement('div');o.className='vov';o.innerHTML='<div class="vbx"><button class="vx" data-act="vclose" aria-label="إغلاق">✕</button><video src="'+t.dataset.v+'.mp4" poster="'+t.dataset.v+'.jpg" controls autoplay playsinline></video></div>';document.body.appendChild(o);return}
   if(a==='vclose'){var ov=document.querySelector('.vov');if(ov){var vv=ov.querySelector('video');vv&&vv.pause();ov.remove()}return}
   if(a==='enter'){welcome=false;render();window.scrollTo(0,0);return}
+  if(a==='claim'){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0);return}
   if(a==='pk'){pinKey(v);return}
   if(a==='pinchg'){if(me===home||unlocked===me||mine.indexOf(me)>=0){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0)}return}
   if(a==='pinx'){pinChange=false;pinBuf='';pinFirst='';pinErr='';render();return}
