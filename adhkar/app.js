@@ -58,7 +58,7 @@ function pull(){if(!code||!DB)return;
   RQ=(linked?R[3]:r.rq)||{};
   var d=r.done||{},o={};for(var a in d){o[a]={};for(var b in d[a])o[a][b]=+d[a][b]||0}
   for(var k in PEND){var q=PEND[k];o[q.m]=o[q.m]||{};o[q.m][q.d]=(o[q.m][q.d]||0)|q.v}
-  DONE=o;cache();render()}).catch(function(){})}
+  DONE=o;cache();if(view==='sess'&&me&&!welcome&&code&&gate()==='open')return;render()}).catch(function(){})}
 function pushAll(){if(linked)return;var m={};S.members.forEach(function(x,i){m[x.id]={name:x.name,i:i,k:x.k||'',h:x.h||'',x:x.x||''}});api('','PATCH',{info:{name:S.info.name,start:S.info.start,own:S.info.own||OWN||''},members:m}).catch(function(){})}
 function putMember(x){if(linked){fetch(DB+'/k/'+code+'/members/'+x.id+'.json',{method:'PATCH',body:JSON.stringify({k:x.k||'',h:x.h||''})}).catch(function(){});return}api('/members/'+x.id,'PUT',{name:x.name,i:S.members.indexOf(x),k:x.k||'',h:x.h||'',x:x.x||''}).catch(function(){})}
 function delMember(id){if(linked)return;api('/members/'+id,'DELETE').catch(function(){})}
