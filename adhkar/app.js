@@ -21,6 +21,7 @@ function newCode(){var a='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz234567
 
 /* ---------- state ---------- */
 var code=(location.hash.match(/[#&]a=([A-Za-z0-9_-]{12,64})/)||[])[1]||ls('ad_code')||'';
+(function(){var o=ls('ad_code');if(code&&o&&o!==code){ls('ad_home',null);ls('ad_mine',null);ls('ad_me',null)}})();
 var SEED=null;try{var sd=(location.hash.match(/[#&]seed=([A-Za-z0-9+\/=_-]+)/)||[])[1];if(sd)SEED=JSON.parse(decodeURIComponent(escape(atob(sd.replace(/-/g,'+').replace(/_/g,'/')))))}catch(e){}
 var SEED=null;try{var sd=(location.hash.match(/[#&]seed=([A-Za-z0-9_-]+)/)||[])[1];if(sd)SEED=JSON.parse(decodeURIComponent(escape(atob(sd.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-sd.length%4)%4)))))}catch(e){}
 var RQ={};
@@ -121,6 +122,7 @@ function pinHash(id,pin){var t=code+':'+id+':'+pin;
   if(window.crypto&&crypto.subtle&&window.TextEncoder)return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b).slice(0,12),function(x){return(x<16?'0':'')+x.toString(16)}).join('')});
   var h=5381;for(var i=0;i<t.length;i++)h=((h*33)^t.charCodeAt(i))>>>0;return Promise.resolve('d'+h.toString(16))}
 function gate(){var m=mem(me);if(!(code&&m))return 'open';
+  if(home&&!mem(home)){home='';ls('ad_home',null)}
   if(pinChange)return 'set';
   if(OWN&&me===OWN&&(!m.k||!home||mine.indexOf(me)>=0)){setHome(me);if(!m.h){m.h='1';putMember(m)}return 'open'}
   if(me===home){if(!m.h){m.h='1';putMember(m)}return 'open'}
