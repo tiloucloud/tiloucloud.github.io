@@ -212,7 +212,7 @@ function vRace(){
   return '<section class="card race"><h2 class="ctitle">سباق المداومة</h2>'+list.map(function(m,i){var v=dget(m.id,0),st=streak(m.id);
     return '<div class="row'+(m.x?' hid':'')+'"><span class="rk num">'+(i+1)+'</span><div class="who"><b>'+esc(m.name)+(m.id===me?' <small>(أنت)</small>':'')+(m.x?' <small>(مخفي)</small>':'')+'</b><span class="td">'+
       ['ص','م','ن'].map(function(l,j){return '<i class="'+((v>>j)&1?'on':'')+'">'+l+'</i>'}).join('')+'</span></div>'+
-      '<span class="rs num">'+(st?'⭐'+st:'—')+'<small>هذا الأسبوع '+weekCount(m.id)+'</small></span>'+(adm?'<div class="ctl"><button data-act="rhide" data-v="'+m.id+'">'+(m.x?'👁 أظهر':'🙈 أخفِ')+'</button>'+((m.k||m.h)&&m.id!==OWN?'<button data-act="rpin" data-v="'+m.id+'">🔑 صفّر الرمز</button>':'')+'</div>':'')+'</div>'}).join('')+
+      '<span class="rs num">'+(st?'⭐'+st:'—')+'<small>هذا الأسبوع '+weekCount(m.id)+'</small></span>'+(adm?'<div class="ctl">'+((m.k||m.h)&&m.id!==OWN?'<button data-act="rpin" data-v="'+m.id+'">🔑 صفّر الرمز</button>':'')+'</div>':'')+'</div>'}).join('')+
     '<p class="sub">الترتيب بأيام المداومة على أذكار الصباح والمساء. ص: الصباح، م: المساء، ن: النوم.</p></section>'}
 function canManage(){return !linked&&(!OWN||(me===OWN&&(me===home||unlocked===me)))}
 function rqList(){return Object.keys(RQ||{}).map(function(k){var x=RQ[k]||{};x.id=k;return x}).sort(function(a,b){return (a.at||0)-(b.at||0)})}
