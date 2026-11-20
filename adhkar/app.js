@@ -297,7 +297,7 @@ function render(){
   applyFs();
   if(gate()!=='open'){root.innerHTML=vLock();return}
   if(view==='sess'&&me){root.innerHTML=vSession();afterSess();return}
-  root.innerHTML='<div class="wrap">'+hdr()+vHome()+'</div>'+vCeleb();
+  root.innerHTML='<div class="wrap">'+hdr()+vHome()+'<p class="ver">الإصدار '+((document.querySelector('script[src*="app.js"]')||{src:''}).src.split('v=')[1]||'')+'</p></div>'+vCeleb();
 }
 
 /* ---------- events ---------- */

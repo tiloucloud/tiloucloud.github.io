@@ -208,3 +208,5 @@ html,body,.sv,.dk,.pgr,.pgi{touch-action:manipulation}
 .fr .ct{top:-13px;background:linear-gradient(var(--bg) 0 50%,var(--fb) 50% 100%)}
 .fr .cb2{bottom:-13px;background:linear-gradient(var(--fb) 0 50%,var(--bg) 50% 100%)}
 .sv[data-th=black] .pgi .dk,.sv[data-th=ybk] .pgi .dk{border-width:2.5px}
+
+.ver{text-align:center;font-size:12px;opacity:.5;margin:14px 0 6px}
