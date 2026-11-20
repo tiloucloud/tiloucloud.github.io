@@ -235,7 +235,7 @@ function vSession(){
   its.forEach(function(it,i){if((pg[i]||0)>=it.n)done++});
   var s=SES[sess],title=s.t+(sess==='p'?' · '+PRN[pIdx]:'');
   var cards=its.map(function(it,i){var c=Math.min(pg[i]||0,it.n),left=it.n-c,ok=left<=0;
-    return '<div class="pgi"><article class="dk'+(ok?' ok':'')+'" id="dk'+i+'" data-act="tap" data-v="'+i+'">'+
+    return '<div class="pgi"><article class="dk'+(ok?' ok':'')+'" id="dk'+i+'" data-act="tap" data-v="'+i+'">'+'<span class="fr" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><b class="ct"></b><b class="cb2"></b></span>'+
       (it.qn?'<p class="qn">'+esc(it.qn)+'</p>':'')+'<p class="dt">'+esc(it.t)+'</p>'+(it.q?'<p class="dq">﴿'+esc(it.q)+'﴾</p>':'')+
       (it.f?'<p class="df">'+esc(it.f)+'</p>':'')+
       autoUi(it,i,ok)+'<div class="dc"><span class="dn">'+(ok?'✓ تمّ':(it.n>1?'بقي <b class="num">'+left+'</b> من '+it.n:'مرة واحدة'))+'</span><span class="cb'+(ok?' ok':'')+'">'+(ok?'✓':'<b class="num">'+left+'</b>')+'</span></div></article></div>'}).join('');
