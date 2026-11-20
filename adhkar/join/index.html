@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>أذكار العائلة — اجعل بيتنا يذكر الله معاً</title>
-<meta name="theme-color" content="#0f2147">
-<meta name="description" content="تطبيق يجمع العائلة على أذكار الصباح والمساء والنوم، بسلسلة أيام ونجوم وهدف أسبوعي مشترك. كن من أول المختبرين.">
-<meta property="og:title" content="أذكار العائلة — اجعل بيتنا يذكر الله معاً">
-<meta property="og:description" content="أذكار الصباح والمساء في تطبيق واحد يجمعنا. أربع خطوات وتصير من أول المختبرين.">
+<title>أذكار العائلة — اجعل الذكر عادةً يومية تجمع العائلة</title>
+<meta name="theme-color" content="#0b1b3a">
+<meta name="description" content="تطبيق يجمع العائلة على أذكار الصباح والمساء والنوم، بسلسلة أيام وهدف أسبوعي مشترك. بلا إعلانات ولا تتبّع. كن من أول المختبرين.">
+<meta property="og:title" content="أذكار العائلة — دعوة خاصة للتجربة">
+<meta property="og:description" content="الذكر عادةً يومية تجمع العائلة. ثبّت التطبيق وانضمّ إلى مجموعتنا الخاصة.">
 <meta property="og:image" content="https://tiloucloud.github.io/adhkar/icon-512.png">
 <link rel="icon" href="../fav-32.png">
 <style>
@@ -15,182 +15,231 @@
 @font-face{font-family:'IBM Plex Sans Arabic';font-weight:400;font-display:swap;src:url('../fonts/ibm-plex-sans-arabic-arabic-400.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+FB50-FDFF,U+FE80-FEFC}
 @font-face{font-family:'IBM Plex Sans Arabic';font-weight:600;font-display:swap;src:url('../fonts/ibm-plex-sans-arabic-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+FB50-FDFF,U+FE80-FEFC}
 @font-face{font-family:'IBM Plex Sans Arabic';font-weight:700;font-display:swap;src:url('../fonts/ibm-plex-sans-arabic-arabic-700.woff2') format('woff2');unicode-range:U+0600-06FF,U+200C-200E,U+FB50-FDFF,U+FE80-FEFC}
-:root{--deep:#0f2147;--brand:#1d3b6e;--gold:#d9b25a;--gold2:#f0d58a;--ink:#16202f;--bg:#f6f2e8;--mute:#5c6678}
+:root{--navy:#0b1b3a;--navy2:#13306a;--gold:#d4a94c;--gold2:#ecd08a;--ink:#101a2c;--mute:#586177;--bg:#f7f5ef;--line:#e5e0d2;--card:#fff}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'IBM Plex Sans Arabic',"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.95;font-size:17px;-webkit-text-size-adjust:100%}
-h1,h2,.k{font-family:'Reem Kufi','IBM Plex Sans Arabic',serif;font-weight:700}
-a{-webkit-tap-highlight-color:transparent}
+body{font-family:'IBM Plex Sans Arabic',"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.9;font-size:17px;-webkit-text-size-adjust:100%;padding-bottom:78px}
+h1,h2,h3,.k{font-family:'Reem Kufi','IBM Plex Sans Arabic',serif;font-weight:700}
+a{color:inherit}
+.in{max-width:1040px;margin:0 auto;padding:0 20px}
+svg{display:block}
+
+/* nav */
+.nav{position:absolute;top:0;left:0;right:0;z-index:5}
+.nav .in{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-family:'Reem Kufi',serif;font-weight:700;font-size:20px}
+.brand img{width:36px;height:36px;border-radius:10px;border:1px solid rgba(212,169,76,.6)}
+.badge{font-size:13px;color:var(--gold2);border:1px solid rgba(212,169,76,.45);border-radius:99px;padding:2px 12px}
 
 /* hero */
-.hero{position:relative;overflow:hidden;color:#fff;text-align:center;padding:44px 20px 120px;background:radial-gradient(120% 80% at 50% 0%,#2b5ba3 0%,var(--deep) 62%)}
-.hero:before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 115%,rgba(217,178,90,.10) 0 5deg,transparent 5deg 10deg);animation:spin 120s linear infinite;transform-origin:50% 115%}
-@keyframes spin{to{transform:rotate(360deg)}}
-.star{position:absolute;color:var(--gold2);opacity:.55;animation:tw 4s ease-in-out infinite}
-.s1{top:36px;left:12%;font-size:14px}.s2{top:90px;right:10%;font-size:20px;animation-delay:1.2s}.s3{top:170px;left:22%;font-size:11px;animation-delay:2.2s}.s4{top:60px;right:30%;font-size:12px;animation-delay:.6s}
-@keyframes tw{50%{opacity:.15;transform:scale(.8)}}
-.hero>*:not(.star):not(.wave){position:relative}
-.logo{width:104px;height:104px;border-radius:28px;border:2px solid rgba(217,178,90,.7);box-shadow:0 12px 34px rgba(0,0,0,.4),0 0 0 8px rgba(217,178,90,.12)}
-.bis{color:var(--gold2);font-size:19px;margin:20px 0 4px}
-h1{font-size:40px;line-height:1.35}
-.tag{max-width:480px;margin:14px auto 0;font-size:19px;opacity:.95}
-.tag b{color:var(--gold2)}
-.pill{display:inline-block;margin-top:18px;padding:6px 16px;border-radius:99px;background:rgba(255,255,255,.12);border:1px solid rgba(217,178,90,.5);font-size:15px}
-.cta{display:block;width:fit-content;margin:26px auto 0;text-decoration:none;font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:21px;padding:15px 34px;border-radius:18px;background:linear-gradient(135deg,var(--gold2),#c99a2e);color:#2a1d00;box-shadow:0 8px 26px rgba(201,154,46,.5);transition:transform .15s}
-.cta:active{transform:scale(.97)}
-.cta small{display:block;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;font-weight:400;opacity:.8;line-height:1.5;margin-top:2px}
-.wave{position:absolute;bottom:-1px;left:0;width:100%;height:60px;display:block}
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(90% 70% at 85% 0%,#1f4a96 0%,transparent 60%),linear-gradient(180deg,var(--navy),#0d2250);padding:104px 0 70px}
+.hero:before{content:"";position:absolute;inset:0;opacity:.07;background-image:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 26px),repeating-linear-gradient(-45deg,#fff 0 1px,transparent 1px 26px)}
+.hero>.in{position:relative;display:grid;gap:36px;align-items:center}
+.eyebrow{color:var(--gold2);font-size:15px;letter-spacing:.2px;margin-bottom:6px}
+h1{font-size:38px;line-height:1.5;margin-bottom:12px}
+h1 em{font-style:normal;color:var(--gold2)}
+.lead{font-size:18.5px;color:#d5def0;max-width:520px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-family:'Reem Kufi',serif;font-weight:700;font-size:19px;padding:14px 26px;border-radius:14px;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn:active{transform:scale(.98)}
+.b1{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#2a1d00;box-shadow:0 8px 22px rgba(212,169,76,.35)}
+.b2{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.45)}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:14.5px;color:#c3cfe6}
+.trust span{display:flex;align-items:center;gap:6px}
+.trust svg{width:16px;height:16px;color:var(--gold2)}
+.phone{width:min(260px,64vw);justify-self:center;border-radius:36px;padding:9px;background:linear-gradient(160deg,#33508a,#0a1633);box-shadow:0 30px 60px rgba(0,0,0,.45),inset 0 0 0 1.5px rgba(255,255,255,.15)}
+.phone img{width:100%;border-radius:28px;display:block}
 
-/* layout */
-.wrap{max-width:600px;margin:-66px auto 0;padding:0 16px 40px;position:relative}
-.card{background:#fff;border-radius:24px;padding:24px 20px;box-shadow:0 10px 30px rgba(15,33,71,.12);margin-bottom:18px}
-.card h2{font-size:23px;color:var(--brand);margin-bottom:10px;line-height:1.5}
-.card h2 span{color:var(--gold)}
+/* sections */
+section{padding:56px 0}
+.sh{text-align:center;max-width:620px;margin:0 auto 30px}
+.sh small{display:block;color:var(--gold);font-weight:600;font-size:14.5px;letter-spacing:.3px}
+.sh h2{font-size:29px;line-height:1.5;color:var(--navy);margin:2px 0 6px}
+.sh p{color:var(--mute);font-size:17px}
+.feats{display:grid;gap:16px}
+.f{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px}
+.f .ic{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold2);display:grid;place-items:center;margin-bottom:12px}
+.f .ic svg{width:24px;height:24px}
+.f h3{font-size:20px;color:var(--navy);margin-bottom:2px}
+.f p{color:var(--mute);font-size:16px;line-height:1.8}
 
-/* why */
-.why{display:grid;gap:12px;margin-top:6px}
-.why div{display:flex;gap:12px;align-items:flex-start;background:#faf6ea;border-radius:16px;padding:12px 14px}
-.why i{font-style:normal;font-size:28px;line-height:1.3;flex:none}
-.why b{display:block;color:var(--brand);font-weight:700}
-.why p{font-size:15.5px;color:var(--mute);line-height:1.7}
+/* gallery */
+.gal{background:#fff;border-block:1px solid var(--line)}
+.rail{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 20px 18px;margin:0 -20px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.shot{flex:0 0 min(230px,64vw);scroll-snap-align:center;text-align:center}
+.shot .ph{border-radius:30px;padding:7px;background:linear-gradient(160deg,#33508a,#0a1633);box-shadow:0 14px 30px rgba(11,27,58,.25)}
+.shot img{width:100%;border-radius:24px;display:block}
+.shot b{display:block;margin-top:12px;color:var(--navy);font-size:16.5px}
+.shot span{display:block;color:var(--mute);font-size:14.5px;line-height:1.6}
 
-/* phone mock */
-.mock{margin:8px auto 4px;width:230px;border-radius:30px;padding:10px;background:linear-gradient(160deg,#27487e,var(--deep));box-shadow:0 14px 34px rgba(15,33,71,.35)}
-.screen{background:#fbf7ec;border-radius:22px;padding:18px 14px;text-align:center;min-height:250px;border:2.5px solid var(--gold);outline:5px solid #fbf7ec;outline-offset:-9px}
-.screen .t{color:var(--gold);font-size:13px}
-.screen .a{font-size:19px;color:var(--brand);line-height:2;margin:10px 0;font-family:'Reem Kufi',serif}
-.screen .c{display:inline-grid;place-items:center;width:62px;height:62px;border-radius:50%;background:var(--brand);color:#fff;font-size:24px;font-weight:700;box-shadow:0 0 0 6px rgba(29,59,110,.15)}
-.screen .f{margin-top:10px;font-size:12px;color:var(--mute)}
+/* join */
+.tabs{display:flex;gap:6px;background:#ebe6d8;border-radius:14px;padding:5px;max-width:360px;margin:0 auto 22px}
+.tabs button{flex:1;font:inherit;font-family:'Reem Kufi',serif;font-weight:700;font-size:17px;padding:9px;border:0;border-radius:10px;background:transparent;color:var(--mute);cursor:pointer}
+.tabs button.on{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.pane{display:none;max-width:640px;margin:0 auto}.pane.on{display:block}
+.steps{list-style:none;counter-reset:s;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:8px 20px}
+.steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start;padding:15px 0}
+.steps li+li{border-top:1px solid var(--line)}
+.steps li:before{content:counter(s);flex:none;width:34px;height:34px;border-radius:50%;background:var(--navy);color:var(--gold2);display:grid;place-items:center;font-weight:700;font-size:16px;margin-top:2px}
+.steps b{color:var(--navy)}
+.pane .btn{width:100%;margin-top:14px}
+.b3{background:var(--navy);color:#fff}
+.hint{font-size:14.5px;color:var(--mute);text-align:center;margin-top:10px}
 
-/* steps */
-.steps{list-style:none;counter-reset:s;position:relative}
-.steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start;padding:12px 0}
-.steps li:before{content:counter(s);flex:none;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#2b5ba3);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;box-shadow:0 4px 10px rgba(29,59,110,.3)}
-.steps li:not(:last-child){border-bottom:1px dashed #e6dec9}
-.steps b{color:var(--brand)}
-.btn{display:block;text-align:center;text-decoration:none;font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:20px;padding:16px;border-radius:16px;margin-top:12px}
-.b1{background:linear-gradient(135deg,var(--gold2),#c99a2e);color:#2a1d00;box-shadow:0 6px 18px rgba(201,154,46,.45)}
-.b2{background:#fff;color:var(--brand);border:2px solid var(--brand);font-size:17px}
+/* goal */
+.goal{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:26px;padding:30px 24px;text-align:center}
+.goal h2{font-size:26px;color:var(--gold2);margin-bottom:6px}
+.goal p{color:#d5def0;max-width:520px;margin:0 auto}
+.nums{display:flex;justify-content:center;gap:34px;margin:20px 0 6px}
+.nums div b{display:block;font-family:'Reem Kufi',serif;font-size:42px;line-height:1.1;color:var(--gold2)}
+.nums div span{font-size:14.5px;color:#c3cfe6}
+.bar{height:10px;border-radius:99px;background:rgba(255,255,255,.16);overflow:hidden;max-width:420px;margin:14px auto 0}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--gold2),var(--gold));transition:width 1.6s ease}
+.goal.go .bar i{width:100%}
 
-/* feats */
-.feat{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.feat div{background:#f7f3e8;border-radius:14px;padding:11px 12px;font-size:15.5px;text-align:center}
-.feat em{display:block;font-style:normal;font-size:26px;line-height:1.4}
-.note{font-size:15px;color:var(--mute);margin-top:12px}
+/* faq */
+.faq{max-width:700px;margin:0 auto;display:grid;gap:10px}
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0 18px}
+summary{cursor:pointer;list-style:none;padding:15px 0;font-weight:600;color:var(--navy);display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--gold);font-size:22px;line-height:1.3}
+details[open] summary:after{content:"−"}
+details p{padding:0 0 16px;color:var(--mute);font-size:16px}
 
-/* goal bar */
-.goal{background:linear-gradient(135deg,var(--deep),#24508f);color:#fff}
-.goal h2{color:var(--gold2)}
-.bar{height:16px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden;margin:14px 0 6px}
-.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--gold2),#c99a2e);transition:width 1.6s ease}
-.goal.in .bar i{width:100%}
-.goal .l{display:flex;justify-content:space-between;font-size:14px;opacity:.9}
-
-.dua{text-align:center;color:var(--brand);font-family:'Reem Kufi',serif;font-size:21px;padding:14px 8px 6px;line-height:1.9}
-.foot{text-align:center;font-size:13px;color:var(--mute);padding-bottom:10px}
-.foot a{color:var(--brand)}
-.sticky{position:fixed;bottom:0;left:0;right:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(246,242,232,.94);backdrop-filter:blur(8px);transform:translateY(110%);transition:transform .3s;z-index:9;box-shadow:0 -4px 18px rgba(0,0,0,.08)}
+.dua{text-align:center;font-family:'Reem Kufi',serif;font-size:22px;color:var(--navy);padding:6px 20px 28px;line-height:2}
+footer{background:var(--navy);color:#aebbd6;text-align:center;font-size:14px;padding:26px 20px}
+footer a{color:var(--gold2)}
+.sticky{position:fixed;bottom:0;left:0;right:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(247,245,239,.95);backdrop-filter:blur(8px);transform:translateY(110%);transition:transform .3s;z-index:9;box-shadow:0 -4px 18px rgba(0,0,0,.1)}
 .sticky.on{transform:none}
-.sticky a{margin:0 auto;max-width:560px;font-size:19px;padding:13px}
-body{padding-bottom:84px}
-@media(prefers-reduced-motion:reduce){.hero:before,.star{animation:none}.bar i{transition:none}}
+.sticky .btn{display:flex;max-width:520px;margin:0 auto}
+
+@media(min-width:820px){
+  .hero{padding:130px 0 90px}
+  .hero>.in{grid-template-columns:1.15fr .85fr}
+  h1{font-size:50px}
+  .feats{grid-template-columns:repeat(3,1fr)}
+  .rail{justify-content:center;overflow:visible;margin:0;padding:6px 0 10px}
+  .shot{flex:0 0 240px}
+  body{padding-bottom:0}.sticky{display:none}
+}
+@media(prefers-reduced-motion:reduce){.bar i{transition:none}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <header class="hero">
-  <span class="star s1">✦</span><span class="star s2">✦</span><span class="star s3">✦</span><span class="star s4">✦</span>
-  <img class="logo" src="../icon-192.png" alt="أذكار العائلة" width="104" height="104">
-  <div class="bis">بسم الله الرحمن الرحيم</div>
-  <h1>أذكار العائلة</h1>
-  <p class="tag">بيتٌ واحد، <b>ذكرٌ واحد</b>، وأجرٌ يتضاعف.<br>تطبيق صغير يجمعنا كل صباح ومساء على ذكر الله.</p>
-  <span class="pill">🤍 دعوة خاصة لأفراد العائلة</span>
-  <a class="cta" href="#join" id="cta">كن من أول المختبرين للتطبيق الجديد<small>أربع خطوات تستغرق دقيقتين</small></a>
-  <svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V28c240 34 480 34 720 6s480-30 720 0v26z" fill="#f6f2e8"/></svg>
-</header>
-
-<main class="wrap">
-  <section class="card">
-    <h2>لماذا <span>أذكار العائلة</span>؟</h2>
-    <div class="why">
-      <div><i>🌅</i><span><b>تبدأ يومك بنور</b><p>أذكار الصباح والمساء والنوم مرتّبة وواضحة، بنقرة واحدة لكل ذكر.</p></span></div>
-      <div><i>👨‍👩‍👧</i><span><b>نتشجّع معاً</b><p>هدف أسبوعي مشترك للعائلة، ترى فيه من ثبت ومن سبق، فنتنافس في الخير.</p></span></div>
-      <div><i>🔥</i><span><b>سلسلة لا تنقطع</b><p>أيامٌ متتالية ونجوم تكافئك، فيصير الذكر عادةً محبّبة لا واجباً ثقيلاً.</p></span></div>
-    </div>
-  </section>
-
-  <section class="card" style="text-align:center">
-    <h2>هكذا يبدو التطبيق</h2>
-    <div class="mock" aria-hidden="true">
-      <div class="screen">
-        <div class="t">أذكار الصباح · 3 / 28</div>
-        <div class="a">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</div>
-        <div class="c">87</div>
-        <div class="f">اضغط للعدّ · أو شغّل العدّاد التلقائي</div>
+  <nav class="nav"><div class="in">
+    <a class="brand" href="#top"><img src="../icon-192.png" alt="" width="36" height="36">أذكار العائلة</a>
+    <span class="badge">دعوة خاصة</span>
+  </div></nav>
+  <div class="in" id="top">
+    <div>
+      <div class="eyebrow">بسم الله الرحمن الرحيم</div>
+      <h1>اجعل الذكر <em>عادةً يومية</em> تجمع العائلة</h1>
+      <p class="lead">تطبيق هادئ لأذكار الصباح والمساء والنوم، بسلسلة أيام وهدف أسبوعي نسعى إليه معاً. نُجرّبه الآن في دائرة العائلة قبل نشره للجميع.</p>
+      <div class="cta-row">
+        <a class="btn b1" href="#join">ابدأ الانضمام</a>
+        <a class="btn b2" href="#join" data-tab="ios">لأصحاب iPhone</a>
+      </div>
+      <div class="trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>بلا إعلانات ولا تتبّع</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>مجموعة خاصة بالعائلة</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>دقيقتان للبدء</span>
       </div>
     </div>
-    <p class="note">إطار مزخرف يُبقي النص واضحاً، وعدّاد تلقائي يريحك من النقر عند المئة.</p>
-  </section>
+    <div class="phone"><img src="shot-home.jpg" alt="الشاشة الرئيسية لتطبيق أذكار العائلة" width="390" height="780"></div>
+  </div>
+</header>
 
-  <section class="card" id="join">
-    <h2>أربع خطوات وتصير من المختبرين ✨</h2>
-    <ol class="steps">
-      <li><span>اضغط الزر الذهبي أدناه <b>من هاتف أندرويد</b> (وأصحاب iPhone تجدون خطواتهم بعد قليل)، وسجّل الدخول ببريد Gmail الذي أعطيتني إياه.</span></li>
-      <li><span>اضغط «<b>Become a tester</b>» (أن تصبح مختبراً).</span></li>
-      <li><span>ثبّت التطبيق من متجر Play وافتحه.</span></li>
-      <li><span>ادخل <b>مجموعة العائلة</b> بـ«رابط الانضمام» الخاص الذي أرسلته لك، ثم فعّل التذكير.</span></li>
-    </ol>
-    <a class="btn b1" href="https://play.google.com/apps/internaltest/4701131523349243090" id="main">⭐ انضمّ وثبّت من Google Play</a>
-  </section>
-
-  <section class="card ios">
-    <h2>📱 هل تستخدم iPhone؟</h2>
-    <p style="margin-bottom:6px">لا مشكلة، يعمل التطبيق عندك أيضاً من غير متجر:</p>
-    <ol class="steps">
-      <li><span>افتح الرابط أدناه <b>في متصفح Safari</b>.</span></li>
-      <li><span>اضغط زر المشاركة <b>⬆︎</b> في الأسفل، ثم اختر «<b>إضافة إلى الشاشة الرئيسية</b>».</span></li>
-      <li><span>افتح التطبيق من أيقونته، وادخل <b>مجموعة العائلة</b> بلصق رابط الانضمام أو رمزها في خانة «الرابط أو الرمز»، ثم فعّل التذكير.</span></li>
-    </ol>
-    <a class="btn b2" href="https://tiloucloud.github.io/adhkar/">🍎 افتح أذكار العائلة على iPhone</a>
-  </section>
-
-  <section class="card">
-    <h2>ماذا ستجد فيه؟</h2>
-    <div class="feat">
-      <div><em>🌅</em>أذكار الصباح والمساء</div>
-      <div><em>🌙</em>أذكار النوم</div>
-      <div><em>🕌</em>أذكار بعد الصلاة</div>
-      <div><em>⭐</em>سلسلة أيام ونجوم</div>
-      <div><em>🎯</em>هدف أسبوعي للعائلة</div>
-      <div><em>🔔</em>تذكير لطيف</div>
+<main>
+<section>
+  <div class="in">
+    <div class="sh"><small>لماذا أذكار العائلة</small><h2>أبسط طريق لتبقى على ذكر الله كل يوم</h2><p>صُمّم ليكون سهلاً وواضحاً لكل أفراد البيت، من الصغير إلى الكبير.</p></div>
+    <div class="feats">
+      <div class="f"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg></div><h3>أذكار مرتّبة وواضحة</h3><p>أذكار الصباح والمساء والنوم وبعد الصلاة بخط كبير ونقرة واحدة لكل ذكر، مع عدّاد تلقائي للأذكار الطويلة.</p></div>
+      <div class="f"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 1.5 6 5.5"/></svg></div><h3>نتشجّع معاً</h3><p>هدف أسبوعي مشترك وقائمة مداومة تُري كل فرد من ثبت ومن سبق، فنتنافس في الخير بلطف.</p></div>
+      <div class="f"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg></div><h3>سلسلة أيام ونجوم</h3><p>تتراكم أيام المداومة فتكسب النجوم والعلامات، فيصير الذكر عادةً محبّبة لا واجباً ثقيلاً.</p></div>
     </div>
-    <p class="note">🔒 بلا إعلانات ولا تتبّع. ولا تدخل المجموعة إلا برابطها الخاص، فلا يراها غيرنا.</p>
-  </section>
+  </div>
+</section>
 
-  <section class="card goal" id="goal">
-    <h2>معاً نصل إلى 12 😊</h2>
-    <p>تطلب Google أن يجرّب التطبيقَ <b>12 شخصاً</b> على الأقل لمدة <b>14 يوماً</b> قبل نشره للناس. كل واحد منكم يُقرّبنا من النشر، فلا تستهِن بمشاركتك.</p>
-    <div class="bar"><i></i></div>
-    <div class="l"><span>اليوم الأول</span><span>اليوم 14 · الإطلاق 🎉</span></div>
-  </section>
+<section class="gal">
+  <div class="in">
+    <div class="sh"><small>لمحة من التطبيق</small><h2>هكذا يبدو في هاتفك</h2></div>
+    <div class="rail">
+      <div class="shot"><div class="ph"><img src="shot-sess.jpg" alt="قراءة الأذكار بإطار مزخرف" loading="lazy" width="390" height="780"></div><b>قراءة مريحة</b><span>إطار مزخرف يُبقي النص واضحاً</span></div>
+      <div class="shot"><div class="ph"><img src="shot-home.jpg" alt="الشاشة الرئيسية" loading="lazy" width="390" height="780"></div><b>يومك في لمحة</b><span>الصباح والمساء والنوم والصلوات</span></div>
+      <div class="shot"><div class="ph"><img src="shot-race.jpg" alt="سباق المداومة" loading="lazy" width="390" height="725"></div><b>سباق المداومة</b><span>من ثبت ومن سبق في العائلة</span></div>
+    </div>
+  </div>
+</section>
 
-  <section class="card">
-    <h2>رجاء صغير 🤍</h2>
-    <p>أبقِ التطبيق مثبّتاً <b>14 يوماً</b>، واجعل أذكارك به كل صباح ومساء. وإن واجهتك أي مشكلة أو خطرت لك فكرة، أخبرني وسأصلحها.</p>
-  </section>
+<section id="join">
+  <div class="in">
+    <div class="sh"><small>الانضمام</small><h2>انضمّ في دقيقتين</h2><p>اختر جهازك وتابع الخطوات.</p></div>
+    <div class="tabs" role="tablist"><button class="on" data-t="and" role="tab">أندرويد</button><button data-t="ios" role="tab">iPhone</button></div>
 
-  <p class="dua">جزاكم الله خيراً، ونسأل الله أن يتقبّل منا ومنكم،<br>وأن يجعله في ميزان حسناتنا جميعاً. 🌿</p>
-  <p class="foot">أذكار العائلة · <a href="../privacy.html">سياسة الخصوصية</a></p>
+    <div class="pane on" id="p-and">
+      <ol class="steps">
+        <li><span>اضغط الزر أدناه <b>من هاتف أندرويد</b>، وسجّل الدخول ببريد Gmail الذي أعطيتني إياه.</span></li>
+        <li><span>اضغط «<b>Become a tester</b>» (أن تصبح مختبراً).</span></li>
+        <li><span>ثبّت التطبيق من متجر Google Play وافتحه.</span></li>
+        <li><span>ادخل <b>مجموعة العائلة</b> برابطها الخاص الذي وصلك في الرسالة، ثم اختر اسمك وفعّل التذكير.</span></li>
+      </ol>
+      <a class="btn b1" id="main" href="https://play.google.com/apps/internaltest/4701131523349243090">انضمّ وثبّت من Google Play</a>
+      <p class="hint">يلزم بريد Gmail أضفتُه إلى قائمة المختبرين. إن ظهرت «Item not found» فانتظر دقائق أو راسلني.</p>
+    </div>
+
+    <div class="pane" id="p-ios">
+      <ol class="steps">
+        <li><span>افتح الرابط أدناه <b>في متصفح Safari</b>.</span></li>
+        <li><span>اضغط زر المشاركة في أسفل الشاشة، ثم اختر «<b>إضافة إلى الشاشة الرئيسية</b>».</span></li>
+        <li><span>افتح التطبيق من أيقونته، وادخل <b>مجموعة العائلة</b> بلصق رابط الانضمام أو رمزها في خانة «الرابط أو الرمز»، ثم فعّل التذكير.</span></li>
+      </ol>
+      <a class="btn b3" href="https://tiloucloud.github.io/adhkar/">افتح أذكار العائلة على iPhone</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="in">
+    <div class="goal" id="goal">
+      <h2>معاً نصل إلى النشر</h2>
+      <p>تشترط Google أن يجرّب التطبيقَ عددٌ كافٍ من الأشخاص مدة 14 يوماً قبل نشره للجميع. مشاركتك تُقرّبنا من ذلك.</p>
+      <div class="nums"><div><b>12</b><span>مختبراً على الأقل</span></div><div><b>14</b><span>يوماً متواصلة</span></div></div>
+      <div class="bar"><i></i></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="in">
+    <div class="sh"><small>أسئلة شائعة</small><h2>قبل أن تبدأ</h2></div>
+    <div class="faq">
+      <details><summary>هل التطبيق مجاني؟</summary><p>نعم، مجاني بالكامل وبلا إعلانات ولا اشتراكات.</p></details>
+      <details><summary>هل بياناتي محفوظة بأمان؟</summary><p>لا نجمع إلا اسمك وتقدّمك في الأذكار داخل مجموعة العائلة الخاصة، ولا تُعرض لغير أفرادها. تفاصيل أكثر في <a href="../privacy.html">سياسة الخصوصية</a>.</p></details>
+      <details><summary>لماذا أحتاج إلى بريد Gmail؟</summary><p>لأن Google تسمح بالتجربة المسبقة لأصحاب البريد المضاف في قائمة المختبرين فقط. أرسل لي بريدك إن لم أكن أضفتُه.</p></details>
+      <details><summary>لم يفتح رابط المجموعة مباشرة، ماذا أفعل؟</summary><p>افتح التطبيق وألصق الرابط أو الرمز في خانة «الرابط أو الرمز»، ثم اختر اسمك.</p></details>
+      <details><summary>هل يجب أن أبقي التطبيق مثبّتاً؟</summary><p>نعم، أبقِه مثبّتاً 14 يوماً واجعل أذكارك به كل صباح ومساء، فهذا شرط نشره للناس.</p></details>
+    </div>
+  </div>
+</section>
+
+<p class="dua">جزاكم الله خيراً، ونسأل الله أن يتقبّل منا ومنكم</p>
 </main>
+<footer>أذكار العائلة · <a href="../privacy.html">سياسة الخصوصية</a></footer>
 
-<div class="sticky" id="stk"><a class="btn b1" href="https://play.google.com/apps/internaltest/4701131523349243090">⭐ انضمّ وثبّت الآن</a></div>
+<div class="sticky" id="stk"><a class="btn b1" href="#join">انضمّ الآن</a></div>
 <script>
 (function(){
-  var stk=document.getElementById('stk'),j=document.getElementById('join'),g=document.getElementById('goal'),m=document.getElementById('main');
-  function chk(){
-    var r=j.getBoundingClientRect(),h=innerHeight,mr=m.getBoundingClientRect();
-    stk.classList.toggle('on',scrollY>360&&!(mr.top<h&&mr.bottom>0));
-    if(g.getBoundingClientRect().top<h*.85)g.classList.add('in');
-  }
+  var tabs=document.querySelectorAll('.tabs button'),panes={and:document.getElementById('p-and'),ios:document.getElementById('p-ios')};
+  function show(t){tabs.forEach(function(b){b.classList.toggle('on',b.dataset.t===t)});for(var k in panes)panes[k].classList.toggle('on',k===t)}
+  tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
+  document.querySelectorAll('[data-tab]').forEach(function(a){a.addEventListener('click',function(){show(a.dataset.tab)})});
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent))show('ios');
+  var stk=document.getElementById('stk'),j=document.getElementById('join'),g=document.getElementById('goal');
+  function chk(){var h=innerHeight,r=j.getBoundingClientRect();
+    stk.classList.toggle('on',scrollY>420&&!(r.top<h&&r.bottom>0));
+    if(g.getBoundingClientRect().top<h*.88)g.classList.add('go')}
   addEventListener('scroll',chk,{passive:true});addEventListener('resize',chk);chk();
 })();
 </script>
