@@ -122,7 +122,7 @@ function pinHash(id,pin){var t=code+':'+id+':'+pin;
   var h=5381;for(var i=0;i<t.length;i++)h=((h*33)^t.charCodeAt(i))>>>0;return Promise.resolve('d'+h.toString(16))}
 function gate(){var m=mem(me);if(!(code&&m))return 'open';
   if(pinChange)return 'set';
-  if(OWN&&me===OWN&&!m.k){setHome(me);if(!m.h){m.h='1';putMember(m)}return 'open'}
+  if(OWN&&me===OWN&&(!m.k||!home||mine.indexOf(me)>=0)){setHome(me);if(!m.h){m.h='1';putMember(m)}return 'open'}
   if(me===home){if(!m.h){m.h='1';putMember(m)}return 'open'}
   if(m.k)return unlocked===me?'open':'enter';
   if(m.h)return 'blocked';
