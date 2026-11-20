@@ -191,3 +191,19 @@ html,body,.sv,.dk,.pgr,.pgi{touch-action:manipulation}
 .au .ab.stop{border-color:#b3261e;color:#b3261e}
 .sv[data-th] .au .ab:not(.go){color:inherit;border-color:currentColor}
 .sv[data-th] .au .ab.stop{color:#b3261e;border-color:#b3261e}
+
+/* ornamental frame around each dhikr in the reader */
+.pgi{padding:20px 16px 20px}
+.pgi .dk{--fb:var(--surface);position:relative;border:2px solid var(--gold);border-radius:22px;padding:30px 22px 26px;
+  background:
+    radial-gradient(circle at 14px 14px,var(--gold) 0 3px,transparent 3.5px),
+    radial-gradient(circle at calc(100% - 14px) 14px,var(--gold) 0 3px,transparent 3.5px),
+    radial-gradient(circle at 14px calc(100% - 14px),var(--gold) 0 3px,transparent 3.5px),
+    radial-gradient(circle at calc(100% - 14px) calc(100% - 14px),var(--gold) 0 3px,transparent 3.5px),
+    var(--fb);
+  box-shadow:inset 0 0 0 6px var(--fb),inset 0 0 0 7.5px var(--gold),0 8px 22px rgba(0,0,0,.12)}
+.pgi .dk.ok{--fb:var(--ok-s);border-color:var(--ok)}
+.pgi .dk:before,.pgi .dk:after{content:"۞";position:absolute;left:50%;transform:translateX(-50%);background:var(--bg);color:var(--gold);font-size:26px;line-height:1;padding:0 12px;font-family:'warsh',serif}
+.pgi .dk:before{top:-16px}
+.pgi .dk:after{bottom:-16px}
+.sv[data-th=black] .pgi .dk,.sv[data-th=ybk] .pgi .dk{border-width:2px}
