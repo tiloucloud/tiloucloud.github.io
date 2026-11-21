@@ -5,21 +5,22 @@ REPO = os.path.dirname(SRC)
 OUT = os.path.join(REPO, 'tasks')
 DB = 'https://khatma-16d1b-default-rtdb.firebaseio.com'
 VAPID = 'BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc'  # public key, same as adhkar
-VER = 1
+VER = 2
 
 os.makedirs(OUT + '/fonts', exist_ok=True)
 AD = os.path.join(REPO, 'adhkar')
-for f in os.listdir(AD + '/fonts'): shutil.copy(f'{AD}/fonts/{f}', f'{OUT}/fonts/{f}')
+shutil.rmtree(OUT + '/fonts'); os.makedirs(OUT + '/fonts')
+for f in [x for x in os.listdir(AD + '/fonts') if x.startswith('ibm-')]: shutil.copy(f'{AD}/fonts/{f}', f'{OUT}/fonts/{f}')
 for f in ['icon-512.png', 'icon-192.png', 'icon-180.png', 'icon-maskable-512.png', 'fav-32.png']:
     shutil.copy(f'{SRC}/icon/{f}', OUT)
 shutil.copy(f'{SRC}/privacy.html', OUT)
-fonts = ''.join(x for x in re.findall(r"@font-face\{[^}]*\}", open(AD + '/app.css').read()) if 'warsh' not in x)
+fonts = ''.join(x for x in re.findall(r"@font-face\{[^}]*\}", open(AD + '/app.css').read()) if 'IBM Plex' in x)
 open(OUT + '/app.css', 'w').write(fonts + '\n' + open(SRC + '/app.css').read())
 open(OUT + '/app.js', 'w').write(open(SRC + '/app.js').read().replace('__DB__', DB).replace('__VAPID__', VAPID))
 open(OUT + '/index.html', 'w').write(f'''<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>مهام العائلة</title><meta name="description" content="قائمة مشتريات مشتركة، ومهام ومواعيد العائلة مع التذكير.">
-<meta name="theme-color" content="#13284d"><link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#312e81"><link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="fav-32.png"><link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="مهام العائلة">
 <meta property="og:title" content="مهام العائلة"><meta property="og:description" content="مشترياتنا ومهامنا ومواعيدنا معاً"><meta property="og:image" content="https://tiloucloud.github.io/tasks/icon-512.png">
@@ -27,7 +28,7 @@ open(OUT + '/index.html', 'w').write(f'''<!doctype html><html lang="ar" dir="rtl
 <link rel="stylesheet" href="app.css?v={VER}"></head><body><div id="app"></div><script src="app.js?v={VER}"></script></body></html>''')
 open(OUT + '/manifest.webmanifest', 'w').write(json.dumps({
     "name": "مهام العائلة", "short_name": "مهام العائلة", "lang": "ar", "dir": "rtl",
-    "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#13284d", "theme_color": "#13284d",
+    "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#312e81", "theme_color": "#312e81",
     "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
               {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
               {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}]}, ensure_ascii=False))
