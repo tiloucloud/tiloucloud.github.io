@@ -106,4 +106,7 @@ select{font:inherit;color:inherit;padding:12px 14px;border:1px solid var(--line)
 .ctitle,.brand h1,.gh,.lock h2{font-weight:700;letter-spacing:0}
 .bn button.on{color:var(--deep-2)}
 :focus-visible{outline-color:#818cf8}
-.x.ed{font-size:17px;background:var(--bg);color:var(--deep-2)}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pill{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:14.5px;font-weight:600;color:var(--ink)}
+.pill.go{background:var(--deep-2);border-color:transparent;color:#fff}
+.got .pill.go{background:var(--ok)}

@@ -145,9 +145,10 @@ function vWho(){
 
 function vShop(){
   var L=arr(D.shop),open=L.filter(function(x){return !x.b}).sort(function(a,b){return (a.c||0)-(b.c||0)}),got=L.filter(function(x){return x.b}).sort(function(a,b){return (b.bt||0)-(a.bt||0)});
-  var row=function(x){return '<li class="it'+(x.b?' got':'')+'"><button class="ck" data-act="buy" data-v="'+x.id+'" aria-label="'+(x.b?'ألغِ الشراء':'اشتريته')+'">'+(x.b?'✓':'')+'</button>'+
-    '<div class="itx"><b>'+esc(x.n)+'</b><small>'+(x.b?'🛒 اشتراه '+esc(nm(x.b))+' · '+ago(x.bt||0):'أضافه '+esc(nm(x.by))+' · '+ago(x.c||0))+'</small></div>'+
-    '<button class="x" data-act="sdel" data-v="'+x.id+'" aria-label="احذف">✕</button></li>'};
+  var row=function(x){return '<li class="it'+(x.b?' got':'')+'"><button class="ck" data-act="buy" data-v="'+x.id+'" aria-label="'+(x.b?'ألغِ الشراء':'تمّ الشراء')+'">'+(x.b?'✓':'')+'</button>'+
+    '<div class="itx"><b>'+esc(x.n)+'</b><small>'+(x.b?'🛒 اشتراه '+esc(nm(x.b))+' · '+ago(x.bt||0):'أضافه '+esc(nm(x.by))+' · '+ago(x.c||0))+'</small>'+
+    '<div class="acts"><button class="pill '+(x.b?'':'go')+'" data-act="buy" data-v="'+x.id+'">'+(x.b?'↩ لم يُشترَ':'✓ تمّ الشراء')+'</button>'+
+    '<button class="pill" data-act="sedit" data-v="'+x.id+'">✏️ تعديل</button><button class="pill" data-act="sdel" data-v="'+x.id+'">✕ حذف</button></div></div></li>'};
   return '<section class="card stack"><h2 class="ctitle">🛒 قائمة المشتريات</h2>'+
     '<form class="form" data-form="shop"><input id="shopIn" maxlength="60" autocomplete="off" placeholder="ماذا نشتري؟ مثلاً: 2 كغ طماطم" enterkeyhint="done"><button class="btn" type="submit">أضف</button></form>'+
     (open.length?'<ul class="ls">'+open.map(row).join('')+'</ul>':'<p class="empty">القائمة فارغة، الحمد لله 🌿</p>')+'</section>'+
@@ -155,11 +156,13 @@ function vShop(){
 
 function tCard(t){var a=asg(t),late=!t.dn&&t.at&&t.at<Date.now()&&(t.tm||t.d<iso(today()));
   return '<li class="tk'+(t.dn?' got':'')+(late?' late':'')+'"><button class="ck" data-act="done" data-v="'+t.id+'" aria-label="'+(t.dn?'لم تُنجز':'أُنجزت')+'">'+(t.dn?'✓':'')+'</button>'+
-    '<button class="tkx" data-act="edit" data-v="'+t.id+'"><b>'+esc(t.t)+'</b>'+
+    '<div class="tkx"><b>'+esc(t.t)+'</b>'+
     '<span class="meta">'+(t.d?'<i>📅 '+esc(dayLab(t.d))+(t.tm?' · '+tmLab(t.tm):'')+'</i>':'')+(t.ra&&!t.dn?'<i>🔔</i>':'')+
     '<i>👥 '+(a.length?a.map(function(id){return esc(nm(id))}).join('، '):'الجميع')+'</i></span>'+
     (t.n?'<small class="nt">'+esc(t.n)+'</small>':'')+
-    (t.dn?'<small>✓ أنجزها '+esc(nm(t.dn))+' · '+ago(t.dt||0)+'</small>':'')+'</button><button class="x ed" data-act="edit" data-v="'+t.id+'" aria-label="عدّل المهمة">✏️</button></li>'}
+    (t.dn?'<small>✓ أنجزها '+esc(nm(t.dn))+' · '+ago(t.dt||0)+'</small>':'')+
+    '<div class="acts"><button class="pill '+(t.dn?'':'go')+'" data-act="done" data-v="'+t.id+'">'+(t.dn?'↩ لم تُنجز':'✓ أنجزتُها')+'</button>'+
+    '<button class="pill" data-act="edit" data-v="'+t.id+'">✏️ تعديل</button></div></div></li>'}
 function groups(L){var td=iso(today()),G=[['⏰ متأخرة',[]],['اليوم',[]],['غداً',[]],['القادمة',[]],['بلا تاريخ',[]]];
   L.forEach(function(t){var late=t.at&&t.at<Date.now()&&(t.tm||t.d<td);
     if(!t.d)G[4][1].push(t);else if(late)G[0][1].push(t);else if(t.d===td)G[1][1].push(t);else if(t.d===addDays(td,1))G[2][1].push(t);else G[3][1].push(t)});
@@ -187,6 +190,9 @@ function vSheet(){var t=draft,isNew=!t.id,a=t.as||{};
     (!isNew?'<div class="sh2">'+(t.by?'<small class="sub">أضافها '+esc(nm(t.by))+'</small>':'<span></span>')+(canDel(t)?'<button type="button" class="lnk dang" data-act="tdel">حذف المهمة</button>':'')+'</div>':'')+
     '</form></div>'}
 
+function vShopSheet(){var x=draft;
+  return '<div class="ov" data-act="ovx"><form class="sht stack" data-form="sedit" role="dialog" aria-label="تعديل الغرض"><div class="sh2"><h2 class="ctitle">تعديل الغرض</h2><button type="button" class="ib" data-act="close" aria-label="إغلاق">✕</button></div>'+
+    '<label>الاسم والكمية<input id="sN" maxlength="60" required autocomplete="off" value="'+esc(x.n||'')+'"></label><button class="btn" type="submit">احفظ</button></form></div>'}
 function vSet(){var m=mem(me);
   return '<div class="ov" data-act="ovx"><div class="sht stack" role="dialog" aria-label="الإعدادات"><div class="sh2"><h2 class="ctitle">⚙️ الإعدادات</h2><button class="ib" data-act="set" aria-label="إغلاق">✕</button></div>'+
     (pushOK()?(nOn?'<p class="ok">🔔 التذكير مُفعَّل على هذا الهاتف</p>':'<div class="stack"><button class="btn" data-act="notif"'+(nBusy?' disabled':'')+'>'+(nBusy?'جارٍ التفعيل…':'🔔 فعّل تذكير المواعيد')+'</button>'+(nErr?'<p class="err">'+esc(nErr)+'</p>':'')+'<p class="sub">على الآيفون: ثبّت التطبيق على الشاشة الرئيسية أولاً من زر المشاركة.</p></div>'):'<p class="sub">هذا المتصفح لا يدعم التنبيهات.</p>')+
@@ -209,7 +215,7 @@ function render(){
   if(!m)body=vWho();
   else body=TAB==='shop'?vShop():TAB==='tasks'?vTasks(false):vTasks(true);
   root.innerHTML='<div class="wrap">'+hdr()+body+'</div>'+(m?nav()+(TAB!=='shop'?'<button class="fab" data-act="new" aria-label="مهمة جديدة">＋</button>':''):'')+
-    (sheet==='task'&&draft?vSheet():'')+(setOpen?vSet():'')+(toast?'<div class="toast" role="status">'+esc(toast)+'</div>':'');
+    (sheet==='task'&&draft?vSheet():'')+(sheet==='shop'&&draft?vShopSheet():'')+(setOpen?vSet():'')+(toast?'<div class="toast" role="status">'+esc(toast)+'</div>':'');
 }
 
 /* ---------- actions ---------- */
@@ -242,6 +248,7 @@ document.addEventListener('click',function(e){
   if(a==='invite'){var u=location.origin+location.pathname.replace(/index\.html$/,'')+'#a='+code,txt='أحبتي، هذا تطبيق «مهام العائلة»: قائمة مشتريات مشتركة ومهام ومواعيد العائلة، بنفس أسمائنا في الختمة:\n'+u;
     if(navigator.share)navigator.share({title:'مهام العائلة',text:txt}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');return}
   if(a==='buy'){var s=D.shop[v];if(!s)return;if(s.b){s.b=null;s.bt=null;wr('/tk/shop/'+v,'PATCH',{b:null,bt:null})}else{s.b=me;s.bt=Date.now();wr('/tk/shop/'+v,'PATCH',{b:me,bt:s.bt});try{navigator.vibrate&&navigator.vibrate(12)}catch(x){}}cache();render();return}
+  if(a==='sedit'){var se=D.shop[v];if(!se)return;draft={id:v,n:se.n};sheet='shop';render();var si=document.getElementById('sN');if(si){si.focus();si.select()}return}
   if(a==='sdel'){var s2=D.shop[v];if(!s2)return;if(!s2.b&&!confirm('حذف «'+s2.n+'» من القائمة؟'))return;delete D.shop[v];wr('/tk/shop/'+v,'DELETE');cache();render();return}
   if(a==='sclr'){var g=arr(D.shop).filter(function(x){return x.b});if(!g.length||!confirm('مسح '+g.length+' من المشترى؟'))return;var p={};g.forEach(function(x){p[x.id]=null;delete D.shop[x.id]});wr('/tk/shop','PATCH',p);cache();render();return}
   if(a==='done'){var k=D.tasks[v];if(!k)return;if(k.dn){k.dn=null;k.dt=null;wr('/tk/tasks/'+v,'PATCH',{dn:null,dt:null})}else{k.dn=me;k.dt=Date.now();wr('/tk/tasks/'+v,'PATCH',{dn:me,dt:k.dt});try{navigator.vibrate&&navigator.vibrate([20,40,30])}catch(x){}}cache();render();return}
@@ -256,6 +263,7 @@ document.addEventListener('submit',function(e){
   var f=e.target.dataset.form;if(!f)return;e.preventDefault();
   if(f==='shop'){shopAdd();return}
   if(f==='task'){saveTask();return}
+  if(f==='sedit'){var nv=(document.getElementById('sN').value||'').trim().slice(0,60),it=D.shop[draft.id];if(nv&&it){it.n=nv;wr('/tk/shop/'+draft.id,'PATCH',{n:nv});cache()}sheet=null;draft=null;render();return}
   if(f==='join'){var s=(document.getElementById('joinIn').value||'').trim(),m=s.match(/[#&]a=([A-Za-z0-9_-]{12,64})/)||s.match(/^([A-Za-z0-9_-]{12,64})$/);
     if(!m){document.getElementById('joinErr').textContent='الرابط أو الرمز غير صحيح';return}
     code=m[1];ls('tk_code',code);M=[];D={shop:{},tasks:{}};loaded=false;inherit('kf');inherit('ad');render();pull();return}
