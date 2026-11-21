@@ -543,6 +543,7 @@ html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
 .prb span svg{width:22px;height:22px;color:#2a1d00}
 .prb.on span{background:linear-gradient(180deg,#f0d384,#c9a24a);border-color:#c9a24a;box-shadow:0 4px 10px -4px rgba(155,112,25,.7)}
 .pr-m{text-align:center;margin-top:8px;font-size:14px;color:var(--em,#0a3b31);font-weight:600}
+.sunan .sub{margin-top:-4px}.sn-f{font-size:15px;line-height:1.9;padding:10px 12px;border-radius:14px;background:var(--bg,#f6f1e4);border:1px solid var(--line)}.sn-f small{display:block;font-size:12px;color:var(--muted)}.sn-ok{width:100%}
 .pr-pv{text-align:center;font-size:12px;color:var(--muted,#5d6e67);margin-top:4px}
 .prd{display:inline-flex;gap:4px}.prd i{width:10px;height:10px;border-radius:50%;border:1.5px solid #c9a24a}.prd i.on{background:#c9a24a}
 .prd.big i{width:14px;height:14px}
@@ -867,6 +868,22 @@ function vKids(){
     return '<div class="kd"><b>'+esc(k.name)+'</b>'+prDots(v,1)+'<small class="num">'+(st?(st>=7?'🕌 ':'🌟 ')+st+' متتالية · ':'')+'الأسبوع '+w+'/35</small></div>'}).join('')+
     '<p class="pr-pv">شجّعوهم بكلمة طيبة، فالصلاة تُحبَّب ولا تُفرض بالقسوة.</p></section>';
 }
+/* ---------- سنن: الكهف يوم الجمعة، الواقعة والملك كل ليلة ---------- */
+var SUN={kahf:{s:18,t:'سورة الكهف',k:'ليلة الجمعة ويومها',f:[['«من قرأ سورة الكهف في يوم الجمعة أضاء له من النور ما بين الجمعتين»','رواه الحاكم والبيهقي، وصحّحه الألباني'],['«من حفظ عشر آيات من أول سورة الكهف عُصِم من الدجال»','رواه مسلم']]},
+  night:{t:'سورة الملك والواقعة',k:'كل ليلة قبل النوم',f:[['كان النبي ﷺ لا ينام حتى يقرأ «الم تنزيل» السجدة و«تبارك الذي بيده الملك»','رواه الترمذي، وصحّحه الألباني'],['«سورة من القرآن ثلاثون آية شفعت لرجل حتى غُفر له، وهي تبارك الذي بيده الملك»','رواه أبو داود والترمذي وحسّنه'],['«هي المانعة، هي المنجية، تنجيه من عذاب القبر» يعني سورة الملك','رواه الترمذي'],['الواقعة تذكّر بيوم القيامة وأصناف الناس فيه: السابقون وأصحاب اليمين وأصحاب الشمال، فتوقظ القلب قبل النوم. وقال ﷺ: «شيّبتني هود والواقعة…»','رواه الترمذي، وصحّحه الألباني']]}};
+function sunNow(){var d=new Date(),w=d.getDay(),h=d.getHours(),r=[];
+  if((w===4&&h>=18)||(w===5&&h<19)){var f=today();if(w===4)f.setDate(f.getDate()+1);r.push({id:'kahf',key:'kf_sn_kahf_'+iso(f)})}
+  if(h>=20||h<3){var n=today();if(h<3)n.setDate(n.getDate()-1);r.push({id:'night',key:'kf_sn_night_'+iso(n)})}
+  return r}
+function sunDone(k){try{return !!localStorage.getItem(k)}catch(e){return false}}
+function vSunan(){
+  return sunNow().map(function(x){var o=SUN[x.id],dn=sunDone(x.key),fi=Math.floor(Date.now()/864e5)%o.f.length,fv=o.f[fi];
+    var bt=x.id==='kahf'?'<button class="btn" data-act="sura" data-v="18">'+I('book')+'اقرأ سورة الكهف</button>':
+      '<button class="btn" data-act="sura" data-v="67">'+I('book')+'سورة الملك</button><button class="btn" data-act="sura" data-v="56">'+I('book')+'سورة الواقعة</button>';
+    return '<section class="card stack sunan"><h2 class="ctitle">'+(x.id==='kahf'?'🕌 ':'🌙 ')+o.t+'</h2><p class="sub">'+o.k+'</p>'+
+      '<p class="sn-f">'+esc(fv[0])+'<small>'+esc(fv[1])+'</small></p>'+
+      '<div class="mact">'+bt+'</div>'+
+      '<button class="btn sm '+(dn?'':'quiet')+' sn-ok" data-act="sundone" data-v="'+x.key+'">'+(dn?I('check')+'قرأتُها، تقبّل الله منك':'ضع علامة: قرأتُها')+'</button></section>'}).join('')}
 function prLine(){var n=dayNo()+((S.khatma.start||'').length),q=n%2===0;
   if(q){var a=PRQ[(n>>1)%PRQ.length];return '<p class="wel-pr"><span class="ab">﴿</span><span class="aw">'+a[0]+'</span><span class="ab">﴾</span><small>'+a[1]+'</small></p>'}
   var h=PRH[(n>>1)%PRH.length];return '<p class="wel-pr">🕌 «'+h[0]+'» <small>'+h[1]+'</small></p>'}
@@ -1438,8 +1455,8 @@ function render(){
   var h=hijri();
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
-    (code?vRqNote()+vSolo()+vWird()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 48</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    (code?vRqNote()+vSolo()+vWird()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 51</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
@@ -1463,6 +1480,7 @@ root.addEventListener('click',function(e){
   if(act==='resume'){if(pos&&pos.pg)goPage(pos.pg);return}
   if(act==='goto'){goPage(+v);return}
   if(act==='sura'){goPage(Q.si[+v-1][1]);return}
+  if(act==='sundone'){try{localStorage.getItem(v)?localStorage.removeItem(v):localStorage.setItem(v,'1')}catch(_){}render();return}
   if(act==='back'){closeReader();return}
   if(act==='fs'){if(big){bfs=Math.max(28,Math.min(56,bfs+ +v));try{localStorage.setItem('kf_bfs',bfs)}catch(_){}}else{fs=Math.max(18,Math.min(40,fs+ +v));try{localStorage.setItem('kf_fs',fs)}catch(_){}}refill(true);render();return}
   if(act==='paperok'){
