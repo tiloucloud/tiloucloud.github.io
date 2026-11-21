@@ -5,7 +5,7 @@ REPO = os.path.dirname(SRC)
 OUT = os.path.join(REPO, 'tasks')
 DB = 'https://khatma-16d1b-default-rtdb.firebaseio.com'
 VAPID = 'BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc'  # public key, same as adhkar
-VER = 5
+VER = 6
 
 os.makedirs(OUT + '/fonts', exist_ok=True)
 AD = os.path.join(REPO, 'adhkar')

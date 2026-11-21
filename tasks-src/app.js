@@ -148,7 +148,7 @@ function vShop(){
   var row=function(x){return '<li class="it'+(x.b?' got':'')+'"><button class="ck" data-act="buy" data-v="'+x.id+'" aria-label="'+(x.b?'ألغِ الشراء':'تمّ الشراء')+'">'+(x.b?'✓':'')+'</button>'+
     '<div class="itx"><b>'+esc(x.n)+'</b><small>'+(x.b?'🛒 اشتراه '+esc(nm(x.b))+' · '+ago(x.bt||0):'أضافه '+esc(nm(x.by))+' · '+ago(x.c||0))+'</small>'+
     '<div class="acts"><button class="pill '+(x.b?'':'go')+'" data-act="buy" data-v="'+x.id+'">'+(x.b?'↩ لم يُشترَ':'✓ تمّ الشراء')+'</button>'+
-    '<button class="pill" data-act="sedit" data-v="'+x.id+'">✏️ تعديل</button><button class="pill" data-act="sdel" data-v="'+x.id+'">✕ حذف</button></div></div></li>'};
+    '<button class="pill" data-act="sedit" data-v="'+x.id+'">✏️ تعديل</button></div></div></li>'};
   return '<section class="card stack"><h2 class="ctitle">🛒 قائمة المشتريات</h2>'+
     '<form class="form" data-form="shop"><input id="shopIn" maxlength="60" autocomplete="off" placeholder="ماذا نشتري؟ مثلاً: 2 كغ طماطم" enterkeyhint="done"><button class="btn" type="submit">أضف</button></form>'+
     (open.length?'<ul class="ls">'+open.map(row).join('')+'</ul>':'<p class="empty">القائمة فارغة، الحمد لله 🌿</p>')+'</section>'+
@@ -192,7 +192,7 @@ function vSheet(){var t=draft,isNew=!t.id,a=t.as||{};
 
 function vShopSheet(){var x=draft;
   return '<div class="ov" data-act="ovx"><form class="sht stack" data-form="sedit" role="dialog" aria-label="تعديل الغرض"><div class="sh2"><h2 class="ctitle">تعديل الغرض</h2><button type="button" class="ib" data-act="close" aria-label="إغلاق">✕</button></div>'+
-    '<label>الاسم والكمية<input id="sN" maxlength="60" required autocomplete="off" value="'+esc(x.n||'')+'"></label><button class="btn" type="submit">احفظ</button></form></div>'}
+    '<label>الاسم والكمية<input id="sN" maxlength="60" required autocomplete="off" value="'+esc(x.n||'')+'"></label><button class="btn" type="submit">احفظ</button><div class="sh2"><span></span><button type="button" class="lnk dang" data-act="sdel" data-v="'+x.id+'">حذف الغرض من القائمة</button></div></form></div>'}
 function vSet(){var m=mem(me);
   return '<div class="ov" data-act="ovx"><div class="sht stack" role="dialog" aria-label="الإعدادات"><div class="sh2"><h2 class="ctitle">⚙️ الإعدادات</h2><button class="ib" data-act="set" aria-label="إغلاق">✕</button></div>'+
     (pushOK()?(nOn?'<p class="ok">🔔 التذكير مُفعَّل على هذا الهاتف</p>':'<div class="stack"><button class="btn" data-act="notif"'+(nBusy?' disabled':'')+'>'+(nBusy?'جارٍ التفعيل…':'🔔 فعّل تذكير المواعيد')+'</button>'+(nErr?'<p class="err">'+esc(nErr)+'</p>':'')+'<p class="sub">على الآيفون: ثبّت التطبيق على الشاشة الرئيسية أولاً من زر المشاركة.</p></div>'):'<p class="sub">هذا المتصفح لا يدعم التنبيهات.</p>')+
@@ -249,7 +249,7 @@ document.addEventListener('click',function(e){
     if(navigator.share)navigator.share({title:'مهام العائلة',text:txt}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');return}
   if(a==='buy'){var s=D.shop[v];if(!s)return;if(s.b){s.b=null;s.bt=null;wr('/tk/shop/'+v,'PATCH',{b:null,bt:null})}else{s.b=me;s.bt=Date.now();wr('/tk/shop/'+v,'PATCH',{b:me,bt:s.bt});try{navigator.vibrate&&navigator.vibrate(12)}catch(x){}}cache();render();return}
   if(a==='sedit'){var se=D.shop[v];if(!se)return;draft={id:v,n:se.n};sheet='shop';render();var si=document.getElementById('sN');if(si){si.focus();si.select()}return}
-  if(a==='sdel'){var s2=D.shop[v];if(!s2)return;if(!s2.b&&!confirm('حذف «'+s2.n+'» من القائمة؟'))return;delete D.shop[v];wr('/tk/shop/'+v,'DELETE');cache();render();return}
+  if(a==='sdel'){var s2=D.shop[v];if(!s2)return;if(!s2.b&&!confirm('حذف «'+s2.n+'» من القائمة؟'))return;delete D.shop[v];wr('/tk/shop/'+v,'DELETE');cache();sheet=null;draft=null;render();return}
   if(a==='sclr'){var g=arr(D.shop).filter(function(x){return x.b});if(!g.length||!confirm('مسح '+g.length+' من المشترى؟'))return;var p={};g.forEach(function(x){p[x.id]=null;delete D.shop[x.id]});wr('/tk/shop','PATCH',p);cache();render();return}
   if(a==='done'){var k=D.tasks[v];if(!k)return;if(k.dn){k.dn=null;k.dt=null;wr('/tk/tasks/'+v,'PATCH',{dn:null,dt:null})}else{k.dn=me;k.dt=Date.now();wr('/tk/tasks/'+v,'PATCH',{dn:me,dt:k.dt});try{navigator.vibrate&&navigator.vibrate([20,40,30])}catch(x){}}cache();render();return}
   if(a==='sdone'){showDone=!showDone;render();return}
