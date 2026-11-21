@@ -5,16 +5,16 @@ REPO = os.path.dirname(SRC)
 OUT = os.path.join(REPO, 'tasks')
 DB = 'https://khatma-16d1b-default-rtdb.firebaseio.com'
 VAPID = 'BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc'  # public key, same as adhkar
-VER = 2
+VER = 3
 
 os.makedirs(OUT + '/fonts', exist_ok=True)
 AD = os.path.join(REPO, 'adhkar')
 shutil.rmtree(OUT + '/fonts'); os.makedirs(OUT + '/fonts')
-for f in [x for x in os.listdir(AD + '/fonts') if x.startswith('ibm-')]: shutil.copy(f'{AD}/fonts/{f}', f'{OUT}/fonts/{f}')
+for f in [x for x in os.listdir(AD + '/fonts') if x.startswith(('ibm-', 'reem-'))]: shutil.copy(f'{AD}/fonts/{f}', f'{OUT}/fonts/{f}')
 for f in ['icon-512.png', 'icon-192.png', 'icon-180.png', 'icon-maskable-512.png', 'fav-32.png']:
     shutil.copy(f'{SRC}/icon/{f}', OUT)
 shutil.copy(f'{SRC}/privacy.html', OUT)
-fonts = ''.join(x for x in re.findall(r"@font-face\{[^}]*\}", open(AD + '/app.css').read()) if 'IBM Plex' in x)
+fonts = ''.join(x for x in re.findall(r"@font-face\{[^}]*\}", open(AD + '/app.css').read()) if 'warsh' not in x)
 open(OUT + '/app.css', 'w').write(fonts + '\n' + open(SRC + '/app.css').read())
 open(OUT + '/app.js', 'w').write(open(SRC + '/app.js').read().replace('__DB__', DB).replace('__VAPID__', VAPID))
 open(OUT + '/index.html', 'w').write(f'''<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
