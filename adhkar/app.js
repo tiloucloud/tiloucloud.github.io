@@ -227,7 +227,7 @@ function rqList(){return Object.keys(RQ||{}).map(function(k){var x=RQ[k]||{};x.i
 function vReqs(){var L=rqList();if(!L.length)return '<p class="sub">لا طلبات جديدة.</p>';
   return '<div class="rqs">'+L.map(function(x){return '<div class="rq"><p><b>'+esc(RQK[x.t]||'طلب')+'</b> · '+esc(x.n||'')+'<br>'+esc(x.x||'')+'</p><div class="rqa">'+(x.t==='add'?'<button class="btn" data-act="rqadd" data-v="'+x.id+'">أضِف</button>':'')+'<button class="lnk" data-act="rqdone" data-v="'+x.id+'">'+(x.t==='add'?'تجاهل':'تمّ')+'</button></div></div>'}).join('')+'</div>'}
 var RQK={add:'إضافة فرد',ren:'تعديل اسم',del:'حذف فرد'};
-var fbType='bug',fbBusy=false,fbErr='',fbSent=false;
+var mlOpen=false,fbType='bug',fbBusy=false,fbErr='',fbSent=false;
 function vFb(){if(!DB||!code)return '';
   var h='<div class="fsec"><h3 class="fh">📝 أرسل ملاحظة أو أبلغ عن خطأ</h3>';
   if(fbSent)return h+'<p class="sub nok">وصلت ملاحظتك، جزاك الله خيراً. ستُراجَع ويُعمل بها في التحديثات القادمة بإذن الله.</p><button class="btn ghost" data-act="fbagain">أرسل ملاحظة أخرى</button></div>';
@@ -251,8 +251,8 @@ function vFamily(){
   return '<details class="card fam"'+(sheet==='fam'?' open':'')+'><summary><h2 class="ctitle">⚙️ إدارة العائلة</h2></summary><div class="stack">'+
     '<button class="btn ghost" data-act="invite">🔗 رابط دعوة العائلة</button>'+
     (m&&(me===home||unlocked===me)?'<button class="btn ghost" data-act="pinchg">🔑 '+(m.k?'تغيير رمزي السري':'رمزي السري (للذكر من هاتف آخر)')+'</button>':'')+
-    mg+
-    '<ul class="ml">'+S.members.map(function(x){return '<li><span>'+esc(x.name)+(x.id===OWN?' <small>(صاحب المجموعة)</small>':'')+'</span>'+(canManage()?'<button class="lnk" data-act="del" data-v="'+x.id+'">حذف</button>':'')+'</li>'}).join('')+'</ul>'+
+    '<div class="mlw"><button type="button" class="mlt" data-act="mlt" aria-expanded="'+mlOpen+'"><span>👨‍👩‍👧‍👦 أفراد العائلة <small class="num">('+S.members.length+')</small></span><i>'+(mlOpen?'▴':'▾')+'</i></button>'+
+    (mlOpen?'<div class="mlb">'+mg+'<ul class="ml">'+S.members.map(function(x){return '<li><span>'+esc(x.name)+(x.id===OWN?' <small>(صاحب المجموعة)</small>':'')+'</span>'+(canManage()?'<button class="lnk" data-act="del" data-v="'+x.id+'">حذف</button>':'')+'</li>'}).join('')+'</ul></div>':'')+'</div>'+
     '<div class="fsec"><h3 class="fh">📩 طلبات الأفراد</h3>'+rqs+'</div>'+vFb()+
     '<p class="sub">التطبيق مجاني وبلا إعلانات. <a href="privacy.html">الخصوصية</a></p></div></details>'}
 function itemsFor(k,p){return AD[k].filter(function(it){return !it.only||(it.only==='fm'?(p===0||p===3):it.only==='f'?p===0:true)}).map(function(it){
@@ -333,6 +333,7 @@ document.addEventListener('click',function(e){
   var t=e.target.closest('[data-act]');if(!t)return;var a=t.dataset.act,v=t.dataset.v;
   if(a==='notif'){enableNotif();return}
   if(a==='fbt'){var ft=document.getElementById('fbText'),keep=ft?ft.value:'';fbType=v;fbErr='';sheet='fam';render();var ft2=document.getElementById('fbText');if(ft2)ft2.value=keep;return}
+  if(a==='mlt'){mlOpen=!mlOpen;sheet='fam';render();return}
   if(a==='fbsend'){if(!fbBusy)sendFb();return}
   if(a==='fbagain'){fbSent=false;fbErr='';sheet='fam';render();return}
   if(a==='rqdone'){delete RQ[v];fetch(DB+'/k/'+code+'/ad/rq/'+v+'.json',{method:'DELETE'}).catch(function(){});sheet='fam';render();return}

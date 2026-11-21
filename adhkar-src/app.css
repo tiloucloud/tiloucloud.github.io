@@ -215,3 +215,8 @@ html,body,.sv,.dk,.pgr,.pgi{touch-action:manipulation}
 .fh{font-size:18.5px}
 .seg2{grid-template-columns:repeat(2,1fr)}
 textarea{font:inherit;color:inherit;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);resize:vertical}
+.mlw{border:1px solid var(--line);border-radius:12px;padding:0 12px}
+.mlt{width:100%;display:flex;justify-content:space-between;align-items:center;padding:12px 0;background:none;border:0;font:inherit;font-weight:600;font-size:17.5px;color:inherit;cursor:pointer}
+.mlt i{font-style:normal;color:var(--muted)}
+.mlb{display:flex;flex-direction:column;gap:8px;padding-bottom:8px}
+.mlb .ml li:last-child{border-bottom:0}
