@@ -4,10 +4,12 @@ on:
   schedule:
     - cron: '41 6 * * *'   # morning message, ~06:41 UTC (off the busy top of the hour)
     - cron: '37 18 * * *'  # evening reminder, ~18:37 UTC
+    - cron: '13 7 * * 5'   # Friday: Surat al-Kahf, ~07:13 UTC
+    - cron: '7 21 * * *'   # nightly: al-Mulk and al-Waqi'a before sleep, ~21:07 UTC
   workflow_dispatch:
     inputs:
       slot:
-        description: 'am = morning message, pm = evening reminder'
+        description: 'am = morning message, pm = evening reminder, kahf = Friday Kahf, night = Mulk and Waqi''a'
         required: true
         default: 'am'
       dry:
@@ -35,6 +37,6 @@ jobs:
           VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
           KHATMA_CODE: ${{ secrets.KHATMA_CODE }}
           DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
-          SLOT: ${{ github.event.inputs.slot || (github.event.schedule == '41 6 * * *' && 'am' || 'pm') }}
+          SLOT: ${{ github.event.inputs.slot || (github.event.schedule == '41 6 * * *' && 'am') || (github.event.schedule == '13 7 * * 5' && 'kahf') || (github.event.schedule == '7 21 * * *' && 'night') || 'pm' }}
           DRY_RUN: ${{ github.event.inputs.dry == 'yes' && '1' || '' }}
         run: node send.js

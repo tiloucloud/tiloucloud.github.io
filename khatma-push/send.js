@@ -15,7 +15,7 @@ const LAST = 604;
 
 function slotNow() {
   const s = (process.env.SLOT || '').trim();
-  if (s === 'am' || s === 'pm') return s;
+  if (s === 'am' || s === 'pm' || s === 'kahf' || s === 'night') return s;
   return new Date().getUTCHours() < 13 ? 'am' : 'pm';
 }
 function dayNo(k, now) {
@@ -32,7 +32,23 @@ function fill(t, ctx) {
 }
 function finish(t) { return /[.!؟?»﴾﴿)\]]$/.test(t) ? t : t + '.'; }
 
+// Sunnah reminders (Kahf on Friday, Mulk and Waqi'a every night) go to every
+// subscribed phone, whatever the khatma's day or the member's progress.
+function buildSunan(data, msgs, slot, now) {
+  const sn = msgs.sunan[slot], subs = data.subs || {};
+  const n = Math.floor(now.getTime() / 864e5);
+  let body = sn.f[n % sn.f.length] + '\n' + sn.end;
+  if (slot === 'night' && now.getUTCDay() === 4) body += '\n' + sn.thu;
+  const out = [];
+  for (const [id, s] of Object.entries(subs)) {
+    if (!s || !s.e || !s.k) continue;
+    out.push({ id, sub: { endpoint: s.e, keys: s.k }, payload: { title: sn.title, body, tag: 'khatma-' + slot, url: SITE } });
+  }
+  return { dn: data.khatma ? dayNo(data.khatma, now) : 0, out };
+}
+
 function buildMessages(data, msgs, slot, now) {
+  if (slot === 'kahf' || slot === 'night') return buildSunan(data, msgs, slot, now);
   const k = data.khatma, members = data.members || {}, subs = data.subs || {};
   const days = k.days, daily = Math.ceil(LAST / days), dn = dayNo(k, now);
   if (dn < 1 || dn > days) return { dn, out: [] };
@@ -82,7 +98,8 @@ async function main() {
   const msgs = JSON.parse(fs.readFileSync(path.join(__dirname, 'msgs.json'), 'utf8'));
   const slot = slotNow(), now = new Date();
   const h = now.getUTCHours();
-  if (!process.env.FORCE && ((slot === 'am' && h >= 12) || (slot === 'pm' && (h >= 22 || h < 12)))) {
+  const late = { am: h >= 12, pm: h >= 22 || h < 12, kahf: h < 5 || h >= 16, night: h < 19 || h >= 23 }[slot];
+  if (!process.env.FORCE && late) {
     console.log(`slot=${slot} started too late (${h}:00 UTC); skipping so nobody is woken up.`); return;
   }
   let jobs;
