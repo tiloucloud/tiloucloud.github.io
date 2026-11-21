@@ -159,7 +159,7 @@ function tCard(t){var a=asg(t),late=!t.dn&&t.at&&t.at<Date.now()&&(t.tm||t.d<iso
     '<span class="meta">'+(t.d?'<i>📅 '+esc(dayLab(t.d))+(t.tm?' · '+tmLab(t.tm):'')+'</i>':'')+(t.ra&&!t.dn?'<i>🔔</i>':'')+
     '<i>👥 '+(a.length?a.map(function(id){return esc(nm(id))}).join('، '):'الجميع')+'</i></span>'+
     (t.n?'<small class="nt">'+esc(t.n)+'</small>':'')+
-    (t.dn?'<small>✓ أنجزها '+esc(nm(t.dn))+' · '+ago(t.dt||0)+'</small>':'')+'</button></li>'}
+    (t.dn?'<small>✓ أنجزها '+esc(nm(t.dn))+' · '+ago(t.dt||0)+'</small>':'')+'</button><button class="x ed" data-act="edit" data-v="'+t.id+'" aria-label="عدّل المهمة">✏️</button></li>'}
 function groups(L){var td=iso(today()),G=[['⏰ متأخرة',[]],['اليوم',[]],['غداً',[]],['القادمة',[]],['بلا تاريخ',[]]];
   L.forEach(function(t){var late=t.at&&t.at<Date.now()&&(t.tm||t.d<td);
     if(!t.d)G[4][1].push(t);else if(late)G[0][1].push(t);else if(t.d===td)G[1][1].push(t);else if(t.d===addDays(td,1))G[2][1].push(t);else G[3][1].push(t)});
@@ -175,7 +175,7 @@ function vTasks(onlyMine){
 
 function vSheet(){var t=draft,isNew=!t.id,a=t.as||{};
   return '<div class="ov" data-act="ovx"><form class="sht stack" data-form="task" role="dialog" aria-label="'+(isNew?'مهمة جديدة':'تعديل المهمة')+'">'+
-    '<div class="sh2"><h2 class="ctitle">'+(isNew?'مهمة أو موعد جديد':'تعديل')+'</h2><button type="button" class="ib" data-act="close" aria-label="إغلاق">✕</button></div>'+
+    '<div class="sh2"><h2 class="ctitle">'+(isNew?'مهمة أو موعد جديد':'تعديل المهمة')+'</h2><button type="button" class="ib" data-act="close" aria-label="إغلاق">✕</button></div>'+
     '<label>العنوان<input id="fT" maxlength="80" required autocomplete="off" value="'+esc(t.t||'')+'" placeholder="مثلاً: موعد الطبيب، دفع فاتورة الكهرباء"></label>'+
     '<div class="two"><label>التاريخ<input id="fD" type="date" value="'+esc(t.d||'')+'"></label><label>الوقت<input id="fM" type="time" value="'+esc(t.tm||'')+'"></label></div>'+
     '<label>التذكير<select id="fR">'+RM.map(function(r){return '<option value="'+r[0]+'"'+((t.rm==null?-1:t.rm)===r[0]?' selected':'')+'>'+r[1]+'</option>'}).join('')+'</select></label>'+

@@ -106,3 +106,4 @@ select{font:inherit;color:inherit;padding:12px 14px;border:1px solid var(--line)
 .ctitle,.brand h1,.gh,.lock h2{font-weight:700;letter-spacing:0}
 .bn button.on{color:var(--deep-2)}
 :focus-visible{outline-color:#818cf8}
+.x.ed{font-size:17px;background:var(--bg);color:var(--deep-2)}
