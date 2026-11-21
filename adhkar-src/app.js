@@ -224,19 +224,36 @@ function vRace(){
     '<p class="sub">الترتيب بأيام المداومة على أذكار الصباح والمساء. ص: الصباح، م: المساء، ن: النوم.</p></section>'}
 function canManage(){return !linked&&(!OWN||(me===OWN&&(me===home||unlocked===me)))}
 function rqList(){return Object.keys(RQ||{}).map(function(k){var x=RQ[k]||{};x.id=k;return x}).sort(function(a,b){return (a.at||0)-(b.at||0)})}
-function vReqs(){var L=rqList();if(!L.length)return '';
-  return '<div class="rqs"><h3>📩 طلبات الأفراد</h3>'+L.map(function(x){return '<div class="rq"><p><b>'+esc(RQK[x.t]||'طلب')+'</b> · '+esc(x.n||'')+'<br>'+esc(x.x||'')+'</p><div class="rqa">'+(x.t==='add'?'<button class="btn" data-act="rqadd" data-v="'+x.id+'">أضِف</button>':'')+'<button class="lnk" data-act="rqdone" data-v="'+x.id+'">'+(x.t==='add'?'تجاهل':'تمّ')+'</button></div></div>'}).join('')+'</div>'}
+function vReqs(){var L=rqList();if(!L.length)return '<p class="sub">لا طلبات جديدة.</p>';
+  return '<div class="rqs">'+L.map(function(x){return '<div class="rq"><p><b>'+esc(RQK[x.t]||'طلب')+'</b> · '+esc(x.n||'')+'<br>'+esc(x.x||'')+'</p><div class="rqa">'+(x.t==='add'?'<button class="btn" data-act="rqadd" data-v="'+x.id+'">أضِف</button>':'')+'<button class="lnk" data-act="rqdone" data-v="'+x.id+'">'+(x.t==='add'?'تجاهل':'تمّ')+'</button></div></div>'}).join('')+'</div>'}
 var RQK={add:'إضافة فرد',ren:'تعديل اسم',del:'حذف فرد'};
+var fbType='bug',fbBusy=false,fbErr='',fbSent=false;
+function vFb(){if(!DB||!code)return '';
+  var h='<div class="fsec"><h3 class="fh">📝 أرسل ملاحظة أو أبلغ عن خطأ</h3>';
+  if(fbSent)return h+'<p class="sub nok">وصلت ملاحظتك، جزاك الله خيراً. ستُراجَع ويُعمل بها في التحديثات القادمة بإذن الله.</p><button class="btn ghost" data-act="fbagain">أرسل ملاحظة أخرى</button></div>';
+  return h+'<div class="seg seg2">'+[['bug','خطأ أو مشكلة'],['idea','اقتراح أو تحسين']].map(function(x){return '<button type="button" class="'+(fbType===x[0]?'on':'')+'" data-act="fbt" data-v="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div>'+
+    '<textarea id="fbText" rows="4" maxlength="2000" aria-label="نص الملاحظة" placeholder="'+(fbType==='bug'?'صف ما حدث، وفي أي صفحة أو زر':'ما الذي تقترح إضافته أو تحسينه؟')+'"></textarea>'+
+    (fbErr?'<p class="err" role="alert">'+esc(fbErr)+'</p>':'')+'<button class="btn" data-act="fbsend"'+(fbBusy?' disabled':'')+'>'+(fbBusy?'جارٍ الإرسال…':'أرسل الملاحظة')+'</button>'+
+    '<p class="sub">تُرسَل ملاحظتك إلى مطوّر التطبيق مع اسمك ونوع هاتفك، ليسهل فهم المشكلة.</p></div>'}
+function sendFb(){var el=document.getElementById('fbText'),t=((el&&el.value)||'').trim();
+  if(t.length<3){fbErr='اكتب ملاحظتك أولاً.';sheet='fam';render();return}
+  var m=mem(me),id='f'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),ver=(document.querySelector('script[src*="app.js"]')||{src:''}).src.split('v=')[1]||'';
+  fbBusy=true;fbErr='';sheet='fam';render();var el2=document.getElementById('fbText');if(el2)el2.value=t;
+  fetch(DB+'/k/'+code+'/ad/fb/'+id+'.json',{method:'PUT',body:JSON.stringify({t:fbType,x:t.slice(0,2000),m:me||'',n:m?m.name:'',at:Date.now(),v:ver,d:navigator.userAgent.slice(0,160)})})
+    .then(function(r){if(!r.ok)throw 0;fbSent=true}).catch(function(){fbErr='تعذّر الإرسال، تحقق من الاتصال وحاول مرة أخرى.'})
+    .then(function(){fbBusy=false;sheet='fam';render();if(!fbSent){var e3=document.getElementById('fbText');if(e3)e3.value=t}})}
 function vFamily(){
   var m=mem(me),own=mem(OWN),on=own?own.name:'صاحب المجموعة';
-  var mg=canManage()?'<form class="form" data-form="add"><input id="addN" maxlength="24" placeholder="اسم فرد جديد" autocomplete="off"><button class="btn" type="submit">أضف</button></form>':
+  var mg=canManage()?'<form class="form" data-form="add"><input id="addN" maxlength="24" placeholder="اسم فرد جديد" autocomplete="off"><button class="btn" type="submit">أضف</button></form>':'';
+  var rqs=canManage()?vReqs():
     (linked?'<p class="sub">أسماء العائلة هي نفسها في «ختمتنا العائلية»، ويديرها '+esc(on)+' وحده حفاظاً على القائمة.</p>':'<p class="sub">إضافة الأفراد وحذفهم وتعديل أسمائهم بيد '+esc(on)+' وحده حفاظاً على القائمة. أرسل طلبك وسيصله.</p>')+
     (DB?'<form class="stack" data-form="rq"><div class="seg">'+['add','ren','del'].map(function(x){return '<button type="button" class="'+(rqKind===x?'on':'')+'" data-act="rqk" data-v="'+x+'">'+RQK[x]+'</button>'}).join('')+'</div><input id="rqText" maxlength="200" placeholder="'+({add:'اسم الفرد الذي تريد إضافته',ren:'الاسم الحالي ← الاسم الصحيح',del:'اسم الفرد وسبب حذفه'})[rqKind]+'" autocomplete="off"><button class="btn" type="submit">أرسل الطلب إلى '+esc(on)+'</button>'+(rqMsg?'<p class="sub nok">'+esc(rqMsg)+'</p>':'')+'</form>':'');
   return '<details class="card fam"'+(sheet==='fam'?' open':'')+'><summary><h2 class="ctitle">⚙️ إدارة العائلة</h2></summary><div class="stack">'+
     '<button class="btn ghost" data-act="invite">🔗 رابط دعوة العائلة</button>'+
     (m&&(me===home||unlocked===me)?'<button class="btn ghost" data-act="pinchg">🔑 '+(m.k?'تغيير رمزي السري':'رمزي السري (للذكر من هاتف آخر)')+'</button>':'')+
-    mg+(canManage()?vReqs():'')+
+    mg+
     '<ul class="ml">'+S.members.map(function(x){return '<li><span>'+esc(x.name)+(x.id===OWN?' <small>(صاحب المجموعة)</small>':'')+'</span>'+(canManage()?'<button class="lnk" data-act="del" data-v="'+x.id+'">حذف</button>':'')+'</li>'}).join('')+'</ul>'+
+    '<div class="fsec"><h3 class="fh">📩 طلبات الأفراد</h3>'+rqs+'</div>'+vFb()+
     '<p class="sub">التطبيق مجاني وبلا إعلانات. <a href="privacy.html">الخصوصية</a></p></div></details>'}
 function itemsFor(k,p){return AD[k].filter(function(it){return !it.only||(it.only==='fm'?(p===0||p===3):it.only==='f'?p===0:true)}).map(function(it){
   var n=it.n;if(it.n3==='fm'&&(p===0||p===3))n=3;return {t:it.t,q:it.q,qn:it.qn,f:it.f,n:n,info:it.info}})}
@@ -315,6 +332,9 @@ function render(){
 document.addEventListener('click',function(e){
   var t=e.target.closest('[data-act]');if(!t)return;var a=t.dataset.act,v=t.dataset.v;
   if(a==='notif'){enableNotif();return}
+  if(a==='fbt'){var ft=document.getElementById('fbText'),keep=ft?ft.value:'';fbType=v;fbErr='';sheet='fam';render();var ft2=document.getElementById('fbText');if(ft2)ft2.value=keep;return}
+  if(a==='fbsend'){if(!fbBusy)sendFb();return}
+  if(a==='fbagain'){fbSent=false;fbErr='';sheet='fam';render();return}
   if(a==='rqdone'){delete RQ[v];fetch(DB+'/k/'+code+'/ad/rq/'+v+'.json',{method:'DELETE'}).catch(function(){});sheet='fam';render();return}
   if(a==='rqadd'){if(!canManage())return;var rx=RQ[v],nm0=rx&&String(rx.x||'').trim().slice(0,24);if(nm0){var x0={id:rid(),name:nm0,i:S.members.length,k:'',h:''};S.members.push(x0);putMember(x0);cache()}delete RQ[v];fetch(DB+'/k/'+code+'/ad/rq/'+v+'.json',{method:'DELETE'}).catch(function(){});sheet='fam';render();return}
   if(a==='rqk'){var tx=document.getElementById('rqText');rqKind=v;rqMsg='';sheet='fam';render();return}

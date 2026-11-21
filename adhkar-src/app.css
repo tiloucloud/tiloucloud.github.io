@@ -211,3 +211,7 @@ html,body,.sv,.dk,.pgr,.pgi{touch-action:manipulation}
 .race .dc em{width:6px}
 .race .dr{flex-direction:column;align-items:flex-start;gap:4px}.race .dl{flex:none;font-weight:600}.race .dc{flex-wrap:nowrap;gap:3px}.race .dc i{min-width:26px;font-size:12px;padding:0 2px}
 #pgl{direction:ltr;unicode-bidi:isolate}
+.fsec{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.fh{font-size:18.5px}
+.seg2{grid-template-columns:repeat(2,1fr)}
+textarea{font:inherit;color:inherit;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);resize:vertical}
