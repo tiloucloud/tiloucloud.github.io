@@ -1008,7 +1008,11 @@ function openVid(w){var f=w==='pin'?'fam-pin':w==='upd'?'fam-upd':w==='join'?'fa
   v.addEventListener('ended',function(){o.classList.add('done')})}
 function vWelcome(){
   var n=0;try{n=+localStorage.getItem('kf_wc')||0}catch(e){}
-  var s=MSG.start[n%MSG.start.length],m=mem(me),K=S.khatma;
+  var m=mem(me),K=S.khatma,s;
+  if(n%2){
+    var dn=dayNo(),hr=new Date().getHours(),dl=MSG.daily.filter(function(t){return !(hr>=12&&/^صباح/.test(t))&&!(dn<=1&&/الأمس|\{fam\}/.test(t))});
+    s={b:dl[((n-1)/2)%dl.length].replace(/\n*\{link\}/g,'')};
+  }else s=MSG.start[(n/2)%MSG.start.length];
   return '<div class="wel"><div class="wel-in">'+
     '<div class="wel-top"><img class="wel-ic" src="icon2-192.png" alt=""><h1>ختمة العائلة</h1><p>'+esc(K.name)+'</p>'+AYAH_HTML+'</div>'+
     '<div class="wel-meta num"><span>'+K.days+' يوماً</span><span>'+pagesN(daily())+' كل يوم</span><span>اليوم '+Math.max(1,dayNo())+'</span></div>'+
