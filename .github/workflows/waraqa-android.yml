@@ -3,6 +3,9 @@ name: Waraqa Scan Android app
 # Builds the signed Google Play bundle (.aab) and an installable .apk,
 # then publishes both at https://tiloucloud.github.io/waraqa-scan/app/
 on:
+  push:
+    branches: [main]
+    paths: ['waraqa-android/**', '.github/workflows/waraqa-android.yml']
   workflow_dispatch:
 
 permissions:
