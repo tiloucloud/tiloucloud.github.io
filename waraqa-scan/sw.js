@@ -1,9 +1,13 @@
-/* Offline support: cache the app shell, serve it cache-first. Bump VERSION on every release. */
-const VERSION = 'waraqa-v1.0.1';
+/* Offline support. Pages (navigations) are network-first so a new release shows up on the next
+   launch; everything else is cache-first. Bump VERSION on every release. */
+const VERSION = 'waraqa-v1.0.2';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  // cache: 'reload' skips the browser HTTP cache, so a fresh deploy is never cached as the old file.
+  e.waitUntil(caches.open(VERSION)
+    .then((c) => c.addAll(SHELL.map((u) => new Request(u, { cache: 'reload' }))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
@@ -14,12 +18,23 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+function save(req, res) {
+  if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); }
+  return res;
+}
+
 self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
+  const req = e.request;
+  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req, { cache: 'no-cache' }).then((res) => save(req, res))
+        .catch(() => caches.match(req, { ignoreSearch: true }).then((hit) => hit || caches.match('index.html')))
+    );
+    return;
+  }
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then((hit) => hit || fetch(e.request).then((res) => {
-      if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(e.request, copy)); }
-      return res;
-    }).catch(() => caches.match('index.html')))
+    caches.match(req, { ignoreSearch: true }).then((hit) => hit || fetch(req).then((res) => save(req, res))
+      .catch(() => caches.match('index.html')))
   );
 });
