@@ -1,0 +1,20 @@
+{
+  "id": "/waraqa-scan/",
+  "name": "Waraqa Scan — PDF Scanner",
+  "short_name": "Waraqa Scan",
+  "description": "Scan documents to clean PDF files in Arabic, French and English. Works offline; files stay on your device.",
+  "lang": "ar",
+  "dir": "auto",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F4F6F5",
+  "theme_color": "#0F766E",
+  "categories": ["productivity", "utilities", "business"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
