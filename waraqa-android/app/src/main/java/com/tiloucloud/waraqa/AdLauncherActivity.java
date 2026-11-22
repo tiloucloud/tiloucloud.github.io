@@ -96,7 +96,11 @@ public class AdLauncherActivity extends Activity {
         if (done) return;
         done = true;
         handler.removeCallbacksAndMessages(null);
-        startActivity(new Intent(this, LauncherActivity.class));
+        // NEW_TASK is required: without it LauncherActivity restarts itself in a new task, and the
+        // second instance sees the first one still alive and finishes, closing the app on launch.
+        Intent intent = new Intent(this, LauncherActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
         overridePendingTransition(0, 0);
     }
