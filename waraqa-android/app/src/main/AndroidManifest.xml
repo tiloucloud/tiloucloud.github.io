@@ -10,6 +10,20 @@
         android:theme="@android:style/Theme.Translucent.NoTitleBar">
 
         <meta-data android:name="asset_statements" android:resource="@string/assetStatements" />
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="@string/admob_app_id" />
+
+        <!-- Entry screen: shows an occasional app-open ad, then opens the TWA below. -->
+        <activity
+            android:name=".AdLauncherActivity"
+            android:exported="true"
+            android:label="@string/appName"
+            android:screenOrientation="portrait"
+            android:theme="@style/AdSplash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
@@ -23,11 +37,6 @@
             <meta-data android:name="android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION" android:value="300" />
             <meta-data android:name="android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY" android:value="@string/providerAuthority" />
             <meta-data android:name="android.support.customtabs.trusted.SCREEN_ORIENTATION" android:value="portrait" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
