@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#F4F6F5</color>
+    <color name="navColor">#F4F6F5</color>
+    <color name="backgroundColor">#0F766E</color>
+    <string name="appName">ورقة سكان</string>
+    <string name="launchUrl">https://tiloucloud.github.io/waraqa-scan/</string>
+    <string name="providerAuthority">com.tiloucloud.waraqa.fileprovider</string>
+    <string name="assetStatements" translatable="false">[{ \"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://tiloucloud.github.io\"}}]</string>
+</resources>
