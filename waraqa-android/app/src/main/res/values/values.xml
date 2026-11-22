@@ -3,13 +3,13 @@
     <color name="colorPrimary">#F4F6F5</color>
     <color name="navColor">#F4F6F5</color>
     <color name="backgroundColor">#0F766E</color>
-    <string name="appName">ورقة سكان</string>
+    <string name="appName">ورقة Scan</string>
     <string name="launchUrl">https://tiloucloud.github.io/waraqa-scan/</string>
     <string name="providerAuthority">com.tiloucloud.waraqa.fileprovider</string>
     <string name="assetStatements" translatable="false">[{ \"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://tiloucloud.github.io\"}}]</string>
-    <!-- AdMob: real IDs for the "Waraqa Scan" app (App Open unit "Waraqa App Open"). -->
-    <string name="admob_app_id" translatable="false">ca-app-pub-5414755897400086~4849966917</string>
-    <string name="admob_app_open_unit" translatable="false">ca-app-pub-5414755897400086/9790256228</string>
+    <!-- AdMob TEST IDs (closed testing). Real IDs: app ca-app-pub-5414755897400086~4849966917, App Open unit ca-app-pub-5414755897400086/9790256228 -->
+    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_app_open_unit" translatable="false">ca-app-pub-3940256099942544/9257395921</string>
     <style name="AdSplash" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/launch_bg</item>
         <item name="android:statusBarColor">@color/backgroundColor</item>
