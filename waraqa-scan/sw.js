@@ -1,5 +1,5 @@
 /* Offline support: cache the app shell, serve it cache-first. Bump VERSION on every release. */
-const VERSION = 'waraqa-v1.0.0';
+const VERSION = 'waraqa-v1.0.1';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {
