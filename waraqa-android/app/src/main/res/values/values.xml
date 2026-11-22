@@ -7,4 +7,13 @@
     <string name="launchUrl">https://tiloucloud.github.io/waraqa-scan/</string>
     <string name="providerAuthority">com.tiloucloud.waraqa.fileprovider</string>
     <string name="assetStatements" translatable="false">[{ \"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://tiloucloud.github.io\"}}]</string>
+    <!-- AdMob. These are Google's public TEST IDs: they show "Test Ad" banners and earn nothing.
+         Replace both with your own IDs from AdMob before a real release. -->
+    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_app_open_unit" translatable="false">ca-app-pub-3940256099942544/9257395921</string>
+    <style name="AdSplash" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/launch_bg</item>
+        <item name="android:statusBarColor">@color/backgroundColor</item>
+        <item name="android:navigationBarColor">@color/backgroundColor</item>
+    </style>
 </resources>
