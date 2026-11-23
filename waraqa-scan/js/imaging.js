@@ -36,8 +36,35 @@
     return c;
   }
 
+  function dataUrlToBlob(url) {
+    const [head, b64] = url.split(',');
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new Blob([bytes], { type: head.slice(5, head.indexOf(';')) });
+  }
+
+  /**
+   * canvas → Blob. Under memory pressure some Chrome builds never call the toBlob callback,
+   * so after a few seconds (or on a null result) fall back to toDataURL.
+   */
   function canvasToBlob(canvas, type, quality) {
-    return new Promise((resolve) => canvas.toBlob(resolve, type || 'image/jpeg', quality || 0.9));
+    type = type || 'image/jpeg'; quality = quality || 0.9;
+    return new Promise((resolve, reject) => {
+      let done = false;
+      const fallback = () => {
+        if (done) return; done = true;
+        try { resolve(dataUrlToBlob(canvas.toDataURL(type, quality))); } catch (e) { reject(e); }
+      };
+      const timer = setTimeout(fallback, 2500);
+      try {
+        canvas.toBlob((b) => {
+          if (done) return;
+          clearTimeout(timer);
+          if (b) { done = true; resolve(b); } else fallback();
+        }, type, quality);
+      } catch (e) { clearTimeout(timer); fallback(); }
+    });
   }
 
   /* ---------------------------------------------------------------- */

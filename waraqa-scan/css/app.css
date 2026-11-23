@@ -220,3 +220,24 @@ svg.i { width: 22px; height: 22px; flex: none; stroke: currentColor; fill: none;
 .cam-error .btn { min-width: 140px; }
 .cam-error .btn:not(.primary) { background: rgba(255,255,255,.16); color: #fff; }
 .cam-error .btn .i { width: 20px; height: 20px; }
+
+/* Delete buttons and selection mode */
+.doc-row { display: flex; align-items: center; gap: 6px; }
+.doc-row .doc-card { flex: 1; min-width: 0; }
+.row-del { color: var(--muted); flex: none; }
+.row-del:active { color: var(--danger); }
+.page-cell { position: relative; }
+.page-cell .page-tile { width: 100%; }
+.tile-del { position: absolute; top: 4px; inset-inline-end: 4px; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center; background: rgba(17,24,39,.72); color: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+.tile-del .i { width: 18px; height: 18px; }
+.tile-del:active { background: var(--danger); }
+.check { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface);
+  display: grid; place-items: center; flex: none; color: transparent; }
+.check .i { width: 16px; height: 16px; }
+.page-tile .check { position: absolute; top: 12px; inset-inline-end: 12px; }
+.checked .check { background: var(--primary); border-color: var(--primary); color: #fff; }
+.checked .page-tile, .checked .doc-card { outline: 3px solid var(--primary); outline-offset: -3px; }
+.select-bar h1 { flex: 1; font-size: 18px; }
+.actionbar .btn.danger { background: var(--danger); color: #fff; }
+.actionbar .btn.danger:disabled { opacity: .45; }

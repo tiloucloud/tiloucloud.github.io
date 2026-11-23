@@ -29,6 +29,9 @@
     magic: '<path d="m15 4 1.5 3L20 8.5 16.5 10 15 13l-1.5-3L10 8.5 13.5 7zM6 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>',
     expand: '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
     edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+    close: '<path d="M6 6l12 12M18 6 6 18"/>',
+    check: '<path d="m5 12.5 4.5 4.5L19 7"/>',
+    checks: '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="m8 12 3 3 5-6"/>',
     trash: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
     left: '<path d="m15 18-6-6 6-6"/>',
     right: '<path d="m9 18 6-6-6-6"/>',
@@ -185,7 +188,9 @@
   /** Render a page's final image from its source + settings and attach out/thumb blobs. */
   async function renderPage(page, srcCanvas, warpedCache) {
     const src = srcCanvas || (await IM.loadToCanvas(page.src, 99999));
-    const warped = warpedCache || IM.warpPerspective(src, page.corners, CFG.maxPageResolution);
+    // Pages imported from PDF / Word / Excel keep the whole image: a plain resize is much faster than a warp.
+    const whole = page.corners.every((p, i) => Math.abs(p.x - [0, 1, 1, 0][i]) < 1e-6 && Math.abs(p.y - [0, 0, 1, 1][i]) < 1e-6);
+    const warped = warpedCache || (whole ? IM.thumbnail(src, CFG.maxPageResolution) : IM.warpPerspective(src, page.corners, CFG.maxPageResolution));
     const final = IM.rotate(IM.applyFilter(warped, page.filter), page.rotation);
     page.out = await IM.canvasToBlob(final, 'image/jpeg', CFG.jpegQuality);
     page.w = final.width; page.h = final.height;
@@ -215,6 +220,7 @@
   async function show(route) {
     freeUrls();
     if (route.name !== 'camera') stopCamera();
+    if (state.select && !((route.name === 'home' && state.select.kind === 'docs') || (route.name === 'doc' && state.select.kind === 'pages'))) state.select = null;
     window.scrollTo(0, 0);
     if (route.name === 'doc') {
       if (!state.doc || state.doc.id !== route.id) state.doc = await window.Store.get(route.id);
@@ -235,40 +241,78 @@
   /* Home                                                                 */
   /* ------------------------------------------------------------------ */
 
+  /** Header shown while several items are being selected. */
+  function selectBar(count, total) {
+    return `<header class="topbar select-bar">
+        <button class="icon-btn" data-act="sel-close" aria-label="${esc(t('cancel'))}">${icon('close')}</button>
+        <h1>${esc(t('selectedN', count))}</h1>
+        <button class="btn small" data-act="sel-all">${esc(count === total && total ? t('selectNone') : t('selectAll'))}</button>
+      </header>`;
+  }
+
   async function renderHome() {
     const docs = await window.Store.all();
     const persistent = window.Store.isPersistent();
-    app.innerHTML = `<section class="screen" data-screen="home">
-      <header class="topbar">
+    const sel = state.select && state.select.kind === 'docs' ? state.select : null;
+    if (sel) sel.ids = new Set([...sel.ids].filter((id) => docs.some((d) => d.id === id)));
+    app.innerHTML = `<section class="screen ${sel ? 'selecting' : ''}" data-screen="home">
+      ${sel ? selectBar(sel.ids.size, docs.length) : `<header class="topbar">`}${sel ? '' : `
         <div class="brand"><div class="brand-mark">${icon('scan')}</div>
           <div><h1>${esc(appName())}</h1><small>${esc(CFG.tagline[window.I18n.lang] || CFG.tagline.en)}</small></div></div>
         ${state.installPrompt ? `<button class="icon-btn" data-act="install" aria-label="${esc(t('install'))}" title="${esc(t('install'))}">${icon('install')}</button>` : ''}
+        ${docs.length ? `<button class="icon-btn" data-act="select" aria-label="${esc(t('select'))}" title="${esc(t('select'))}">${icon('checks')}</button>` : ''}
         <button class="icon-btn" data-act="settings" aria-label="${esc(t('settings'))}" title="${esc(t('settings'))}">${icon('settings')}</button>
-      </header>
+      </header>`}
       ${persistent ? '' : `<div class="banner">${esc(t('storageWarning'))}</div>`}
       <main class="content">
         ${docs.length ? `<h2 class="section-title">${esc(t('documents'))}</h2>
           <div class="doc-list">${docs.map((d) => `
-            <button class="doc-card" data-doc="${esc(d.id)}">
-              ${d.pages[0] && d.pages[0].thumb ? `<img class="doc-thumb" alt="" src="${blobUrl(d.pages[0].thumb)}">` : '<div class="doc-thumb"></div>'}
-              <div class="doc-meta"><strong>${esc(d.name)}</strong><span>${esc(t('pages', d.pages.length))} · ${esc(formatDate(d.updated))}</span></div>
-              ${icon('right', 'flip-rtl')}
-            </button>`).join('')}</div>`
+            <div class="doc-row ${sel && sel.ids.has(d.id) ? 'checked' : ''}">
+              <button class="doc-card" data-doc="${esc(d.id)}">
+                ${sel ? `<span class="check" aria-hidden="true">${icon('check')}</span>` : ''}
+                ${d.pages[0] && d.pages[0].thumb ? `<img class="doc-thumb" alt="" src="${blobUrl(d.pages[0].thumb)}">` : '<div class="doc-thumb"></div>'}
+                <div class="doc-meta"><strong>${esc(d.name)}</strong><span>${esc(t('pages', d.pages.length))} · ${esc(formatDate(d.updated))}</span></div>
+                ${sel ? '' : icon('right', 'flip-rtl')}
+              </button>
+              ${sel ? '' : `<button class="icon-btn row-del" data-del-doc="${esc(d.id)}" aria-label="${esc(t('deleteDoc'))}" title="${esc(t('deleteDoc'))}">${icon('trash')}</button>`}
+            </div>`).join('')}</div>`
         : `<div class="empty"><div class="art">${icon('doc')}</div><h2>${esc(t('emptyTitle'))}</h2><p>${esc(t('emptyBody'))}</p>
             <div class="privacy-pill">${icon('lock')}${esc(t('privacyNote'))}</div></div>`}
         ${window.Ads ? window.Ads.placeholder('home') : ''}
       </main>
       <footer class="actionbar"><div class="inner">
-        <button class="btn" data-act="import">${icon('image')}${esc(t('import'))}</button>
-        <button class="btn primary" data-act="scan">${icon('camera')}${esc(t('scan'))}</button>
+        ${sel ? `<button class="btn danger" data-act="del-selected" ${sel.ids.size ? '' : 'disabled'}>${icon('trash')}${esc(t('deleteN', sel.ids.size))}</button>`
+          : `<button class="btn" data-act="import">${icon('image')}${esc(t('import'))}</button>
+        <button class="btn primary" data-act="scan">${icon('camera')}${esc(t('scan'))}</button>`}
       </div></footer>
     </section>`;
-    if (window.Ads) window.Ads.mount(app);
+    if (window.Ads && !sel) window.Ads.mount(app);
     app.onclick = async (e) => {
+      const del = e.target.closest('[data-del-doc]');
+      if (del) {
+        const doc = docs.find((x) => x.id === del.dataset.delDoc);
+        if (doc && await confirmDialog(`${t('confirmDeleteDoc')}\n«${doc.name}»`, t('delete'), true)) {
+          await window.Store.remove(doc.id); toast(t('deleted')); renderHome();
+        }
+        return;
+      }
       const d = e.target.closest('[data-doc]');
-      if (d) return go({ name: 'doc', id: d.dataset.doc });
+      if (d) {
+        if (sel) { sel.ids.has(d.dataset.doc) ? sel.ids.delete(d.dataset.doc) : sel.ids.add(d.dataset.doc); return renderHome(); }
+        return go({ name: 'doc', id: d.dataset.doc });
+      }
       const a = e.target.closest('[data-act]');
       if (!a) return;
+      if (a.dataset.act === 'select') { state.select = { kind: 'docs', ids: new Set() }; return renderHome(); }
+      if (a.dataset.act === 'sel-close') { state.select = null; return renderHome(); }
+      if (a.dataset.act === 'sel-all' && sel) {
+        sel.ids = sel.ids.size === docs.length ? new Set() : new Set(docs.map((x) => x.id)); return renderHome();
+      }
+      if (a.dataset.act === 'del-selected' && sel && sel.ids.size) {
+        if (!(await confirmDialog(t('confirmDeleteDocs', sel.ids.size), t('delete'), true))) return;
+        for (const id of sel.ids) await window.Store.remove(id);
+        const n = sel.ids.size; state.select = null; toast(t('deletedN', n)); return renderHome();
+      }
       if (a.dataset.act === 'settings') go({ name: 'settings' });
       if (a.dataset.act === 'scan' || a.dataset.act === 'import') {
         state.doc = { id: window.uid(), name: t('newDocName', stampName(Date.now())), created: Date.now(), pages: [] };
@@ -586,32 +630,62 @@
 
   function renderDoc() {
     const doc = state.doc;
-    app.innerHTML = `<section class="screen" data-screen="doc">
-      <header class="topbar">
+    const sel = state.select && state.select.kind === 'pages' && state.select.doc === doc.id ? state.select : null;
+    app.innerHTML = `<section class="screen ${sel ? 'selecting' : ''}" data-screen="doc">
+      ${sel ? selectBar(sel.ids.size, doc.pages.length) : `<header class="topbar">
         <button class="icon-btn" data-act="back" aria-label="${esc(t('back'))}">${icon('back', 'flip-rtl')}</button>
         <button class="title-btn" data-act="rename" title="${esc(t('rename'))}"><h1>${esc(doc.name)}</h1></button>
+        ${doc.pages.length > 1 ? `<button class="icon-btn" data-act="select" aria-label="${esc(t('select'))}" title="${esc(t('select'))}">${icon('checks')}</button>` : ''}
         <button class="icon-btn" data-act="menu" aria-label="${esc(t('more'))}">${icon('more')}</button>
-      </header>
+      </header>`}
       <main class="content">
         <h2 class="section-title">${esc(t('pages', doc.pages.length))}</h2>
         <div class="page-grid">
-          ${doc.pages.map((p, i) => `<button class="page-tile" data-page="${i}" aria-label="${esc(t('page'))} ${i + 1}">
-            <img alt="" src="${blobUrl(p.thumb)}"><span class="page-num">${i + 1}</span></button>`).join('')}
-          <button class="add-tile" data-act="add">${icon('plus')}${esc(t('addPage'))}</button>
+          ${doc.pages.map((p, i) => `<div class="page-cell ${sel && sel.ids.has(p.id) ? 'checked' : ''}">
+            <button class="page-tile" data-page="${i}" aria-label="${esc(t('page'))} ${i + 1}">
+              <img alt="" src="${blobUrl(p.thumb)}"><span class="page-num">${i + 1}</span>
+              ${sel ? `<span class="check" aria-hidden="true">${icon('check')}</span>` : ''}</button>
+            ${sel ? '' : `<button class="tile-del" data-del-page="${i}" aria-label="${esc(t('delete'))} ${esc(t('page'))} ${i + 1}">${icon('close')}</button>`}
+          </div>`).join('')}
+          ${sel ? '' : `<button class="add-tile" data-act="add">${icon('plus')}${esc(t('addPage'))}</button>`}
         </div>
       </main>
       <footer class="actionbar"><div class="inner">
-        <button class="btn" data-act="add">${icon('camera')}${esc(t('addPage'))}</button>
-        <button class="btn primary" data-act="export" ${doc.pages.length ? '' : 'disabled'}>${icon('pdf')}${esc(t('exportPdf'))}</button>
+        ${sel ? `<button class="btn danger" data-act="del-selected" ${sel.ids.size ? '' : 'disabled'}>${icon('trash')}${esc(t('deleteN', sel.ids.size))}</button>`
+          : `<button class="btn" data-act="add">${icon('camera')}${esc(t('addPage'))}</button>
+        <button class="btn primary" data-act="export" ${doc.pages.length ? '' : 'disabled'}>${icon('pdf')}${esc(t('exportPdf'))}</button>`}
       </div></footer>
     </section>`;
 
+    const removePages = async (ids) => {
+      doc.pages = doc.pages.filter((p) => !ids.has(p.id));
+      state.select = null;
+      if (!doc.pages.length) { await window.Store.remove(doc.id); state.doc = null; return go({ name: 'home' }, true); }
+      await window.Store.put(doc); renderDoc();
+    };
+
     app.onclick = async (e) => {
+      const del = e.target.closest('[data-del-page]');
+      if (del) {
+        const i = +del.dataset.delPage;
+        if (!(await confirmDialog(`${t('confirmDeletePage')} (${t('page')} ${i + 1})`, t('delete'), true))) return;
+        return removePages(new Set([doc.pages[i].id]));
+      }
       const tile = e.target.closest('[data-page]');
-      if (tile) return pageMenu(+tile.dataset.page);
+      if (tile) {
+        if (sel) { const id = doc.pages[+tile.dataset.page].id; sel.ids.has(id) ? sel.ids.delete(id) : sel.ids.add(id); return renderDoc(); }
+        return pageMenu(+tile.dataset.page);
+      }
       const a = e.target.closest('[data-act]');
       if (!a) return;
       const act = a.dataset.act;
+      if (act === 'select') { state.select = { kind: 'pages', doc: doc.id, ids: new Set() }; return renderDoc(); }
+      if (act === 'sel-close') { state.select = null; return renderDoc(); }
+      if (act === 'sel-all' && sel) { sel.ids = sel.ids.size === doc.pages.length ? new Set() : new Set(doc.pages.map((p) => p.id)); return renderDoc(); }
+      if (act === 'del-selected' && sel && sel.ids.size) {
+        if (!(await confirmDialog(t('confirmDeletePages', sel.ids.size), t('delete'), true))) return;
+        const n = sel.ids.size; await removePages(new Set(sel.ids)); toast(t('deletedN', n)); return;
+      }
       if (act === 'back') back();
       if (act === 'rename') {
         const name = await promptDialog(t('docName'), doc.name);
