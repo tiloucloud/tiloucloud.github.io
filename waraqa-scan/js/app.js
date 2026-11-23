@@ -272,7 +272,7 @@
       if (a.dataset.act === 'settings') go({ name: 'settings' });
       if (a.dataset.act === 'scan' || a.dataset.act === 'import') {
         state.doc = { id: window.uid(), name: t('newDocName', stampName(Date.now())), created: Date.now(), pages: [] };
-        await addPages(a.dataset.act === 'scan');
+        await addPages(a.dataset.act === 'scan' ? 'camera' : 'choose');
       }
       if (a.dataset.act === 'install' && state.installPrompt) {
         state.installPrompt.prompt();
@@ -283,10 +283,21 @@
   }
 
   /** Pick photos; one photo → open editor, several → process all and show the document. */
-  /** Add pages: the live camera (auto-capture) or files of any supported type. */
-  async function addPages(camera) {
-    if (camera) return openCamera();
-    const files = await pickFiles({ multiple: true });
+  const DOC_ACCEPT = '.pdf,.docx,.docm,.xlsx,.xlsm,.xls,.ods,.csv,.tsv,.txt,.md,.json,.xml,.html,.htm,.rtf,' +
+    'application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,' +
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,' +
+    'application/vnd.oasis.opendocument.spreadsheet,text/csv,text/plain,text/html,image/*';
+
+  /** Add pages. mode: 'camera' (live camera), 'gallery' (photo picker), 'files' (PDF, Word, Excel…), 'choose' (ask). */
+  async function addPages(mode) {
+    if (mode === true || mode === 'camera') return openCamera();
+    if (mode === 'choose' || mode === false) {
+      return sheet(t('import'), [
+        { icon: 'image', label: t('importGallery'), onClick: () => addPages('gallery') },
+        { icon: 'doc', label: t('importFiles'), onClick: () => addPages('files') }
+      ]);
+    }
+    const files = await pickFiles({ multiple: true, accept: mode === 'gallery' ? 'image/*' : DOC_ACCEPT });
     if (files.length) await importFiles(files);
   }
 
@@ -375,6 +386,32 @@
     else if (replaceRoute) back();
   }
 
+  /** The live camera could not start: explain why and offer retry / the phone's camera app. */
+  function cameraError(err) {
+    const name = (err && err.name) || 'Error';
+    const denied = name === 'NotAllowedError' || name === 'SecurityError';
+    const box = document.createElement('div');
+    box.className = 'cam-error';
+    box.innerHTML = `<p><strong>${esc(t('cameraDenied'))}</strong></p>
+      ${denied ? `<p>${esc(t('camHelpDenied'))}</p>` : ''}
+      <p class="cam-code">${esc(name)}${err && err.message ? ' — ' + esc(String(err.message).slice(0, 120)) : ''}</p>
+      <div class="btns">
+        <button class="btn primary" data-act="retry">${esc(t('camRetry'))}</button>
+        <button class="btn" data-act="system">${icon('camera')}${esc(t('camSystem'))}</button>
+      </div>`;
+    const view = $('.cam-view');
+    if (view) view.appendChild(box);
+    const hint = $('.cam-hint'); if (hint) hint.hidden = true;
+    app.onclick = async (e) => {
+      const a = e.target.closest('[data-act]');
+      if (!a) return;
+      if (a.dataset.act === 'close') back();
+      if (a.dataset.act === 'retry') renderCamera();
+      if (a.dataset.act === 'system') cameraFallback(true);
+      if (a.dataset.act === 'gallery') { const files = await pickFiles({ multiple: true, accept: 'image/*' }); if (files.length) await importFiles(files, true); }
+    };
+  }
+
   async function renderCamera() {
     if (!state.doc) return go({ name: 'home' }, true);
     const auto = window.Settings.get('autoCapture', true);
@@ -404,18 +441,24 @@
     const RING = 2 * Math.PI * 36;
     ring.style.strokeDasharray = RING; ring.style.strokeDashoffset = RING;
 
-    let stream;
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: { facingMode: { ideal: 'environment' }, width: { ideal: 3840 }, height: { ideal: 2160 } }
-      });
-    } catch (err) {
-      console.warn(err);
-      toast(t('cameraDenied'));
-      return cameraFallback(true);
+    // Some phones refuse high resolutions (NotReadableError / OverconstrainedError): try smaller requests.
+    const ATTEMPTS = [
+      { facingMode: { ideal: 'environment' }, width: { ideal: 2560 }, height: { ideal: 1440 } },
+      { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } },
+      { facingMode: { ideal: 'environment' } },
+      true
+    ];
+    let stream = null, lastErr = null;
+    for (const video of ATTEMPTS) {
+      try { stream = await navigator.mediaDevices.getUserMedia({ audio: false, video }); break; }
+      catch (err) {
+        console.warn('getUserMedia', err);
+        lastErr = err;
+        if (err && (err.name === 'NotAllowedError' || err.name === 'SecurityError')) break;
+      }
     }
-    if (!$('[data-screen="camera"]')) { stream.getTracks().forEach((tr) => tr.stop()); return; }
+    if (!$('[data-screen="camera"]')) { if (stream) stream.getTracks().forEach((tr) => tr.stop()); return; }
+    if (!stream) return cameraError(lastErr);
     const track = stream.getVideoTracks()[0];
     cam = { stream, track, auto, quad: null, shown: null, stable: 0, capturing: false, torch: false, stopped: false };
     video.srcObject = stream;
@@ -529,7 +572,7 @@
         a.classList.toggle('on', cam.torch);
       }
       if (act === 'gallery') {
-        const files = await pickFiles({ multiple: true });
+        const files = await pickFiles({ multiple: true, accept: 'image/*' });
         if (!files.length) return;
         stopCamera();
         await importFiles(files, true);
@@ -586,8 +629,9 @@
       }
       if (act === 'add') {
         sheet(t('addPage'), [
-          { icon: 'camera', label: t('scan'), onClick: () => addPages(true) },
-          { icon: 'image', label: t('import'), onClick: () => addPages(false) }
+          { icon: 'camera', label: t('scan'), onClick: () => addPages('camera') },
+          { icon: 'image', label: t('importGallery'), onClick: () => addPages('gallery') },
+          { icon: 'doc', label: t('importFiles'), onClick: () => addPages('files') }
         ]);
       }
       if (act === 'export') exportDoc();

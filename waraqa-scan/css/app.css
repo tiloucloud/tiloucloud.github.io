@@ -212,3 +212,11 @@ svg.i { width: 22px; height: 22px; flex: none; stroke: currentColor; fill: none;
 .shutter .ring { stroke: #22C55E; stroke-linecap: round; transition: stroke-dashoffset .12s linear; }
 .shutter .dot { width: 62px; height: 62px; border-radius: 50%; background: #fff; transition: transform .1s; }
 .shutter:active .dot { transform: scale(.9); }
+.cam-error { position: absolute; left: 16px; right: 16px; top: 50%; transform: translateY(-50%); padding: 18px; border-radius: 18px;
+  background: rgba(17,24,39,.92); color: #fff; text-align: center; font-size: 15px; line-height: 1.5; }
+.cam-error p { margin: 0 0 10px; }
+.cam-error .cam-code { font-size: 12px; opacity: .7; direction: ltr; }
+.cam-error .btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.cam-error .btn { min-width: 140px; }
+.cam-error .btn:not(.primary) { background: rgba(255,255,255,.16); color: #fff; }
+.cam-error .btn .i { width: 20px; height: 20px; }

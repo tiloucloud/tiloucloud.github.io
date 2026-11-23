@@ -1,6 +1,6 @@
 /* Offline support. App files are network-first, so a new release shows up on the next launch;
    the cache is only used offline. Bump VERSION on every release. */
-const VERSION = 'waraqa-v1.2.0';
+const VERSION = 'waraqa-v1.2.1';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'js/config.js', 'js/i18n.js', 'js/db.js', 'js/imaging.js', 'js/pdf.js', 'js/importers.js', 'js/ads.js', 'js/app.js',

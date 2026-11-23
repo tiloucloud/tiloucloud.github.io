@@ -31,8 +31,8 @@
       notDetected: 'لم يتم العثور على حواف واضحة — عدّل النقاط يدويًا',
       storageWarning: 'التخزين غير متاح في هذا المتصفح: صدّر مستنداتك قبل الإغلاق.',
       install: 'تثبيت التطبيق', more: 'المزيد', docName: 'اسم المستند',
-      camFind: 'وجّه الكاميرا نحو الورقة', camHold: 'ثبّت الهاتف… جارٍ الالتقاط', camShot: 'تم الالتقاط', camTap: 'اضغط على الزر للالتقاط',
-      camAuto: 'تلقائي', camManual: 'يدوي', torch: 'الفلاش', gallery: 'ملفات',
+      camFind: 'وجّه الكاميرا نحو الورقة', camHold: 'ثبّت الهاتف… جارٍ الالتقاط', camShot: 'تم الالتقاط', camRetry: 'إعادة المحاولة', camSystem: 'كاميرا الهاتف', camHelpDenied: 'اسمح باستعمال الكاميرا: إعدادات الهاتف ← التطبيقات ← Chrome ← الأذونات ← الكاميرا، ثم في Chrome: الإعدادات ← إعدادات المواقع ← الكاميرا.', importGallery: 'صور من المعرض', importFiles: 'ملفات (PDF، Word، Excel…)', camTap: 'اضغط على الزر للالتقاط',
+      camAuto: 'تلقائي', camManual: 'يدوي', torch: 'الفلاش', gallery: 'المعرض',
       cameraDenied: 'تعذّر فتح الكاميرا — اسمح للتطبيق باستعمالها', importing: 'جارٍ الاستيراد',
       unsupportedFile: 'نوع الملف غير مدعوم (حوّله إلى PDF أو DOCX)', errorFile: 'تعذّر فتح هذا الملف'
     },
@@ -62,8 +62,8 @@
       notDetected: 'Bords non détectés — ajustez les points à la main',
       storageWarning: 'Stockage indisponible dans ce navigateur : exportez vos documents avant de fermer.',
       install: 'Installer l’application', more: 'Plus', docName: 'Nom du document',
-      camFind: 'Visez le document', camHold: 'Ne bougez plus… capture', camShot: 'Capturé', camTap: 'Appuyez sur le bouton pour capturer',
-      camAuto: 'Auto', camManual: 'Manuel', torch: 'Flash', gallery: 'Fichiers',
+      camFind: 'Visez le document', camHold: 'Ne bougez plus… capture', camShot: 'Capturé', camRetry: 'Réessayer', camSystem: 'Appareil photo du téléphone', camHelpDenied: 'Autorisez la caméra : Paramètres du téléphone → Applications → Chrome → Autorisations → Caméra, puis dans Chrome : Paramètres → Paramètres des sites → Caméra.', importGallery: 'Photos de la galerie', importFiles: 'Fichiers (PDF, Word, Excel…)', camTap: 'Appuyez sur le bouton pour capturer',
+      camAuto: 'Auto', camManual: 'Manuel', torch: 'Flash', gallery: 'Galerie',
       cameraDenied: 'Impossible d’ouvrir la caméra — autorisez l’accès', importing: 'Importation',
       unsupportedFile: 'Format non pris en charge (convertissez-le en PDF ou DOCX)', errorFile: 'Impossible d’ouvrir ce fichier'
     },
@@ -93,8 +93,8 @@
       notDetected: 'No clear edges found — adjust the points by hand',
       storageWarning: 'Storage is unavailable in this browser: export your documents before closing.',
       install: 'Install app', more: 'More', docName: 'Document name',
-      camFind: 'Point the camera at the document', camHold: 'Hold still… capturing', camShot: 'Captured', camTap: 'Tap the button to capture',
-      camAuto: 'Auto', camManual: 'Manual', torch: 'Flash', gallery: 'Files',
+      camFind: 'Point the camera at the document', camHold: 'Hold still… capturing', camShot: 'Captured', camRetry: 'Try again', camSystem: 'Phone camera app', camHelpDenied: 'Allow the camera: phone Settings → Apps → Chrome → Permissions → Camera, then in Chrome: Settings → Site settings → Camera.', importGallery: 'Photos from gallery', importFiles: 'Files (PDF, Word, Excel…)', camTap: 'Tap the button to capture',
+      camAuto: 'Auto', camManual: 'Manual', torch: 'Flash', gallery: 'Gallery',
       cameraDenied: 'Could not open the camera — allow camera access', importing: 'Importing',
       unsupportedFile: 'Unsupported file type (convert it to PDF or DOCX)', errorFile: 'Could not open this file'
     }
