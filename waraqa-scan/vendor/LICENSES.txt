@@ -1,0 +1,8 @@
+Third-party libraries bundled in this folder (loaded only when importing such files):
+
+- pdf.min.mjs, pdf.worker.min.mjs — PDF.js 4.10.38, Mozilla Foundation. Apache License 2.0.
+  https://github.com/mozilla/pdf.js
+- mammoth.browser.min.js — Mammoth 1.13.0 (Word .docx → HTML), Michael Williamson. BSD 2-Clause License.
+  https://github.com/mwilliamson/mammoth.js
+- xlsx.full.min.js — SheetJS Community Edition 0.18.5 (Excel / ODS / CSV). Apache License 2.0.
+  https://sheetjs.com
