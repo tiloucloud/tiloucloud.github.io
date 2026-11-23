@@ -744,15 +744,18 @@ function sync(){
   }).catch(function(){}):Promise.resolve();
   var p=pre.then(function(){if(!d)return;sent=JSON.stringify(toR());return fetch(url(),{method:'PATCH',body:JSON.stringify(d)}).then(function(r){if(!r.ok)throw 0;prev=JSON.parse(sent)})});
   p.then(function(){return fetch(url(),{cache:'no-store'})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){
-    online=true;
+    online=true;flushPend();
     if(!r||!r.members){
       if(seed&&seed.members){S={v:3,khatma:seed.khatma,members:seed.members};seed=null}
       if(!S.members.length){prev={khatma:S.khatma,members:{}};return}
       return fetch(url(),{method:'PUT',body:JSON.stringify(toR())}).then(function(x){if(!x.ok)throw 0;prev=toR();cache();render()});
     }
     if(prev&&edits!==e0)return;
-    var before=JSON.stringify(S);
-    S=fromR(r);prev=toR();cache();prMerge(r.pr);histMerge(r.hist);var rqc=rqMerge(r.rq);
+    var before=JSON.stringify(S),lm=me?mem(me):null,lp=lm?lm.p:0,lk=S&&S.khatma?S.khatma.start+'|'+(S.khatma.r||0):'';
+    S=fromR(r);prev=toR();
+    /* pages read offline before the app was closed: keep the larger of this phone and the server, unless the khatma was restarted */
+    var sm=me?mem(me):null;if(sm&&lp>sm.p&&lk===S.khatma.start+'|'+(S.khatma.r||0)){sm.p=Math.min(LAST,lp);histPush(sm);edits++}
+    cache();prMerge(r.pr);histMerge(r.hist);var rqc=rqMerge(r.rq);
     if(pendAdd&&pendAdd.length){
       if(amOwner()&&owner()){var pas=pendAdd;pendAdd=null;var did=[],had=[];pas.forEach(function(pa,i){var ex=null;S.members.forEach(function(x){if(x.name===pa.n)ex=x});if(ex){if(pa.p>ex.p){ex.p=Math.min(pa.p,LAST);did.push(pa.n+' ← '+ex.p)}else had.push(pa.n)}else{S.members.push({id:'m'+Date.now().toString(36)+i,name:pa.n,p:Math.min(pa.p,LAST)});did.push(pa.n)}});edits++;cache();showNote(did.length?('✅ تمّ: '+did.join('، ')+(had.length?' (موجودون أصلاً: '+had.join('، ')+')':'')):('الأسماء موجودة أصلاً في القائمة: '+had.join('، ')),true);
         return fetch(url(),{method:'PATCH',body:JSON.stringify(diff(prev,toR())||{})}).then(function(){prev=toR();render()})}
@@ -762,6 +765,11 @@ function sync(){
   }).catch(function(){online=false}).then(function(){syncing=false;if(was!==online&&!sheet&&!reading)render();if(prev&&diff(prev,toR())&&online)setTimeout(sync,500)});
 }
 function save(){edits++;render();cache();sync()}
+/* prayer ticks and daily progress saved while offline are sent once the server answers again */
+function flushPend(){if(!code||!CFG.db)return;var b=CFG.db.replace(/\/+$/,'')+'/k/'+code;
+  [[PRP,'/pr/'],[HISTP,'/hist/']].forEach(function(x){var P=x[0];Object.keys(P).forEach(function(k){var q=P[k];
+    if(q.c&&q.c!==code){delete P[k];pendSave();return}
+    fetch(b+x[1]+q.m+'/'+q.d+'.json',{method:'PUT',body:String(q.v)}).then(function(r){if(r.ok&&P[k]&&P[k].v===q.v){delete P[k];pendSave()}}).catch(function(){})})})}
 function dlAll(){
   var list=[],i=0,n;
   for(n=1;n<=30;n++){list.push('juz/'+(n<10?'0':'')+n+'.js');list.push('m/'+(n<10?'0':'')+n+'.js')}
@@ -836,7 +844,8 @@ var MSRC={1:'«تذكرة الأريب في تفسير الغريب» لابن �
 
 /* ---------- prayer tracker ---------- */
 var PRN=['الفجر','الظهر','العصر','المغرب','العشاء'],PRQ=[["وَامُرَ اَهْلَكَ بِالصَّلَوٰةِ وَاصْطَبِرْ عَلَيْهَاۖ", "طه"], ["حَٰفِظُواْ عَلَى اَ۬لصَّلَوَٰتِ وَالصَّلَوٰةِ اِ۬لْوُسْط۪ىٰ", "البقرة"], ["إِنَّ اَ۬لصَّلَوٰةَ تَنْه۪ىٰ عَنِ اِ۬لْفَحْشَآءِ وَالْمُنكَرِۖ", "العنكبوت"], ["قَدَ اَفْلَحَ اَ۬لْمُومِنُونَۖ اَ۬لذِينَ هُمْ فِے صَلَاتِهِمْ خَٰشِعُونَ", "المؤمنون"], ["وَاسْتَعِينُواْ بِالصَّبْرِ وَالصَّلَوٰةِۖ", "البقرة"]],PRH=[["الصلاةُ نور", "رواه مسلم"], ["أرِحْنا بها يا بلال", "رواه أبو داود"], ["وجُعِلَت قُرّةُ عيني في الصلاة", "رواه النسائي"], ["أحبُّ العمل إلى الله الصلاةُ على وقتها", "متفق عليه"], ["إنّ أولَ ما يُحاسَبُ به العبدُ يومَ القيامة من عمله صلاتُه", "رواه الترمذي"]];
-var PR={},PRP={};try{PR=JSON.parse(localStorage.getItem('kf_pr')||'{}')||{}}catch(e){PR={}}
+var PR={},PRP={};try{PR=JSON.parse(localStorage.getItem('kf_pr')||'{}')||{};PRP=JSON.parse(localStorage.getItem('kf_prp')||'{}')||{}}catch(e){PR={}}
+function pendSave(){try{localStorage.setItem('kf_prp',JSON.stringify(PRP));localStorage.setItem('kf_histp',JSON.stringify(HISTP))}catch(e){}}
 function prMerge(r){var o={},id,d;r=r||{};for(id in r)if(r[id]&&typeof r[id]==='object'){o[id]={};for(d in r[id])o[id][d]=+r[id][d]||0}
   for(var k in PRP){var q=PRP[k];(o[q.m]=o[q.m]||{})[q.d]=q.v}
   PR=o;try{localStorage.setItem('kf_pr',JSON.stringify(PR))}catch(e){}}
@@ -845,9 +854,9 @@ function prDay(o){var t=today();t.setDate(t.getDate()-o);return iso(t)}
 function prStreak(m){var n=0,o=prGet(m,prDay(0))===31?0:1;for(;o<400&&prGet(m,prDay(o))===31;o++)n++;return n}
 function prWeek(m){var n=0;for(var o=0;o<7;o++){var v=prGet(m,prDay(o));while(v){n+=v&1;v>>=1}}return n}
 function prSet(i){if(!me||!code)return;var d=prDay(0),v=prGet(me,d)^(1<<i),key=me+d;
-  (PR[me]=PR[me]||{})[d]=v;PRP[key]={m:me,d:d,v:v};try{localStorage.setItem('kf_pr',JSON.stringify(PR))}catch(e){}
+  (PR[me]=PR[me]||{})[d]=v;PRP[key]={m:me,d:d,v:v,c:code};pendSave();try{localStorage.setItem('kf_pr',JSON.stringify(PR))}catch(e){}
   render();
-  if(CFG.db)fetch(CFG.db.replace(/\/+$/,'')+'/k/'+code+'/pr/'+me+'/'+d+'.json',{method:'PUT',body:String(v)}).then(function(r){if(r.ok&&PRP[key]&&PRP[key].v===v)delete PRP[key]}).catch(function(){})}
+  if(CFG.db)fetch(CFG.db.replace(/\/+$/,'')+'/k/'+code+'/pr/'+me+'/'+d+'.json',{method:'PUT',body:String(v)}).then(function(r){if(r.ok&&PRP[key]&&PRP[key].v===v){delete PRP[key];pendSave()}}).catch(function(){})}
 function gTog(v){var p=v.split('|'),m=mem(p[0]);if(!m)return;var gs=guards(m),i=gs.indexOf(p[1]);if(i>=0)gs.splice(i,1);else gs.push(p[1]);m.g=gs.join(',');save()}
 function guards(m){return (m&&m.g?m.g.split(','):[]).filter(Boolean)}
 function myKids(){return S.members.filter(function(m){return m.id!==me&&guards(m).indexOf(me)>=0})}
@@ -970,13 +979,13 @@ document.addEventListener('visibilitychange',function(){if(document.hidden){clea
 wlPing();
 
 /* ---------- encouragement badges ---------- */
-var HIST={},HISTP={};try{HIST=JSON.parse(localStorage.getItem('kf_hist')||'{}')||{}}catch(e){HIST={}}
+var HIST={},HISTP={};try{HIST=JSON.parse(localStorage.getItem('kf_hist')||'{}')||{};HISTP=JSON.parse(localStorage.getItem('kf_histp')||'{}')||{}}catch(e){HIST={}}
 function histMerge(r){var o={},id,d;r=r||{};for(id in r)if(r[id]&&typeof r[id]==='object'){o[id]={};for(d in r[id])o[id][d]=+r[id][d]||0}
   for(var k in HISTP){var q=HISTP[k];o[q.m]=o[q.m]||{};if(!(o[q.m][q.d]>=q.v))o[q.m][q.d]=q.v}
   HIST=o;try{localStorage.setItem('kf_hist',JSON.stringify(HIST))}catch(e){}}
 function histPush(m){if(!m||!code)return;var d=iso(today()),key=m.id+d,v=m.p;
-  (HIST[m.id]=HIST[m.id]||{})[d]=v;HISTP[key]={m:m.id,d:d,v:v};try{localStorage.setItem('kf_hist',JSON.stringify(HIST))}catch(e){}
-  if(CFG.db)fetch(CFG.db.replace(/\/+$/,'')+'/k/'+code+'/hist/'+m.id+'/'+d+'.json',{method:'PUT',body:String(v)}).then(function(r){if(r.ok&&HISTP[key]&&HISTP[key].v===v)delete HISTP[key]}).catch(function(){})}
+  (HIST[m.id]=HIST[m.id]||{})[d]=v;HISTP[key]={m:m.id,d:d,v:v,c:code};pendSave();try{localStorage.setItem('kf_hist',JSON.stringify(HIST))}catch(e){}
+  if(CFG.db)fetch(CFG.db.replace(/\/+$/,'')+'/k/'+code+'/hist/'+m.id+'/'+d+'.json',{method:'PUT',body:String(v)}).then(function(r){if(r.ok&&HISTP[key]&&HISTP[key].v===v){delete HISTP[key];pendSave()}}).catch(function(){})}
 function dateOf(dn){var t=pd(S.khatma.start);t.setDate(t.getDate()+dn-1);return iso(t)}
 function pAt(m,dn){var h=HIST[m.id]||{},d=dateOf(dn),best=-1,k;for(k in h)if(k<=d&&k>=S.khatma.start&&h[k]>best)best=h[k];
   if(dn===dayNo())best=Math.max(best,m.p);return best}
@@ -1456,7 +1465,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 51</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 52</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
