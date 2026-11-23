@@ -275,7 +275,7 @@ function vSession(){
 }
 function afterSess(){var p=document.getElementById('pgr');if(!p)return;var n=p.children.length;if(pi>=n)pi=n-1;if(pi<0)pi=0;
   if(p.children[pi])p.children[pi].scrollIntoView({behavior:'instant',inline:'start',block:'nearest'});
-  var tm;p.addEventListener('scroll',function(){clearTimeout(tm);tm=setTimeout(function(){var w=p.clientWidth||1,k=Math.round(Math.abs(p.scrollLeft)/w);if(k>=n)k=n-1;pi=k;var l=document.getElementById('pgl');if(l)l.textContent=(k+1)+' / '+n},90)},{passive:true})}
+  var tm;p.addEventListener('scroll',function(){clearTimeout(tm);tm=setTimeout(function(){if(!p.isConnected||document.getElementById('pgr')!==p)return;var w=p.clientWidth||1,k=Math.round(Math.abs(p.scrollLeft)/w);if(k>=n)k=n-1;pi=k;var l=document.getElementById('pgl');if(l)l.textContent=(k+1)+' / '+n},90)},{passive:true})}
 function goPg(k,smooth){var p=document.getElementById('pgr');if(!p)return;if(k<0||k>=p.children.length)return;pi=k;p.children[k].scrollIntoView({behavior:smooth?'smooth':'instant',inline:'start',block:'nearest'});var l=document.getElementById('pgl');if(l)l.textContent=(k+1)+' / '+p.children.length}
 
 /* ---- timed reading for long counts (screen kept awake) ---- */
@@ -305,7 +305,9 @@ document.addEventListener('visibilitychange',function(){if(document.hidden&&AUTO
 function tapItem(i){var its=itemsFor(sess,pIdx),pg=jget(progKey(),{}),it=its[i];if(!it)return;
   var c=pg[i]||0;if(c>=it.n)return;pg[i]=c+1;ls(progKey(),JSON.stringify(pg));
   try{navigator.vibrate&&navigator.vibrate(c+1>=it.n?[20,40,30]:12)}catch(e){}
-  var all=its.every(function(x,j){return (pg[j]||0)>=x.n});
+  var all=its.every(function(x,j){return (pg[j]||0)>=x.n}),card=document.getElementById('dk'+i);
+  if(c+1<it.n&&card&&!AUTO){var left=it.n-(c+1),dn=card.querySelector('.dn'),cb=card.querySelector('.cb b'),go=card.querySelector('.ab.go');
+    if(dn)dn.innerHTML='بقي <b class="num">'+left+'</b> من '+it.n;if(cb)cb.textContent=left;if(go)go.textContent='⏱ اقرأ بعدّاد المدة · ≈ '+aFmt(left*aPer(it));return}
   render();
   if(c+1>=it.n){var nx=null;for(var j=i+1;j<its.length;j++)if((pg[j]||0)<its[j].n){nx=j;break}
     if(nx!==null&&!all)setTimeout(function(){goPg(nx,true)},300)}
