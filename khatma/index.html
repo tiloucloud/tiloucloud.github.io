@@ -543,6 +543,9 @@ html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
 .prb span svg{width:22px;height:22px;color:#2a1d00}
 .prb.on span{background:linear-gradient(180deg,#f0d384,#c9a24a);border-color:#c9a24a;box-shadow:0 4px 10px -4px rgba(155,112,25,.7)}
 .pr-m{text-align:center;margin-top:8px;font-size:14px;color:var(--em,#0a3b31);font-weight:600}
+.focus .fdur{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.focus .fdur .btn{padding:4px 6px;flex-direction:column;gap:0;line-height:1.2}.fwk{font-size:13.5px;color:var(--muted)}
+.fbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 12px;background:var(--primary);color:#fff;font-size:14px}.fbar .btn{background:#fff;color:var(--primary);border-color:#fff;min-height:32px}
+.feed .fi{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:6px}.feed .fh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.feed .fdel{margin-inline-start:auto}.fq{margin:0;padding:8px 12px;border-inline-start:3px solid var(--primary);background:var(--line);border-radius:10px;line-height:1.8}.fa{display:flex;gap:8px;flex-wrap:wrap}.fr{font-size:12.5px}.fc{display:grid;gap:6px;font-size:14px;padding:8px 10px;border-radius:12px;background:var(--bg,#f6f1e4)}.fc p{margin:0;line-height:1.7}
 .sunan .sub{margin-top:-4px}.sn-f{font-size:15px;line-height:1.9;padding:10px 12px;border-radius:14px;background:var(--bg,#f6f1e4);border:1px solid var(--line)}.sn-f small{display:block;font-size:12px;color:var(--muted)}.sn-ok{width:100%}
 .pr-pv{text-align:center;font-size:12px;color:var(--muted,#5d6e67);margin-top:4px}
 .prd{display:inline-flex;gap:4px}.prd i{width:10px;height:10px;border-radius:50%;border:1.5px solid #c9a24a}.prd i.on{background:#c9a24a}
@@ -755,7 +758,7 @@ function sync(){
     S=fromR(r);prev=toR();
     /* pages read offline before the app was closed: keep the larger of this phone and the server, unless the khatma was restarted */
     var sm=me?mem(me):null;if(sm&&lp>sm.p&&lk===S.khatma.start+'|'+(S.khatma.r||0)){sm.p=Math.min(LAST,lp);histPush(sm);edits++}
-    cache();prMerge(r.pr);histMerge(r.hist);var rqc=rqMerge(r.rq);
+    cache();prMerge(r.pr);histMerge(r.hist);fsMerge(r.fs);var rqc=rqMerge(r.rq);
     if(pendAdd&&pendAdd.length){
       if(amOwner()&&owner()){var pas=pendAdd;pendAdd=null;var did=[],had=[];pas.forEach(function(pa,i){var ex=null;S.members.forEach(function(x){if(x.name===pa.n)ex=x});if(ex){if(pa.p>ex.p){ex.p=Math.min(pa.p,LAST);did.push(pa.n+' ← '+ex.p)}else had.push(pa.n)}else{S.members.push({id:'m'+Date.now().toString(36)+i,name:pa.n,p:Math.min(pa.p,LAST)});did.push(pa.n)}});edits++;cache();showNote(did.length?('✅ تمّ: '+did.join('، ')+(had.length?' (موجودون أصلاً: '+had.join('، ')+')':'')):('الأسماء موجودة أصلاً في القائمة: '+had.join('، ')),true);
         return fetch(url(),{method:'PATCH',body:JSON.stringify(diff(prev,toR())||{})}).then(function(){prev=toR();render()})}
@@ -767,6 +770,7 @@ function sync(){
 function save(){edits++;render();cache();sync()}
 /* prayer ticks and daily progress saved while offline are sent once the server answers again */
 function flushPend(){if(!code||!CFG.db)return;var b=CFG.db.replace(/\/+$/,'')+'/k/'+code;
+  Object.keys(FSP).forEach(function(k){var q=FSP[k];if(q.c!==code){delete FSP[k];fsSave();return}fetch(b+'/fs/'+k+'.json',{method:'PUT',body:JSON.stringify(q.v)}).catch(function(){})});
   [[PRP,'/pr/'],[HISTP,'/hist/']].forEach(function(x){var P=x[0];Object.keys(P).forEach(function(k){var q=P[k];
     if(q.c&&q.c!==code){delete P[k];pendSave();return}
     fetch(b+x[1]+q.m+'/'+q.d+'.json',{method:'PUT',body:String(q.v)}).then(function(r){if(r.ok&&P[k]&&P[k].v===q.v){delete P[k];pendSave()}}).catch(function(){})})})}
@@ -842,6 +846,59 @@ function vMsgs(){
 var AYAH_HTML='<p class="tnf" aria-label="قال الله تعالى: وفي ذلك فليتنافس المتنافسون"><span class="ab">﴿</span><span class="aw">وَفِے ذَٰلِكَ فَلْيَتَنَافَسِ اِ۬لْمُتَنَٰفِسُونَۖ</span><span class="ab">﴾</span></p>';
 var MSRC={1:'«تذكرة الأريب في تفسير الغريب» لابن الجوزي',2:'«التبيان في تفسير غريب القرآن» لابن الهائم'};
 
+/* ---------- جلسة ورد مركّزة + مجلس العائلة ---------- */
+var FSO=[],FS={},FSP={},focus=null,fT=null,fsOpen={};try{FSP=JSON.parse(localStorage.getItem('kf_fsp')||'{}')||{}}catch(e){FSP={}}
+function fsSave(){try{localStorage.setItem('kf_fsp',JSON.stringify(FSP))}catch(e){}}
+function fsMerge(r){var o={},k,ch=false;r=r||{};for(k in r)if(r[k]&&typeof r[k]==='object'&&r[k].m)o[k]=r[k];for(k in FSP){if(o[k]){delete FSP[k];ch=true}else if(FSP[k].c===code)o[k]=FSP[k].v}if(ch)fsSave();
+  /* keep my own taps (reactions, comments, deletions) visible until the server copy catches up */
+  var nw=Date.now();FSO=FSO.filter(function(q){return nw-q.t<30000});FSO.forEach(function(q){var x=o[q.id];if(q.del&&!q.k){delete o[q.id];return}if(!x)return;var bag=x[q.k]=Object.assign({},x[q.k]||{});if(q.del)delete bag[q.s];else bag[q.s]=q.v});FS=o}
+function minN(n){return n===1?'دقيقة واحدة':n===2?'دقيقتان':n<=10?n+' دقائق':n+' دقيقة'}
+function sesN(n){return n===1?'جلسة واحدة':n===2?'جلستين':n<=10?n+' جلسات':n+' جلسة'}
+function fsBase(){return CFG.db.replace(/\/+$/,'')+'/k/'+code+'/fs/'}
+function fsSlot(t){var h=new Date(t).getHours();return h<5?'في الليل':h<8?'بعد الفجر':h<12?'في الضحى':h<15?'بعد الظهر':h<18?'بعد العصر':h<20?'بعد المغرب':'بعد العشاء'}
+function fsAgo(t){var d=iso(new Date(t)),n=iso(today());if(d===n)return 'اليوم';var y=today();y.setDate(y.getDate()-1);return d===iso(y)?'أمس':d}
+function fsList(days){var lim=Date.now()-days*864e5;return Object.keys(FS).map(function(k){var x=FS[k];return{id:k,x:x}}).filter(function(o){return (+o.x.at||0)>=lim}).sort(function(a,b){return b.x.at-a.x.at})}
+function fsCnt(o){return o?Object.keys(o).filter(function(k){return o[k]}).length:0}
+function fmtClock(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+function fStart(min){var m=mem(me);if(!m)return;focus={min:min,t0:Date.now(),end:Date.now()+min*6e4,n:0};var ra=resumeAt(m);goPage(ra.pg,ra.ay);clearInterval(fT);fT=setInterval(fTick,1000)}
+function fTick(){if(!focus)return clearInterval(fT);var left=(focus.end-Date.now())/1000,el=document.getElementById('fclock');if(el)el.textContent=fmtClock(left);wlPing();
+  if(left<=0){clearInterval(fT);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}fEnd()}}
+function fEnd(){if(!focus)return;clearInterval(fT);focus.used=Math.max(1,Math.round((Math.min(Date.now(),focus.end)-focus.t0)/6e4));
+  if(Date.now()-focus.t0<45e3){focus=null;if(reading)closeReader();return}
+  sheet='fsum';render()}
+function fDone(share){var f=focus,x='';focus=null;sheet=null;
+  if(share&&f&&code&&CFG.db){var ta=document.getElementById('fsText');x=ta?ta.value.trim().slice(0,200):'';
+    var id='f'+Date.now().toString(36)+(me||''),v={m:me,min:f.used,pg:f.n,at:Date.now(),x:x};
+    FS[id]=v;FSP[id]={c:code,v:v};fsSave();
+    fetch(fsBase()+id+'.json',{method:'PUT',body:JSON.stringify(v)}).catch(function(){});
+    showNote('شاركتَ جلستك مع العائلة، تقبّل الله منك',true)}
+  if(reading)closeReader();else render()}
+function vFsum(){var f=focus;if(!f)return '';
+  return '<div class="scrim"><div class="sheet fsum" role="dialog" aria-modal="true"><h3>تقبّل الله منك 🌿</h3>'+
+    '<p class="msg num">أعطيتَ القرآن <b>'+minN(f.used)+'</b>'+(f.n?' وقرأتَ <b>'+pagesN(f.n)+'</b>':'')+'.</p>'+
+    '<label for="fsText">آية أو فائدة استوقفتك، لتتدارسها مع العائلة (اختياري)</label><textarea id="fsText" rows="3" maxlength="200" placeholder="مثال: آية في سورة الكهف ذكّرتني بأن…"></textarea>'+
+    '<button class="btn" data-act="fshare">'+I('share')+'شارك العائلة</button><button class="btn quiet" data-act="fskip">احفظها لنفسي فقط</button>'+
+    '<p class="sub">والآن انتقل إلى عملك التالي بقلب حاضر، كما كنت حاضراً مع القرآن.</p></div></div>'}
+function vFocus(){var m=mem(me);if(!m||!code)return '';
+  var wk=fsList(7),mins=0;wk.forEach(function(o){mins+=+o.x.min||0});
+  return '<section class="card stack focus"><h2 class="ctitle">⏳ جلسة ورد مركّزة</h2><p class="sub">اختر وقتاً تعطيه للقرآن وحده، بلا انشغال بغيره. وحين ينتهي، تنتقل إلى عملك التالي بهدوء.</p>'+
+    '<div class="fdur">'+[10,15,20,30].map(function(n){return '<button class="btn ghost sm" data-act="fstart" data-v="'+n+'"><b class="num">'+n+'</b> '+(n===10?'دقائق':'دقيقة')+'</button>'}).join('')+'</div>'+
+    (wk.length?'<p class="fwk num">تركيز العائلة هذا الأسبوع: <b>'+minN(mins)+'</b> في '+sesN(wk.length)+'</p>':'')+'</section>'}
+function vFeed(){if(!code)return '';var L=fsList(3).slice(0,8);if(!L.length)return '';
+  return '<section class="card stack feed"><h2 class="ctitle">'+I('chat')+'مجلس العائلة</h2><p class="sub">جلسات التركيز وما استوقف كل واحد منّا. شجّعوا بعضكم وتدارسوا.</p>'+
+    L.map(function(o){var x=o.x,mm=mem(x.m),nm=mm?mm.name:'فرد',rs=x.r||{},mine=!!(me&&rs[me]),cs=x.c?Object.keys(x.c).map(function(k){return{id:k,c:x.c[k]}}).filter(function(z){return z.c&&z.c.x}).sort(function(a,b){return a.c.at-b.c.at}):[],op=fsOpen[o.id];
+      return '<article class="fi"><p class="fh"><b>'+esc(nm)+'</b> <span class="sub num">'+fsAgo(x.at)+' · '+fsSlot(x.at)+'</span>'+((x.m===me||amOwner())?'<button class="lnk fdel" data-act="fsdel" data-v="'+o.id+'" aria-label="حذف">حذف</button>':'')+'</p>'+
+        '<p class="num">جلسة تركيز: <b>'+minN(+x.min||0)+'</b>'+(x.pg?' · '+pagesN(+x.pg):'')+'</p>'+
+        (x.x?'<blockquote class="fq">'+esc(x.x)+'</blockquote>':'')+
+        '<div class="fa"><button class="btn sm '+(mine?'':'ghost')+'" data-act="fsr" data-v="'+o.id+'" aria-pressed="'+mine+'">🤲 تقبّل الله'+(fsCnt(rs)?' <span class="num">'+fsCnt(rs)+'</span>':'')+'</button>'+
+        '<button class="btn sm quiet" data-act="fsc" data-v="'+o.id+'">💬 '+(cs.length?'<span class="num">'+cs.length+'</span> ':'')+'تعليق</button></div>'+
+        (rs&&fsCnt(rs)?'<p class="sub fr">'+Object.keys(rs).filter(function(k){return rs[k]}).map(function(k){var z=mem(k);return z?esc(z.name):''}).filter(Boolean).join('، ')+'</p>':'')+
+        (op||cs.length?'<div class="fc">'+cs.slice(op?0:-2).map(function(z){var zm=mem(z.c.m);return '<p><b>'+esc(zm?zm.name:'فرد')+':</b> '+esc(z.c.x)+((z.c.m===me||amOwner())?' <button class="lnk" data-act="fscdel" data-v="'+o.id+'|'+z.id+'">حذف</button>':'')+'</p>'}).join('')+
+          (op?'<form class="form" data-form="fsc" data-v="'+o.id+'"><input id="fsc_'+o.id+'" maxlength="160" autocomplete="off" placeholder="اكتب تعليقاً أو فائدة…" aria-label="تعليق"><button class="btn sm" type="submit">أرسل</button></form>':'')+'</div>':'')+
+        '</article>'}).join('')+'</section>'}
+function fsPut(path,val,del){if(!CFG.db||!code)return;fetch(fsBase()+path+'.json',del?{method:'DELETE'}:{method:'PUT',body:JSON.stringify(val)}).then(function(r){if(!r.ok)throw 0}).catch(function(){showNote('تحتاج اتصالاً بالإنترنت لهذا')})}
+function fsReact(id){var x=FS[id];if(!x||!me)return;x.r=Object.assign({},x.r||{});var on=!x.r[me];if(on)x.r[me]=true;else delete x.r[me];FSO.push({id:id,k:'r',s:me,v:true,del:!on,t:Date.now()});fsPut(id+'/r/'+me,true,!on);render()}
+function fsComment(id,t){var x=FS[id];t=(t||'').trim().slice(0,160);if(!x||!me||!t)return;var cid='c'+Date.now().toString(36),v={m:me,x:t,at:Date.now()};x.c=Object.assign({},x.c||{});x.c[cid]=v;FSO.push({id:id,k:'c',s:cid,v:v,t:Date.now()});fsOpen[id]=true;fsPut(id+'/c/'+cid,v);render()}
 /* ---------- prayer tracker ---------- */
 var PRN=['الفجر','الظهر','العصر','المغرب','العشاء'],PRQ=[["وَامُرَ اَهْلَكَ بِالصَّلَوٰةِ وَاصْطَبِرْ عَلَيْهَاۖ", "طه"], ["حَٰفِظُواْ عَلَى اَ۬لصَّلَوَٰتِ وَالصَّلَوٰةِ اِ۬لْوُسْط۪ىٰ", "البقرة"], ["إِنَّ اَ۬لصَّلَوٰةَ تَنْه۪ىٰ عَنِ اِ۬لْفَحْشَآءِ وَالْمُنكَرِۖ", "العنكبوت"], ["قَدَ اَفْلَحَ اَ۬لْمُومِنُونَۖ اَ۬لذِينَ هُمْ فِے صَلَاتِهِمْ خَٰشِعُونَ", "المؤمنون"], ["وَاسْتَعِينُواْ بِالصَّبْرِ وَالصَّلَوٰةِۖ", "البقرة"]],PRH=[["الصلاةُ نور", "رواه مسلم"], ["أرِحْنا بها يا بلال", "رواه أبو داود"], ["وجُعِلَت قُرّةُ عيني في الصلاة", "رواه النسائي"], ["أحبُّ العمل إلى الله الصلاةُ على وقتها", "متفق عليه"], ["إنّ أولَ ما يُحاسَبُ به العبدُ يومَ القيامة من عمله صلاتُه", "رواه الترمذي"]];
 var PR={},PRP={};try{PR=JSON.parse(localStorage.getItem('kf_pr')||'{}')||{};PRP=JSON.parse(localStorage.getItem('kf_prp')||'{}')||{}}catch(e){PR={}}
@@ -1162,6 +1219,7 @@ function vAdmin(){
 function vSheet(){
   if(!sheet)return '';
   if(sheet==='donec')return mem(me)?vDone():'';
+  if(sheet==='fsum')return vFsum();
   var p=sheet.split(':'),k=p[0],a=p[1],h='',m,n;
   if(k==='juz'){
     n=+a;m=mem(me);var mt=Q.meta[n-1];
@@ -1345,7 +1403,7 @@ var WC={},DW={},END={},VER=null,VKEY='';
 function vkey(){return 'kf_rd_'+S.khatma.start+'_'+(S.khatma.r||0)+'_'+(me||'')}
 function ver(){var k=vkey();if(VKEY!==k){VKEY=k;DW={};END={};try{VER=localStorage.getItem(k)||''}catch(e){VER=''}if(VER.length!==LAST)VER=new Array(LAST+1).join('0')}return VER}
 function isRead(p){return ver().charAt(p-1)==='1'}
-function setRead(p){var v=ver();VER=v.substr(0,p-1)+'1'+v.substr(p);try{localStorage.setItem(VKEY,VER)}catch(e){}}
+function setRead(p){var v=ver();if(focus&&v.charAt(p-1)!=='1')focus.n++;VER=v.substr(0,p-1)+'1'+v.substr(p);try{localStorage.setItem(VKEY,VER)}catch(e){}}
 // about 0.63 s per word: a typical 142-word page takes ~1 min 30 s, as measured by a real reader
 function need(p){return WC[p]?Math.max(20,Math.round(WC[p]*0.518)):9999}
 function dur(s){var m=Math.floor(s/60),r=s%60;return m?(m===1?'دقيقة':m===2?'دقيقتان':m+' دقائق')+(r?' و'+r+' ثانية':''):s+' ثانية'}
@@ -1425,7 +1483,7 @@ function barsHTML(){
     '<button class="ib bmbtn'+(bm&&bm.pg===p?' on':'')+'" data-act="bmpage" aria-pressed="'+!!(bm&&bm.pg===p)+'" aria-label="'+(bm&&bm.pg===p?'أزل العلامة':'ضع علامة على هذه الصفحة')+'">'+I('mark')+'</button>'+
     '<button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر">أ<small>أ</small></button>'+
     '<button class="ib'+(tjOn?' on':'')+'" data-act="open" data-v="tjs" aria-label="ألوان التجويد">'+I('pal')+'</button>'+
-    '<button class="ib" data-act="open" data-v="idx" aria-label="فهرس المصحف">'+I('list')+'</button></div></div>';
+    '<button class="ib" data-act="open" data-v="idx" aria-label="فهرس المصحف">'+I('list')+'</button></div>'+(focus?'<div class="fbar"><span>⏳ جلسة مركّزة · بقي <b id="fclock" class="num">'+fmtClock((focus.end-Date.now())/1000)+'</b></span><button class="btn sm" data-act="fend">أنهيت</button></div>':'')+'</div>';
   var wb='';
   if(m&&m.p<LAST){var dn2=dayNo(),done=dn2>0&&m.p>=targetAt(dn2),T=done?Math.min(LAST,targetAt(dn2+1)):Math.max(targetAt(dn2),m.p+1),left=T-m.p,ra=resumeAt(m);
     wb='<div class="wbar"><div><span><small>'+(done?(left>0?'أتممتَ وِرد اليوم ✓ · وِرد الغد':'سبقتَ بوِرد الغد'):'وِرد اليوم')+'</small><b class="num">'+(left>0?'بقي '+pagesN(left)+' · حتى ص '+T:'بارك الله فيك')+'</b></span>'+
@@ -1464,8 +1522,8 @@ function render(){
   var h=hijri();
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
-    (code?vRqNote()+vSolo()+vWird()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 52</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    (code?vRqNote()+vSolo()+vWird()+vFocus()+vFeed()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 53</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
@@ -1475,6 +1533,10 @@ root.addEventListener('toggle',function(e){var k=e.target.getAttribute&&e.target
 root.addEventListener('click',function(e){
   var el=e.target.closest('[data-act]');if(!el||!root.contains(el))return;
   var act=el.getAttribute('data-act'),v=el.getAttribute('data-v'),m;
+  if(act==='fstart'){fStart(+v);return}if(act==='fend'){fEnd();return}if(act==='fshare'){fDone(true);return}if(act==='fskip'){fDone(false);return}
+  if(act==='fsr'){fsReact(v);return}if(act==='fsc'){fsOpen[v]=!fsOpen[v];render();var ci=document.getElementById('fsc_'+v);if(ci)ci.focus();return}
+  if(act==='fsdel'){var fx=FS[v];if(fx&&(fx.m===me||amOwner())){delete FS[v];delete FSP[v];fsSave();FSO.push({id:v,del:true,t:Date.now()});fsPut(v,null,true);render()}return}
+  if(act==='fscdel'){var pp=v.split('|'),fy=FS[pp[0]];if(fy&&fy.c&&fy.c[pp[1]]&&(fy.c[pp[1]].m===me||amOwner())){fy.c=Object.assign({},fy.c);delete fy.c[pp[1]];FSO.push({id:pp[0],k:'c',s:pp[1],del:true,t:Date.now()});fsPut(pp[0]+'/c/'+pp[1],null,true);render()}return}
   if(act==='vid'){openVid(v);return}else if(act==='pray'){prSet(+v);return}else if(act==='gtog'){gTog(v);return}else if(act==='enter'){welcome=false;try{localStorage.setItem('kf_wc',(+localStorage.getItem('kf_wc')||0)+1)}catch(_){}render();window.scrollTo(0,0);return}
   if(act==='donex'){if(el.classList.contains('scrim')&&e.target!==el)return;try{localStorage.setItem(doneKey(),'1')}catch(_){}sheet=null;render();return}
   if(act==='notify'){enableNotif();return}
@@ -1490,7 +1552,7 @@ root.addEventListener('click',function(e){
   if(act==='goto'){goPage(+v);return}
   if(act==='sura'){goPage(Q.si[+v-1][1]);return}
   if(act==='sundone'){try{localStorage.getItem(v)?localStorage.removeItem(v):localStorage.setItem(v,'1')}catch(_){}render();return}
-  if(act==='back'){closeReader();return}
+  if(act==='back'){if(focus){fEnd();return}closeReader();return}
   if(act==='fs'){if(big){bfs=Math.max(28,Math.min(56,bfs+ +v));try{localStorage.setItem('kf_bfs',bfs)}catch(_){}}else{fs=Math.max(18,Math.min(40,fs+ +v));try{localStorage.setItem('kf_fs',fs)}catch(_){}}refill(true);render();return}
   if(act==='paperok'){
     m=mem(me);var pv=parseInt((document.getElementById('paperTo')||{}).value,10),pe=document.getElementById('paperErr');
@@ -1538,6 +1600,7 @@ root.addEventListener('click',function(e){
 root.addEventListener('submit',function(e){
   e.preventDefault();
   var f=e.target.getAttribute('data-form');
+  if(f==='fsc'){var fid=e.target.getAttribute('data-v'),fin=document.getElementById('fsc_'+fid);fsComment(fid,fin&&fin.value);return}
   if((f==='addm'||f==='renm'||f==='newk')&&!amOwner())return;
   if(f==='addm'){
     var name=document.getElementById('newMember').value.trim();if(!name)return;

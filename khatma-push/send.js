@@ -15,7 +15,7 @@ const LAST = 604;
 
 function slotNow() {
   const s = (process.env.SLOT || '').trim();
-  if (s === 'am' || s === 'pm' || s === 'kahf' || s === 'night') return s;
+  if (s === 'am' || s === 'pm' || s === 'kahf' || s === 'night' || s === 'fs') return s;
   return new Date().getUTCHours() < 13 ? 'am' : 'pm';
 }
 function dayNo(k, now) {
@@ -45,6 +45,43 @@ function buildSunan(data, msgs, slot, now) {
     out.push({ id, sub: { endpoint: s.e, keys: s.k }, payload: { title: sn.title, body, tag: 'khatma-' + slot, url: SITE } });
   }
   return { dn: data.khatma ? dayNo(data.khatma, now) : 0, out };
+}
+
+// Focus sessions shared in the family council since the last run: tell the
+// rest of the family, and tell a session's author about new comments on it.
+const mins = (n) => n === 1 ? 'دقيقة واحدة' : n === 2 ? 'دقيقتان' : n <= 10 ? n + ' دقائق' : n + ' دقيقة';
+function buildFs(data, since, now) {
+  const members = data.members || {}, subs = data.subs || {}, fsd = data.fs || {};
+  const name = (id) => (members[id] && members[id].name) || 'أحد أفراد العائلة';
+  const fresh = (t) => +t > since && +t <= now.getTime() && now.getTime() - t < 12 * 3600e3;
+  const sess = [], com = [];
+  for (const [id, x] of Object.entries(fsd)) {
+    if (!x || !x.m) continue;
+    if (fresh(x.at)) sess.push(x);
+    for (const c of Object.values(x.c || {})) if (c && c.m && c.x && c.m !== x.m && fresh(c.at)) com.push({ to: x.m, c });
+  }
+  const out = [];
+  for (const [id, s] of Object.entries(subs)) {
+    if (!s || !s.e || !s.k) continue;
+    const mine = sess.filter((x) => x.m !== s.m);
+    const cs = com.filter((z) => z.to === s.m && z.c.m !== s.m);
+    let title, body;
+    if (mine.length) {
+      const who = [...new Set(mine.map((x) => name(x.m)))];
+      const tot = mine.reduce((t, x) => t + (+x.min || 0), 0);
+      title = '🌿 ' + (who.length === 1 ? who[0] : who.slice(0, -1).join('، ') + ' و' + who[who.length - 1]) + ' في مجلس العائلة';
+      const q = mine.find((x) => x.x);
+      body = (mine.length === 1 ? 'جلسة تركيز مع القرآن: ' : 'جلسات تركيز مع القرآن: ') + mins(tot) + '.' +
+        (q ? '\n«' + String(q.x).slice(0, 90) + (String(q.x).length > 90 ? '…' : '') + '»' : '') + '\nشجّعوا بعضكم بـ«تقبّل الله» وشاركوا في النقاش.'
+      if (cs.length) body += '\n💬 وعلى جلستك تعليق جديد من ' + [...new Set(cs.map((z) => name(z.c.m)))].join('، ') + '.';
+    } else if (cs.length) {
+      const who = [...new Set(cs.map((z) => name(z.c.m)))];
+      title = '💬 تعليق جديد على جلستك';
+      body = who.join('، ') + ': «' + String(cs[cs.length - 1].c.x).slice(0, 90) + '»';
+    } else continue;
+    out.push({ id, sub: { endpoint: s.e, keys: s.k }, payload: { title, body, tag: 'khatma-fs', url: SITE } });
+  }
+  return out;
 }
 
 function buildMessages(data, msgs, slot, now) {
@@ -98,7 +135,7 @@ async function main() {
   const msgs = JSON.parse(fs.readFileSync(path.join(__dirname, 'msgs.json'), 'utf8'));
   const slot = slotNow(), now = new Date();
   const h = now.getUTCHours();
-  const late = { am: h >= 12, pm: h >= 22 || h < 12, kahf: h < 5 || h >= 16, night: h < 19 || h >= 23 }[slot];
+  const late = { am: h >= 12, pm: h >= 22 || h < 12, kahf: h < 5 || h >= 16, night: h < 19 || h >= 23, fs: h < 7 || h >= 22 }[slot];
   if (!process.env.FORCE && late) {
     console.log(`slot=${slot} started too late (${h}:00 UTC); skipping so nobody is woken up.`); return;
   }
@@ -117,7 +154,16 @@ async function main() {
   let sent = 0, gone = 0, failed = 0, fams = 0;
   for (const { code, data } of jobs) {
     if (!data || !data.khatma) continue;
-    const { dn, out } = buildMessages(data, msgs, slot, now);
+    let dn = 0, out;
+    if (slot === 'fs') {
+      if (!data.fs) continue;
+      const since = +data.fsn || 0;
+      out = since ? buildFs(data, since, now) : []; // first run only sets the marker, so old sessions are not announced
+      if (!DRY && DB && process.env.DATA_FILE == null) {
+        const SECRET = process.env.DB_SECRET || '';
+        await fetch(DB + '/k/' + code + '/fsn.json' + (SECRET ? '?auth=' + encodeURIComponent(SECRET) : ''), { method: 'PUT', body: String(now.getTime()) }).catch(() => {});
+      }
+    } else ({ dn, out } = buildMessages(data, msgs, slot, now));
     fams++;
     console.log(`khatma #${fams}: slot=${slot} day=${dn} subscriptions=${Object.keys(data.subs || {}).length} to_send=${out.length}`);
     if (DRY) { for (const o of out) console.log('---', o.id, '\n' + o.payload.title + '\n' + o.payload.body); continue; }
@@ -137,4 +183,4 @@ async function main() {
 }
 
 if (require.main === module) main().catch((e) => { console.error(e.message); process.exit(1); });
-module.exports = { buildMessages, fill, dayNo };
+module.exports = { buildMessages, buildFs, fill, dayNo };
