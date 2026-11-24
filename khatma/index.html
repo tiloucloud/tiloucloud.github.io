@@ -554,6 +554,8 @@ html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
 /* 16px+ inputs stop phones from zooming in when typing */
 .fc input,.fc textarea,#fsText,.fsum textarea{font-size:16px}
 .fc .form{display:flex;flex-direction:column;gap:8px;align-items:stretch}.fc .form textarea{min-height:64px;max-height:40vh;resize:vertical;background:#fff}.fc .form .btn{align-self:flex-end}.fc p{white-space:pre-line}.feed .fh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.feed .fdel{margin-inline-start:auto}.fq{white-space:pre-line;margin:0;padding:8px 12px;border-inline-start:3px solid var(--primary);background:var(--line);border-radius:10px;line-height:1.8}.fa{display:flex;gap:8px;flex-wrap:wrap}.fr{font-size:12.5px}.fc{display:grid;gap:6px;font-size:14px;padding:8px 10px;border-radius:12px;background:var(--bg,#f6f1e4)}.fc p{margin:0;line-height:1.7}
+.pr-y{font-size:13px;color:var(--muted);margin:10px 0 4px}.pr-yr .prb{transform:scale(.82);transform-origin:top center;margin-bottom:-10px;opacity:.9}
+.pdr{display:grid;gap:6px;padding:8px 0;border-top:1px solid var(--line)}.pdr b{font-size:14px}.pdr div{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.pdc{min-height:40px;border-radius:12px;border:1.5px solid #d9c591;background:#fff;font:inherit;font-size:13px;color:var(--ink,#14261f)}.pdc.on{background:linear-gradient(180deg,#f6dc8c,#d4a94a);border-color:#c99a3c;font-weight:700}
 .sunan .sub{margin-top:-4px}.sn-f{font-size:15px;line-height:1.9;padding:10px 12px;border-radius:14px;background:var(--bg,#f6f1e4);border:1px solid var(--line)}.sn-f small{display:block;font-size:12px;color:var(--muted)}.sn-ok{width:100%}
 .pr-pv{text-align:center;font-size:12px;color:var(--muted,#5d6e67);margin-top:4px}
 .prd{display:inline-flex;gap:4px}.prd i{width:10px;height:10px;border-radius:50%;border:1.5px solid #c9a24a}.prd i.on{background:#c9a24a}
@@ -942,11 +944,18 @@ function prMerge(r){var o={},id,d;r=r||{};for(id in r)if(r[id]&&typeof r[id]==='
 function prGet(m,d){return (PR[m]&&PR[m][d])||0}
 function prDay(o){var t=today();t.setDate(t.getDate()-o);return iso(t)}
 function prStreak(m){var n=0,o=prGet(m,prDay(0))===31?0:1;for(;o<400&&prGet(m,prDay(o))===31;o++)n++;return n}
+/* prayer badges: every recorded prayer counts, so one missed tap never wipes out the effort */
+var PTL=[50,100,250,500],PSL=[3,7,15,30];
+function prTotal(m){var n=0,o=PR[m]||{};for(var d in o){var v=+o[d]||0;while(v){n+=v&1;v>>=1}}return n}
+function prBest(m){var o=PR[m]||{},ds=Object.keys(o).filter(function(d){return o[d]===31}).sort(),b=0,c=0,prev=null;
+  ds.forEach(function(d){var t=new Date(d+'T12:00:00');c=(prev&&Math.round((t-prev)/864e5)===1)?c+1:1;prev=t;if(c>b)b=c});return b}
+function lvl(n,L){var l=0;L.forEach(function(x,i){if(n>=x)l=i+1});return l}
 function prWeek(m){var n=0;for(var o=0;o<7;o++){var v=prGet(m,prDay(o));while(v){n+=v&1;v>>=1}}return n}
-function prSet(i){if(!me||!code)return;var d=prDay(0),v=prGet(me,d)^(1<<i),key=me+d;
-  (PR[me]=PR[me]||{})[d]=v;PRP[key]={m:me,d:d,v:v,c:code};pendSave();try{localStorage.setItem('kf_pr',JSON.stringify(PR))}catch(e){}
+/* o = days ago (0 today, 1 yesterday); id = whose prayers (default: me; others only for the khatma owner) */
+function prSet(i,o,id){if(!me||!code)return;id=id||me;var d=prDay(o||0),v=prGet(id,d)^(1<<i),key=id+d;
+  (PR[id]=PR[id]||{})[d]=v;PRP[key]={m:id,d:d,v:v,c:code};pendSave();try{localStorage.setItem('kf_pr',JSON.stringify(PR))}catch(e){}
   render();
-  if(CFG.db)fetch(CFG.db.replace(/\/+$/,'')+'/k/'+code+'/pr/'+me+'/'+d+'.json',{method:'PUT',body:String(v)}).then(function(r){if(r.ok&&PRP[key]&&PRP[key].v===v){delete PRP[key];pendSave()}}).catch(function(){})}
+  if(CFG.db)fetch(CFG.db.replace(/\/+$/,'')+'/k/'+code+'/pr/'+id+'/'+d+'.json',{method:'PUT',body:String(v)}).then(function(r){if(r.ok&&PRP[key]&&PRP[key].v===v){delete PRP[key];pendSave()}}).catch(function(){})}
 function gTog(v){var p=v.split('|'),m=mem(p[0]);if(!m)return;var gs=guards(m),i=gs.indexOf(p[1]);if(i>=0)gs.splice(i,1);else gs.push(p[1]);m.g=gs.join(',');save()}
 function guards(m){return (m&&m.g?m.g.split(','):[]).filter(Boolean)}
 function myKids(){return S.members.filter(function(m){return m.id!==me&&guards(m).indexOf(me)>=0})}
@@ -955,8 +964,10 @@ function vPray(){
   var m=mem(me);if(!m||!guards(m).length)return '';
   var v=prGet(me,prDay(0)),st=prStreak(me),all=v===31,gs=guards(m).map(function(id){var x=mem(id);return x?x.name:''}).filter(Boolean);
   var b='';for(var i=0;i<5;i++)b+='<button class="prb'+(v>>i&1?' on':'')+'" data-act="pray" data-v="'+i+'" aria-pressed="'+(v>>i&1?'true':'false')+'"><span>'+(v>>i&1?I('check'):'')+'</span>'+PRN[i]+'</button>';
-  return '<section class="card pray"><div class="pr-h"><h2 class="ctitle">صلواتي اليوم</h2>'+(st?'<span class="pr-st num">'+(st>=7?'🕌':'🌟')+' '+st+' '+(st===1?'يوم':st===2?'يومان':st<=10?'أيام':'يوماً')+'</span>':'')+'</div>'+
+  return '<section class="card pray"><div class="pr-h"><h2 class="ctitle">صلواتي اليوم</h2>'+(st?'<span class="pr-st num">'+(st>=7?'🕌':'🌟')+' '+st+' '+(st===1?'يوم':st===2?'يومان':st<=10?'أيام':'يوماً')+'</span>':(prWeek(me)?'<span class="pr-st num">🌟 '+prWeek(me)+' صلاة هذا الأسبوع</span>':''))+'</div>'+
     '<div class="pr-row">'+b+'</div>'+
+    (new Date().getHours()<12?(function(){var y=prGet(me,prDay(1)),r='';for(var i=0;i<5;i++)r+='<button class="prb sm'+(y>>i&1?' on':'')+'" data-act="prayy" data-v="'+i+'" aria-pressed="'+(y>>i&1?'true':'false')+'"><span>'+(y>>i&1?I('check'):'')+'</span>'+PRN[i]+'</button>';
+      return '<p class="pr-y">نسيتَ تسجيل صلاة البارحة؟ سجّلها هنا حتى الظهر:</p><div class="pr-row pr-yr">'+r+'</div>'})():'')+
     '<p class="pr-m">'+(all?'أحسنتَ، حافظتَ على صلواتك الخمس اليوم. تقبّل الله منك 🌟':'اضغط على الصلاة بعد أن تؤدّيها')+'</p>'+
     '<p class="pr-pv">🔒 لا تدخل في سباق العائلة، ويراها: '+esc(gs.join('، '))+'</p></section>';
 }
@@ -1087,6 +1098,13 @@ function msLevel(m){var l=0;MSL.forEach(function(x,i){if(m.p>=Math.round(LAST*x[
 function juzDone(m){var n=0;for(var j=0;j<30;j++)if(m.p>=Q.meta[j][1])n++;return n}
 function famDone(){var dn=dayNo();if(dn<1||!S.members.length)return false;var t=targetAt(dn);return S.members.every(function(m){return m.p>=t})}
 function miniBadges(m){var st=wStreak(m),ml=msLevel(m),h='';if(ml)h+='<span title="'+MSL[ml-1][2]+'">'+MSL[ml-1][1]+'</span>';if(st>=3)h+='<span class="num" title="'+st+' أيام متتالية">⭐'+st+'</span>';return h?'<span class="mb">'+h+'</span>':''}
+function vPrBadges(){var tot=prTotal(me),bs=prBest(me),wk=prWeek(me),tl=lvl(tot,PTL),sl=lvl(bs,PSL);
+  var a=PSL.map(function(x,i){return '<li class="'+(i<sl?'on':'')+'"><b>🕌</b><small class="num">'+x+' '+(x<=10?'أيام':'يوماً')+' كاملة</small></li>'}).join('');
+  var b=PTL.map(function(x,i){return '<li class="'+(i<tl?'on':'')+'"><b>🤲</b><small class="num">'+x+' صلاة</small></li>'}).join('');
+  var nx=PTL[tl];
+  return '<h3>الصلاة <small class="num">هذا الأسبوع '+wk+' من 35</small></h3><ul class="bl">'+a+'</ul><ul class="bl" style="margin-top:6px">'+b+'</ul>'+
+    '<p class="bt num">سجّلتَ '+tot+' صلاة'+(nx?'، بقي '+(nx-tot)+' للعلامة التالية':'، ما شاء الله')+'</p>'+
+    '<p class="bq">«أحبُّ العمل إلى الله الصلاةُ على وقتها» <small>متفق عليه</small></p>'}
 function vBadges(){
   var m=mem(me);if(!m)return '';
   var st=wStreak(m),sl=stLevel(st),ml=msLevel(m),jd=juzDone(m),cur=juzOf(Math.min(LAST,m.p+1));
@@ -1099,18 +1117,22 @@ function vBadges(){
     '<h2 class="ctitle">علاماتي</h2>'+
     '<h3>المداومة</h3><ul class="bl">'+stars+'</ul><p class="bt">'+stTxt+'</p>'+
     '<p class="bq">«أحبُّ الأعمال إلى الله أدومُها وإن قلّ» <small>متفق عليه</small></p>'+
+    (guards(m).length?vPrBadges():'')+
     '<h3>مراحل الختمة</h3><ul class="bl">'+ms+'</ul>'+
     '<h3>الأجزاء <small class="num">'+jd+' من 30</small></h3><div class="jz">'+jz+'</div></section>';
 }
 var BKEY=function(){return 'kf_bdg_'+S.khatma.start+'_'+(S.khatma.r||0)+'_'+(me||'')};
 function checkBadges(){var m=mem(me);if(!m||sheet||reading||welcome)return;
   var seen={};try{seen=JSON.parse(localStorage.getItem(BKEY())||'{}')||{}}catch(e){}
-  var st=wStreak(m),sl=stLevel(st),ml=msLevel(m),ps=mem(me)?prStreak(me):0,news=null;
-  if(seen.s===undefined&&seen.m===undefined){seen={s:sl,m:ml,ps:ps>=7?1:0};try{localStorage.setItem(BKEY(),JSON.stringify(seen))}catch(e){}return}
+  var st=wStreak(m),sl=stLevel(st),ml=msLevel(m),ps=mem(me)?prStreak(me):0,news=null,pg=guards(m).length,pl=pg?lvl(prBest(me),PSL):0,pt=pg?lvl(prTotal(me),PTL):0;
+  if(seen.pl===undefined){seen.pl=pl;seen.pt=pt}
+  if(seen.s===undefined&&seen.m===undefined){seen={s:sl,m:ml,ps:ps>=7?1:0,pl:pl,pt:pt};try{localStorage.setItem(BKEY(),JSON.stringify(seen))}catch(e){}return}
   if(ml>(seen.m||0))news={i:MSL[ml-1][1],t:'بلغتَ '+MSL[ml-1][2],q:ml===4?'ختمتَ كتاب الله، تقبّل الله منك وجعله شفيعاً لك.':'«خيركم من تعلّم القرآن وعلّمه» (رواه البخاري)'};
   else if(sl>(seen.s||0))news={i:'⭐',t:'نجمة المداومة: '+STL[sl-1]+' '+(STL[sl-1]<=10?'أيام':'يوماً')+' متتالية',q:'«أحبُّ الأعمال إلى الله أدومُها وإن قلّ» (متفق عليه)'};
+  else if(pl>(seen.pl||0))news={i:'🕌',t:'حافظتَ على صلواتك الخمس '+PSL[pl-1]+' '+(PSL[pl-1]<=10?'أيام':'يوماً')+' متتالية',q:'«أحبُّ العمل إلى الله الصلاةُ على وقتها» (متفق عليه)'};
+  else if(pt>(seen.pt||0))news={i:'🤲',t:'سجّلتَ '+PTL[pt-1]+' صلاة، ما شاء الله',q:'«الصلاة نور» (رواه مسلم)'};
   else if(ps>=7&&!seen.ps&&guards(m).length)news={i:'🕌',t:'حافظتَ على صلواتك الخمس 7 أيام متتالية',q:'«أحبُّ العمل إلى الله الصلاةُ على وقتها» (متفق عليه)'};
-  seen.m=Math.max(seen.m||0,ml);seen.s=Math.max(seen.s||0,sl);if(ps>=7)seen.ps=1;try{localStorage.setItem(BKEY(),JSON.stringify(seen))}catch(e){}
+  seen.m=Math.max(seen.m||0,ml);seen.s=Math.max(seen.s||0,sl);seen.pl=Math.max(seen.pl||0,pl);seen.pt=Math.max(seen.pt||0,pt);if(pl>=2)seen.ps=1;if(ps>=7)seen.ps=1;try{localStorage.setItem(BKEY(),JSON.stringify(seen))}catch(e){}
   if(news){BNEW=news;sheet='bnew';render()}}
 var BNEW=null;
 function famVid(){var h=5381;for(var i=0;i<(code||'').length;i++)h=((h*33)^code.charCodeAt(i))>>>0;return h===1887904206}
@@ -1244,6 +1266,7 @@ function vAdmin(){
     (code?'<button class="btn ghost" data-act="open" data-v="invite">'+I('link')+'رابط العائلة لدعوة فرد</button>':'')+
     (code?'<button class="btn ghost" data-act="open" data-v="fbl">'+I('chat')+'ملاحظات العائلة على التطبيق</button>':'')+
     '<button class="btn ghost" data-act="open" data-v="pfol">🕌 متابعة صلاة الأبناء</button>'+
+    '<button class="btn ghost" data-act="open" data-v="pown">🤲 تسجيل صلوات الأفراد</button>'+
     (me&&(me===home||unlocked===me)?'<button class="btn ghost" data-act="pinchg">🔑 '+(mem(me)&&mem(me).k?'تغيير رمزي السري':'رمزي السري (للقراءة من هاتف آخر)')+'</button>':'')+
     '<button class="btn ghost" data-act="open" data-v="fb">أرسل ملاحظة أو أبلغ عن خطأ</button>'+
     (amOwner()?'<button class="btn ghost" data-act="open" data-v="new">ختمة جديدة</button>':'')+
@@ -1338,6 +1361,14 @@ function vSheet(){
       S.members.filter(function(x){return x.id!==me}).map(function(x){return x.k?'<button class="btn ghost pfr" data-act="pinr" data-v="'+x.id+'"><b>'+esc(x.name)+'</b><small>أعد الضبط</small></button>':'<div class="pfr nok"><b>'+esc(x.name)+'</b><small>لم يختر رمزاً بعد</small></div>'}).join('');
   }else if(k==='bnew'&&BNEW){
     h='<div class="bnew"><div class="bi">'+BNEW.i+'</div><p class="bh">'+esc(BNEW.t)+'</p><p>'+esc(BNEW.q)+'</p><p class="sub">بارك الله فيك، واصِل.</p></div><button class="btn" data-act="close">الحمد لله</button>';
+  }else if(k==='pown'&&amOwner()){
+    h='<h3>تسجيل صلوات الأفراد</h3><p class="sub">لصاحب الختمة فقط: سجّل أو صحّح صلوات أي فرد في الأيام السبعة الأخيرة.</p>'+
+      S.members.map(function(x){return '<button class="btn ghost pfr" data-act="open" data-v="pown1:'+x.id+'"><b>'+esc(x.name)+'</b><small class="num">هذا الأسبوع '+prWeek(x.id)+' من 35</small></button>'}).join('');
+  }else if(k==='pown1'&&amOwner()&&mem(a)){
+    m=mem(a);var rows='';for(var o=0;o<7;o++){var dv=prGet(a,prDay(o)),dd=new Date(prDay(o)+'T12:00:00'),lb=o===0?'اليوم':o===1?'البارحة':['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'][dd.getDay()];
+      var bt='';for(var i=0;i<5;i++)bt+='<button class="pdc'+(dv>>i&1?' on':'')+'" data-act="prow" data-v="'+a+'|'+o+'|'+i+'" aria-pressed="'+(dv>>i&1?'true':'false')+'" aria-label="'+PRN[i]+' '+lb+'">'+PRN[i]+'</button>';
+      rows+='<div class="pdr"><b>'+lb+'</b><div>'+bt+'</div></div>'}
+    h='<h3>صلوات '+esc(m.name)+'</h3><p class="sub">اضغط على الصلاة لتسجيلها أو إلغائها.</p>'+rows+'<button class="btn" data-act="open" data-v="pown">تمّ</button>';
   }else if(k==='pfol'){
     h='<h3>متابعة صلاة الأبناء</h3><p class="sub">اختر الابن أو البنت، ثم حدّد من يرى صلواته من الوالدين. صلوات كل فرد لا يراها غيره إلا من تختارهم هنا، ولا تدخل في سباق العائلة.</p>'+
       S.members.map(function(x){var gs=guards(x).map(function(id){var y=mem(id);return y?y.name:''}).filter(Boolean);
@@ -1558,7 +1589,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vFocus()+vFeed()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 58</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 60</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
@@ -1577,7 +1608,8 @@ root.addEventListener('click',function(e){
   if(act==='fsr'){fsReact(v);return}if(act==='fsc'){fsOpen[v]=!fsOpen[v];render();var ci=document.getElementById('fsc_'+v);if(ci)ci.focus();return}
   if(act==='fsdel'){var fx=FS[v];if(fx&&(fx.m===me||amOwner())){delete FS[v];delete FSP[v];fsSave();FSO.push({id:v,del:true,t:Date.now()});fsPut(v,null,true);render()}return}
   if(act==='fscdel'){var pp=v.split('|'),fy=FS[pp[0]];if(fy&&fy.c&&fy.c[pp[1]]&&(fy.c[pp[1]].m===me||amOwner())){fy.c=Object.assign({},fy.c);delete fy.c[pp[1]];FSO.push({id:pp[0],k:'c',s:pp[1],del:true,t:Date.now()});fsPut(pp[0]+'/c/'+pp[1],null,true);render()}return}
-  if(act==='vid'){openVid(v);return}else if(act==='pray'){prSet(+v);return}else if(act==='gtog'){gTog(v);return}else if(act==='enter'){welcome=false;try{localStorage.setItem('kf_wc',(+localStorage.getItem('kf_wc')||0)+1)}catch(_){}render();window.scrollTo(0,0);return}
+  if(act==='vid'){openVid(v);return}else if(act==='pray'){prSet(+v);return}if(act==='prayy'){if(new Date().getHours()<12)prSet(+v,1);else{showNote('انتهى وقت تسجيل صلوات البارحة عند الظهر');render()}return}
+  if(act==='prow'){var pw=v.split('|');if(amOwner()&&mem(pw[0]))prSet(+pw[2],+pw[1],pw[0]);return}else if(act==='gtog'){gTog(v);return}else if(act==='enter'){welcome=false;try{localStorage.setItem('kf_wc',(+localStorage.getItem('kf_wc')||0)+1)}catch(_){}render();window.scrollTo(0,0);return}
   if(act==='donex'){if(el.classList.contains('scrim')&&e.target!==el)return;try{localStorage.setItem(doneKey(),'1')}catch(_){}sheet=null;render();return}
   if(act==='notify'){enableNotif();return}
   if(act==='close'){if(el.classList.contains('scrim')&&e.target!==el)return;sheet=null;copied=false;render();return}
