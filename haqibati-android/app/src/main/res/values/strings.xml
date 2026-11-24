@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appName">حقيبتي</string>
+    <string name="launchUrl">https://tiloucloud.github.io/haqibati/</string>
+    <string name="providerAuthority">com.tiloucloud.haqibati.fileprovider</string>
+    <string name="assetStatements" translatable="false">[{ \"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://tiloucloud.github.io\"}}]</string>
+    <string name="shareTarget" translatable="false">{\"action\": \"https://tiloucloud.github.io/haqibati/share\", \"method\": \"POST\", \"enctype\": \"multipart/form-data\", \"params\": {\"title\": \"title\", \"text\": \"text\", \"url\": \"url\", \"files\": [{\"name\": \"f\", \"accept\": [\"image/*\", \"application/pdf\", \"audio/*\", \"video/*\"]}]}}</string>
+</resources>
