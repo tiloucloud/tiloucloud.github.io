@@ -57,7 +57,7 @@
 
         <!-- Shows the web notifications (new lesson, lesson finished) as this app's own, with sound -->
         <service
-            android:name="com.google.androidbrowserhelper.trusted.DelegationService"
+            android:name="com.tiloucloud.haqibati.AlertDelegationService"
             android:enabled="true"
             android:exported="true">
             <meta-data android:name="android.support.customtabs.trusted.SMALL_ICON" android:resource="@drawable/ic_notification_icon" />

@@ -4,7 +4,7 @@ SRC = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(SRC)
 OUT = os.path.join(REPO, 'haqibati')
 DB = sys.argv[1] if len(sys.argv) > 1 else 'https://khatma-16d1b-default-rtdb.firebaseio.com'
-VER = 3
+VER = 4
 VAPID = 'BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc'
 
 os.makedirs(OUT, exist_ok=True)
@@ -14,6 +14,7 @@ for f in [x for x in os.listdir(AD + '/fonts') if x.startswith(('ibm-', 'reem-')
 for f in ['icon-512.png', 'icon-192.png', 'icon-180.png', 'icon-maskable-512.png', 'fav-32.png']:
     shutil.copy(f'{SRC}/icon/{f}', OUT)
 shutil.copy(f'{SRC}/privacy.html', OUT)
+shutil.copy(f'{SRC}/alert.ogg', OUT)
 shutil.rmtree(OUT + '/pdf', ignore_errors=True); shutil.copytree(f'{SRC}/vendor/pdf', OUT + '/pdf')
 shutil.copy(f'{SRC}/vendor/qr.js', OUT + '/qr.js')
 fonts = ''.join(x for x in re.findall(r"@font-face\{[^}]*\}", open(AD + '/app.css').read()) if 'warsh' not in x)
@@ -37,7 +38,7 @@ open(OUT + '/manifest.webmanifest', 'w').write(json.dumps({
     "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
               {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
               {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}]}, ensure_ascii=False))
-files = ['./', 'index.html', f'app.css?v={VER}', f'app.js?v={VER}', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest', 'qr.js?v=1'] + ['fonts/' + f for f in sorted(os.listdir(OUT + '/fonts'))]
+files = ['./', 'index.html', f'app.css?v={VER}', f'app.js?v={VER}', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest', 'qr.js?v=1', 'alert.ogg?v=1'] + ['fonts/' + f for f in sorted(os.listdir(OUT + '/fonts'))]
 open(OUT + '/sw.js', 'w').write('''var C='hq-v%d',F=%s;
 self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(F)}).then(function(){return self.skipWaiting()}))});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(x){return /^hq-v/.test(x)&&x!==C}).map(function(x){return caches.delete(x)}))}).then(function(){return self.clients.claim()}))});

@@ -60,7 +60,7 @@ function pull(){if(!code||!DB)return;
     for(id in km){x=km[id];if(x&&x.name)ms.push({id:id,name:String(x.name),i:+x.i||0,k:x.k||'',h:x.h?'1':'',x:x.x?'1':''})}
     for(id in lm){x=lm[id];if(x&&x.name&&!km[id])ms.push({id:id,name:String(x.name),i:1000+(+x.i||0),k:x.k||'',h:x.h?'1':'',x:x.x?'1':'',l:1})}
     ms.sort(function(a,b){return a.i-b.i});
-    M=ms;H=h;OWN=h.own||R[1]||(famVid()?'mmwf6wd6v':'');FN=h.name||R[2]||FN||'';loaded=true;cache();purgeOld();soft()}).catch(function(){})}
+    var known=loaded&&H.items?Object.keys(H.items):null;M=ms;H=h;if(known&&isKid(me)&&Object.keys(h.items||{}).some(function(i){return known.indexOf(i)<0})){bigSound(1);setTimeout(function(){flash('📚 وصل درس جديد!')},50)}OWN=h.own||R[1]||(famVid()?'mmwf6wd6v':'');FN=h.name||R[2]||FN||'';loaded=true;cache();purgeOld();soft()}).catch(function(){})}
 function busy(){var a=document.activeElement;return sheet||(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'))}
 function soft(){if(busy()){dirty=true;return}render()}
 document.addEventListener('focusout',function(){setTimeout(function(){if(dirty&&!busy()){dirty=false;render()}},50)});
@@ -114,7 +114,7 @@ function pinKey(k){
       if(pinFirst!==p){pinFirst='';pinBuf='';pinErr='الرمزان مختلفان، اختر رمزك من جديد';render();return}
       pinHash(id,p).then(function(h){m.k=h;m.h='1';unlocked=id;pinFirst='';pinBuf='';pinChange=false;if(mine.indexOf(id)<0){mine.push(id);ls('hq_mine',JSON.stringify(mine))}putMember(m);cache();render()});return}
     pinHash(id,p).then(function(h){
-      if(h===m.k){unlocked=id;pinFails=0;pinBuf='';render()}
+      if(h===m.k){unlocked=id;pinFails=0;pinBuf='';if(!home&&isKid(id))setHome(id);render()}
       else{pinFails++;pinBuf='';pinErr='الرمز غير صحيح';if(pinFails>=5){pinFails=0;pinWait=Date.now()+30000;setTimeout(render,30100)}render()}})},120)}
 document.addEventListener('visibilitychange',function(){
   if(document.hidden){hidAt=Date.now();if(Date.now()-extAt<4000){extAway=true;return}if(TM&&TM.ph==='s'&&TM.k===me){TM.out=(TM.out||0)+1;saveTM()}return}
@@ -206,7 +206,7 @@ function vMsg(x,k){var lv=x.r&&x.r[k];
 
 /* ---------- item detail ---------- */
 function vItem(x){var kid=isKid(me),K=kids().filter(function(m){return forKid(x,m.id)});
-  return '<div class="wrap"><header class="top"><button class="ib" data-act="back" aria-label="رجوع">→</button>'+tag(x.s)+'<span class="tag n">'+(x.ty==='h'?'واجب':'درس')+'</span><span class="sp"></span><button class="ib" data-act="big" aria-label="تكبير الخط"><b>أ</b><small>'+(FL+1)+'</small></button></header>'+
+  return '<div class="wrap'+(isKid(me)&&TM&&TM.k===me&&TM.ph==='s'?' wtb':'')+'"><header class="top"><button class="ib" data-act="back" aria-label="رجوع">→</button>'+tag(x.s)+'<span class="tag n">'+(x.ty==='h'?'واجب':'درس')+'</span><span class="sp"></span><button class="ib" data-act="big" aria-label="تكبير الخط"><b>أ</b><small>'+(FL+1)+'</small></button></header>'+
     '<section class="stack"><h2 class="title">'+esc(ttl(x))+'</h2><p class="sub">'+from(x)+' · '+ago(x.c)+(x.due?' · للتسليم '+esc(dLab(x.due)):'')+'</p></section>'+
     (x.n?'<div class="note"><small>ملاحظة من '+esc(nm(x.by))+'</small><p>'+esc(x.n)+'</p></div>':'')+
     (x.txt?'<section class="card"><p class="txt">'+esc(x.txt)+'</p></section>':'')+
@@ -247,6 +247,7 @@ function vFam(){var me0=mem(me),K=kids(),A=adults();
       return '<div class="kbox"><div class="mrow"><span class="av k">'+esc(m.name.slice(0,1))+'</span><b>'+esc(m.name)+'</b><button class="pill go" data-act="qr" data-v="'+m.id+'">📲 جهّز جهازه</button><button class="pill" data-act="unkid" data-v="'+m.id+'" aria-label="ليس تلميذاً">✕</button></div>'+
       '<div class="seg"><button type="button" class="'+(c.g==='f'?'on':'')+'" data-act="kg" data-k="'+m.id+'" data-v="f">بنت</button><button type="button" class="'+(c.g==='m'?'on':'')+'" data-act="kg" data-k="'+m.id+'" data-v="m">ولد</button></div>'+
       '<div class="two"><label><span>مدة الحصة</span><select data-kc="st" data-k="'+m.id+'">'+o([15,20,25,30,40,45,60],c.st,'دقيقة')+'</select></label><label><span>الاستراحة بعدها</span><select data-kc="br" data-k="'+m.id+'">'+o([0,5,10,15,20,30],c.br,'دقائق')+'</select></label></div>'+
+      '<label><span>عدد الأجزاء في الحصة</span><select data-kc="rn" data-k="'+m.id+'">'+[1,2,3].map(function(n){return '<option value="'+n+'"'+(n===c.rn?' selected':'')+'>'+(n===1?'جزء واحد':n===2?'جزءان':'3 أجزاء')+'</option>'}).join('')+'</select></label>'+
       '<label class="chk"><input type="checkbox" data-kc="lk" data-k="'+m.id+'"'+(c.lk?' checked':'')+'> اقفل التطبيق أثناء الاستراحة</label>'+
       '<label><span>📺 رابط دروس الدعم (TelmidTICE) <small>(اختياري)</small></span><input type="url" dir="ltr" data-kc="tt" data-k="'+m.id+'" value="'+esc(c.tt)+'" placeholder="https://telmidtice.men.gov.ma/..."></label>'+
       '<p class="sub">افتح telmidtice.men.gov.ma، واختر «السادس ابتدائي» أو مستوى '+esc(m.name)+'، ثم انسخ رابط الصفحة والصقه هنا. يظهر له زر يفتحها، وهو الموقع الخارجي الوحيد المسموح له.</p></div>'}).join(''):'<p class="sub">لا تلاميذ بعد.</p>')+
@@ -351,7 +352,7 @@ function vNotif(kid){if(!pushOK()||nOn)return '';var den=window.Notification&&No
     '<button class="btn" data-act="notif"'+(nBusy?' disabled':'')+'>'+(nBusy?'جارٍ التفعيل…':'فعّل الإشعارات')+'</button>'+(nErr?'<p class="err">'+esc(nErr)+'</p>':'')+'</section>'}
 
 /* ---------- gender, themes ---------- */
-function cfgFor(k){var c=(H.cfg&&H.cfg[k])||{};return {st:+c.st||30,br:c.br==null?10:+c.br,lk:c.lk==null?1:+c.lk,g:c.g==='m'?'m':c.g==='f'?'f':'',tt:TT_RE.test(c.tt||'')?c.tt:''}}
+function cfgFor(k){var c=(H.cfg&&H.cfg[k])||{};return {st:+c.st||30,br:c.br==null?10:+c.br,lk:c.lk==null?1:+c.lk,g:c.g==='m'?'m':c.g==='f'?'f':'',tt:TT_RE.test(c.tt||'')?c.tt:'',rn:Math.min(3,Math.max(1,+c.rn||1))}}
 var TT_RE=/^https:\/\/telmidtice\.men\.gov\.ma(\/[^\s"'<>]*)?$/,extAt=0,extAway=false;
 function G(f,m,k){return cfgFor(k||me).g==='m'?m:f}
 var THEMES=[['paper','ورق دافئ','الكل'],['rose','وردي وزهور','بنت'],['lilac','بنفسجي ونجوم','بنت'],['sky','سماء وطائرات','ولد'],['space','الفضاء','ولد'],['garden','حديقة','الكل']];
@@ -363,39 +364,48 @@ function vThemes(){var t=curTheme();return '<div class="thg">'+THEMES.map(functi
 var TM=jget('hq_tm',null),AC=null,hidT=0;
 function saveTM(){ls('hq_tm',TM?JSON.stringify(TM):null)}
 function ac(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}return AC}
-function chime(kind){var a=ac();if(!a)return;var S={warn:[[880,.18,0],[880,.18,.3]],end:[[523,.22,0],[659,.22,.22],[784,.22,.44],[1047,.5,.66],[523,.22,1.4],[659,.22,1.62],[784,.22,1.84],[1047,.6,2.06]],bell:[[988,.5,0],[784,.5,.45],[659,.8,.9]]}[kind]||[];
-  S.forEach(function(s){var o=a.createOscillator(),g=a.createGain(),t=a.currentTime+s[2];o.type='sine';o.frequency.value=s[0];g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.45,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+s[1]);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+s[1]+.05)});
+var SND=null;function bigSound(n){try{SND=SND||new Audio('alert.ogg?v=1');SND.volume=1;SND.currentTime=0;var k=0;SND.onended=function(){if(++k<(n||1)){SND.currentTime=0;SND.play().catch(function(){})}};SND.play().catch(function(){chime('end')})}catch(e){}}
+function chime(kind){var a=ac();if(!a)return;var S={warn:[[880,.2,0],[880,.2,.3],[880,.2,.6],[1175,.4,.9]],end:[[523,.22,0],[659,.22,.22],[784,.22,.44],[1047,.5,.66],[523,.22,1.4],[659,.22,1.62],[784,.22,1.84],[1047,.6,2.06]],bell:[[988,.5,0],[784,.5,.45],[659,.8,.9]]}[kind]||[];
+  S.forEach(function(s){var o=a.createOscillator(),g=a.createGain(),t=a.currentTime+s[2];o.type=kind==='warn'?'square':'triangle';o.frequency.value=s[0];g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.9,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+s[1]);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+s[1]+.05)});
   try{navigator.vibrate&&navigator.vibrate(kind==='warn'?[150,100,150]:[400,150,400,150,600])}catch(e){}}
 function mmss(ms){var s=Math.max(0,Math.ceil(ms/1000));return pad(Math.floor(s/60))+':'+pad(s%60)}
-function startStudy(min){ac();var c=cfgFor(me),n=Date.now();TM={k:me,ph:'s',s:n,d:min*60000,e:n+min*60000,b:c.br*60000,lk:c.lk,out:0,w:0};saveTM();render();window.scrollTo(0,0)}
-function endStudy(){var n=Date.now();if(TM.b>0){TM.ph='b';TM.e=n+TM.b}else TM.ph='d';TM.sd=n;saveTM();chime('end');render()}
+function startStudy(min){ac();var c=cfgFor(me),n=Date.now(),cont=TM&&TM.k===me&&TM.ph==='n';TM={k:me,ph:'s',s:cont?TM.s:n,d:min*60000,e:n+min*60000,b:c.br*60000,lk:c.lk,out:cont?TM.out:0,w:0,r:cont?TM.r+1:1,R:cont?TM.R:c.rn};saveTM();render();window.scrollTo(0,0)}
+function afterBreak(){TM.ph=(TM.r||1)<(TM.R||1)?'n':'f';saveTM();bigSound(2);render()}
+function endStudy(){var n=Date.now();TM.sd=n;if(TM.b>0){TM.ph='b';TM.e=n+TM.b;saveTM();bigSound(3);render()}else afterBreak()}
 var ACT={f:['ساعدي في ترتيب غرفتك 🧸','اشربي كأس ماء وتمدّدي قليلاً 💧','ساعدي أمك أو جدتك في المطبخ 🍽️','اقرئي صفحات من قصة تحبينها 📖','ارسمي شيئاً جميلاً 🎨','العبي لعبة حركية مع إخوتك 🤸‍♀️','اسقي النباتات 🌱','رتّبي حقيبتك ليوم غد 🎒','توضّئي وصلّي إن حان وقت الصلاة 🕌'],
   m:['ساعد في ترتيب غرفتك 🧸','اشرب كأس ماء وتمدّد قليلاً 💧','ساعد أمك أو جدتك في المطبخ 🍽️','اقرأ صفحات من قصة تحبها 📖','ارسم شيئاً جميلاً 🎨','العب لعبة حركية مع إخوتك ⚽','اسقِ النباتات 🌱','رتّب حقيبتك ليوم غد 🎒','توضّأ وصلِّ إن حان وقت الصلاة 🕌']};
-function activity(){var L=ACT[cfgFor(me).g==='m'?'m':'f'];return L[Math.floor((TM&&TM.s||0)/60000)%L.length]}
+function activity(off){var L=ACT[cfgFor(me).g==='m'?'m':'f'];return L[(Math.floor((TM&&TM.s||0)/60000)+(TM&&TM.r||1)*2+(off||0))%L.length]}
 function vTimer(){var c=cfgFor(me);
   if(!TM||TM.k!==me)return '<section class="card stack tcard"><div class="tch"><span class="ic o" aria-hidden="true">⏱️</span><div class="rx"><b>حصة مذاكرة مركّزة</b><small>'+G('اختاري','اختر')+' المدة، ثم '+G('ركّزي','ركّز')+' في '+G('درسك','درسك')+' حتى يرنّ المنبّه</small></div></div>'+
     '<div class="tdur">'+[15,20,30,45].concat(c.st>45||[15,20,30,45].indexOf(c.st)<0?[c.st]:[]).sort(function(a,b){return a-b}).map(function(n){return '<button class="'+(n===c.st?'on':'')+'" data-act="tstart" data-v="'+n+'"><b>'+n+'</b><small>دقيقة</small></button>'}).join('')+'</div>'+
-    (c.br>0?'<p class="sub">بعدها استراحة '+c.br+' دقائق لنشاط في البيت'+(c.lk?'، ويُقفَل التطبيق خلالها':'')+'.</p>':'')+'</section>';
+    '<p class="sub">'+(c.rn>1?'الحصة '+(c.rn===2?'جزءان':c.rn+' أجزاء')+'، ':'')+(c.br>0?'بعد كل جزء استراحة '+c.br+' دقائق لنشاط في البيت'+(c.lk?'، ويُقفَل التطبيق خلالها':''):'')+'.</p>'+'</section>';
   if(TM.ph!=='s')return '';
   var rem=TM.e-Date.now(),C=2*Math.PI*88;
   return '<section class="card tbig" aria-live="off"><svg viewBox="0 0 200 200" class="ring" aria-hidden="true"><circle cx="100" cy="100" r="88" class="rb"/><circle cx="100" cy="100" r="88" class="rf" id="tmr" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-rem/TM.d)).toFixed(1)+'"/></svg>'+
-    '<div class="tin"><b class="tmv" role="timer">'+mmss(rem)+'</b><small>'+G('ركّزي','ركّز')+' في '+G('درسك','درسك')+' 💪</small></div>'+
+    '<div class="tin"><small class="tpl">'+partLab()+'</small><b class="tmv" role="timer">'+mmss(rem)+'</b><small>'+G('ركّزي','ركّز')+' في '+G('درسك','درسك')+' 💪</small></div>'+
     '<p class="twarn" id="twarn"'+(TM.w?'':' hidden')+'>⏰ بقيت دقيقة، ثم '+(TM.b>0?'يُغلق التطبيق لوقت نشاط في البيت':'تنتهي الحصة')+'</p>'+
     (TM.out?'<p class="sub c">'+G('خرجتِ','خرجتَ')+' من التطبيق '+TM.out+(TM.out===1?' مرة':' مرات')+' خلال الحصة</p>':'')+
     '<button class="lnk" data-act="tend">'+G('أنهيتُ قبل الوقت','أنهيتُ قبل الوقت')+'</button></section>'}
 function vBreak(){var rem=TM.e-Date.now();
-  if(TM.ph==='b')return '<div class="brk"><div class="bin"><p class="bbig">🎉</p><h2>انتهت الحصة، '+G('أحسنتِ','أحسنتَ')+'!</h2><p>الآن وقت نشاط في البيت:</p><p class="bact">'+esc(activity())+'</p>'+
+  if(TM.ph==='b')return '<div class="brk"><div class="bin"><p class="bbig">🎉</p><h2>'+(TM.R>1?'انتهى الجزء '+TM.r+' من '+TM.R:'انتهت الحصة')+'، '+G('أحسنتِ','أحسنتَ')+'!</h2><p>الآن وقت نشاط في البيت:</p><p class="bact">'+esc(activity())+'</p>'+
     '<p class="sub">'+(TM.lk?'يُفتح التطبيق من جديد بعد':'الاستراحة')+'</p><b class="tmv bt" role="timer">'+mmss(rem)+'</b>'+
     (TM.lk?'<button class="lnk" data-act="adm">وليّ الأمر</button>':'<button class="btn ghost" data-act="tclear">رجوع إلى الدروس</button>')+'</div></div>';
-  return '<div class="brk"><div class="bin"><p class="bbig">🔔</p><h2>انتهت الاستراحة</h2><p>'+G('مرحباً بعودتكِ','مرحباً بعودتك')+'. هل '+G('تبدئين','تبدأ')+' حصة جديدة؟</p>'+
-    '<button class="btn big" data-act="tstart" data-v="'+cfgFor(me).st+'">ابدأ حصة '+cfgFor(me).st+' دقيقة</button><button class="btn ghost" data-act="tclear">لاحقاً</button></div></div>'}
+  if(TM.ph==='n')return '<div class="brk"><div class="bin"><p class="bbig">🔔</p><h2>انتهت الاستراحة</h2><p>'+G('مرحباً بعودتكِ','مرحباً بعودتك')+'. بقي الجزء '+(TM.r+1)+' من '+TM.R+'.</p>'+
+    '<button class="btn big" data-act="tstart" data-v="'+cfgFor(me).st+'">'+G('ابدئي','ابدأ')+' الجزء '+(TM.r+1)+' ('+cfgFor(me).st+' دقيقة)</button></div></div>';
+  return '<div class="brk"><div class="bin"><p class="bbig">🏆</p><h2>انتهت حصة اليوم، '+G('أحسنتِ','أحسنتَ')+'!</h2><p>الآن نشاط آخر في البيت:</p><p class="bact">'+esc(activity(3))+'</p>'+
+    '<button class="btn ghost" data-act="tclear">إلى الدروس</button></div></div>'}
 function tick(){if(!TM)return;var n=Date.now(),rem=TM.e-n;
   if(TM.ph==='s'){
-    if(rem<=60000&&!TM.w&&rem>0){TM.w=1;saveTM();chime('warn');var w=document.getElementById('twarn');if(w)w.hidden=false;else flash('⏰ بقيت دقيقة على نهاية الحصة')}
+    if(rem<=60000&&!TM.w&&rem>0){TM.w=1;saveTM();chime('warn');setTimeout(function(){chime('warn')},1500);warnFlash();var w=document.getElementById('twarn');if(w)w.hidden=false}
+    document.documentElement.dataset.tz=rem<=60000?'red':rem<=5*60000?'amber':'';
     if(rem<=0){endStudy();return}
-  }else if(TM.ph==='b'&&rem<=0){TM.ph='d';saveTM();chime('bell');render();return}
+  }else if(TM.ph==='b'&&rem<=0){afterBreak();return}
   document.querySelectorAll('.tmv').forEach(function(el){el.textContent=mmss(rem)});
-  var r=document.getElementById('tmr');if(r&&TM.ph==='s'){var C=2*Math.PI*88;r.setAttribute('stroke-dashoffset',(C*(1-rem/TM.d)).toFixed(1))}}
+  var r=document.getElementById('tmr');if(r&&TM.ph==='s'){var C=2*Math.PI*88;r.setAttribute('stroke-dashoffset',(C*(1-rem/TM.d)).toFixed(1))}
+  var pb=document.getElementById('tbp');if(pb&&TM.ph==='s')pb.style.width=(100*(1-rem/TM.d)).toFixed(1)+'%'}
+function warnFlash(){var d=document.createElement('div');d.className='wflash';d.setAttribute('role','alert');d.innerHTML='<b>⏰ دقيقة واحدة!</b><span>'+(TM&&TM.b>0?'بعدها يُغلق التطبيق لوقت الاستراحة':'بعدها تنتهي الحصة')+'</span>';document.body.appendChild(d);setTimeout(function(){d.remove()},5000)}
+function partLab(){return (TM&&TM.R>1)?'الجزء '+TM.r+' من '+TM.R:'حصة مذاكرة'}
+function vTbar(){if(!(TM&&TM.k===me&&TM.ph==='s'))return '';var rem=TM.e-Date.now();return '<div class="tbar" role="timer"><span class="tbl">⏱️ '+partLab()+'</span><b class="tmv">'+mmss(rem)+'</b><span class="tbt"><i id="tbp" style="width:'+(100*(1-rem/TM.d)).toFixed(1)+'%"></i></span></div>'}
 setInterval(tick,1000);
 
 /* ---------- render ---------- */
@@ -404,15 +414,15 @@ function render(){
   applyFs();readDraft();
   if(gate()!=='open'){root.innerHTML=vLock();return}
   var m=mem(me),kid=m&&isKid(me),body;applyTheme();
-  if(kid&&TM&&TM.k===me&&(TM.ph==='b'||TM.ph==='d')){root.innerHTML=vBreak()+(sheet==='adm'?vAdm():'');return}
+  if(kid&&TM&&TM.k===me&&(TM.ph==='b'||TM.ph==='d'||TM.ph==='n'||TM.ph==='f')){root.innerHTML=vBreak()+(sheet==='adm'?vAdm():'');return}
   if(m&&kid&&TAB==='fam')TAB='home';if(m&&!kid&&TAB==='hw')TAB='home';
   if(m&&OPEN&&H.items&&H.items[OPEN]){var x=H.items[OPEN];x.id=OPEN;
     if(kid&&!seen[OPEN]){seen[OPEN]=1;ls('hq_seen',JSON.stringify(seen))}
-    root.innerHTML=vItem(x)+(kid&&TM&&TM.k===me&&TM.ph==='s'?'<div class="tmini" role="timer">⏱️ <b class="tmv">'+mmss(TM.e-Date.now())+'</b></div>':'')+(toast?'<div class="toast" role="status">'+esc(toast)+'</div>':'');fillAtt();return}
+    root.innerHTML=vItem(x)+(kid?vTbar():'')+(toast?'<div class="toast" role="status">'+esc(toast)+'</div>':'');fillAtt();return}
   OPEN=null;
   if(!m)body=vWho();else if(kid)body=kidHome();else body=TAB==='fam'?vFam():parentHome();
   var sub=m?(kid?(FN||'عائلتي'):(FN||'عائلتي')+' · '+nm(me)):'دروس الأستاذ، من العائلة فقط';
-  root.innerHTML='<div class="wrap">'+hdr(sub)+body+'</div>'+(m?nav(kid)+(!kid&&TAB==='home'?'<button class="fab" data-act="new" aria-label="إرسال درس">＋</button>':''):'')+
+  root.innerHTML=(kid?vTbar():'')+'<div class="wrap'+(kid&&TM&&TM.k===me&&TM.ph==='s'?' wtb':'')+'">'+hdr(sub)+body+'</div>'+(m?nav(kid)+(!kid&&TAB==='home'?'<button class="fab" data-act="new" aria-label="إرسال درس">＋</button>':''):'')+
     (sheet==='new'&&draft?vNew():'')+(sheet==='set'?vSet():'')+(sheet==='adm'?vAdm():'')+(toast?'<div class="toast" role="status">'+esc(toast)+'</div>':'');
   if(qrFor)drawQR()}
 
