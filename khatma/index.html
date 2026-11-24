@@ -552,8 +552,8 @@ html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
 .feed,.feed .fi,.fq,.fc,.fc p,.fsum,.fsum label{min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
 .feed .fi>*{min-width:0}.feed .fi,.fc{grid-template-columns:minmax(0,1fr)}.fc .form input{width:0;min-width:0}
 /* 16px+ inputs stop phones from zooming in when typing */
-.fc input,#fsText,.fsum textarea{font-size:16px}
-.fc .form{display:flex;gap:8px;align-items:center}.fc .form input{flex:1 1 auto}.feed .fh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.feed .fdel{margin-inline-start:auto}.fq{white-space:pre-line;margin:0;padding:8px 12px;border-inline-start:3px solid var(--primary);background:var(--line);border-radius:10px;line-height:1.8}.fa{display:flex;gap:8px;flex-wrap:wrap}.fr{font-size:12.5px}.fc{display:grid;gap:6px;font-size:14px;padding:8px 10px;border-radius:12px;background:var(--bg,#f6f1e4)}.fc p{margin:0;line-height:1.7}
+.fc input,.fc textarea,#fsText,.fsum textarea{font-size:16px}
+.fc .form{display:flex;flex-direction:column;gap:8px;align-items:stretch}.fc .form textarea{min-height:64px;max-height:40vh;resize:vertical;background:#fff}.fc .form .btn{align-self:flex-end}.fc p{white-space:pre-line}.feed .fh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.feed .fdel{margin-inline-start:auto}.fq{white-space:pre-line;margin:0;padding:8px 12px;border-inline-start:3px solid var(--primary);background:var(--line);border-radius:10px;line-height:1.8}.fa{display:flex;gap:8px;flex-wrap:wrap}.fr{font-size:12.5px}.fc{display:grid;gap:6px;font-size:14px;padding:8px 10px;border-radius:12px;background:var(--bg,#f6f1e4)}.fc p{margin:0;line-height:1.7}
 .sunan .sub{margin-top:-4px}.sn-f{font-size:15px;line-height:1.9;padding:10px 12px;border-radius:14px;background:var(--bg,#f6f1e4);border:1px solid var(--line)}.sn-f small{display:block;font-size:12px;color:var(--muted)}.sn-ok{width:100%}
 .pr-pv{text-align:center;font-size:12px;color:var(--muted,#5d6e67);margin-top:4px}
 .prd{display:inline-flex;gap:4px}.prd i{width:10px;height:10px;border-radius:50%;border:1.5px solid #c9a24a}.prd i.on{background:#c9a24a}
@@ -898,7 +898,7 @@ function fEnd(){if(!focus)return;clearInterval(fT);if(focus.used){focus.compose=
   if(Date.now()-focus.t0<45e3){focus=null;if(reading)closeReader();return}
   sheet='fsum';render()}
 function fDone(share){var f=focus,x='';focus=null;sheet=null;
-  if(share&&f&&code&&CFG.db){var ta=document.getElementById('fsText');x=(ta?ta.value:(f.draft||'')).trim().slice(0,600);
+  if(share&&f&&code&&CFG.db){var ta=document.getElementById('fsText');x=(ta?ta.value:(f.draft||'')).trim().slice(0,1500);
     var id='f'+Date.now().toString(36)+(me||''),v={m:me,min:f.used,pg:f.n,at:Date.now(),x:x};
     FS[id]=v;FSP[id]={c:code,v:v};fsSave();
     fetch(fsBase()+id+'.json',{method:'PUT',body:JSON.stringify(v)}).catch(function(){});
@@ -907,7 +907,7 @@ function fDone(share){var f=focus,x='';focus=null;sheet=null;
 function vFsum(){var f=focus;if(!f)return '';
   return '<div class="scrim"><div class="sheet fsum" role="dialog" aria-modal="true"><h3>تقبّل الله منك 🌿</h3>'+
     '<p class="msg num">أعطيتَ القرآن <b>'+minN(f.used)+'</b>'+(f.n?' وقرأتَ <b>'+pagesN(f.n)+'</b>':'')+'.</p>'+
-    '<label for="fsText">آية أو فائدة استوقفتك، لتتدارسها مع العائلة (اختياري)</label><textarea id="fsText" rows="4" maxlength="600" placeholder="مثال: آية في سورة الكهف ذكّرتني بأن…">'+esc(f.draft||'')+'</textarea>'+
+    '<label for="fsText">آية أو فائدة استوقفتك، لتتدارسها مع العائلة (اختياري)</label><textarea id="fsText" rows="4" maxlength="1500" placeholder="مثال: آية في سورة الكهف ذكّرتني بأن…">'+esc(f.draft||'')+'</textarea>'+
     '<button class="btn ghost" data-act="fsback">'+I('book')+'ارجع إلى المصحف لتنقل الآية بدقّة</button>'+
     '<button class="btn" data-act="fshare">'+I('share')+'شارك العائلة</button><button class="btn quiet" data-act="fskip">احفظها لنفسي فقط</button>'+
     '<p class="sub">والآن انتقل إلى عملك التالي بقلب حاضر، كما كنت حاضراً مع القرآن.</p></div></div>'}
@@ -926,11 +926,11 @@ function vFeed(){if(!code||!mem(me))return '';var L=fsList(3).slice(0,8);if(!L.l
         '<button class="btn sm quiet" data-act="fsc" data-v="'+o.id+'">💬 '+(cs.length?'<span class="num">'+cs.length+'</span> ':'')+'تعليق</button></div>'+
         (rs&&fsCnt(rs)?'<p class="sub fr">'+Object.keys(rs).filter(function(k){return rs[k]}).map(function(k){var z=mem(k);return z?esc(z.name):''}).filter(Boolean).join('، ')+'</p>':'')+
         (op||cs.length?'<div class="fc">'+cs.slice(op?0:-2).map(function(z){var zm=mem(z.c.m);return '<p><b>'+esc(zm?zm.name:'فرد')+':</b> '+esc(z.c.x)+((z.c.m===me||amOwner())?' <button class="lnk" data-act="fscdel" data-v="'+o.id+'|'+z.id+'">حذف</button>':'')+'</p>'}).join('')+
-          (op?'<form class="form" data-form="fsc" data-v="'+o.id+'"><input id="fsc_'+o.id+'" maxlength="160" autocomplete="off" placeholder="اكتب تعليقاً أو فائدة…" aria-label="تعليق"><button class="btn sm" type="submit">أرسل</button></form>':'')+'</div>':'')+
+          (op?'<form class="form" data-form="fsc" data-v="'+o.id+'"><textarea id="fsc_'+o.id+'" maxlength="1000" rows="2" placeholder="اكتب تعليقاً أو فائدة…" aria-label="تعليق"></textarea><button class="btn sm" type="submit">أرسل</button></form>':'')+'</div>':'')+
         '</article>'}).join('')+'</section>'}
 function fsPut(path,val,del){if(!CFG.db||!code)return;fetch(fsBase()+path+'.json',del?{method:'DELETE'}:{method:'PUT',body:JSON.stringify(val)}).then(function(r){if(!r.ok)throw 0}).catch(function(){showNote('تحتاج اتصالاً بالإنترنت لهذا')})}
 function fsReact(id){var x=FS[id];if(!x||!me)return;x.r=Object.assign({},x.r||{});var on=!x.r[me];if(on)x.r[me]=true;else delete x.r[me];FSO.push({id:id,k:'r',s:me,v:true,del:!on,t:Date.now()});fsPut(id+'/r/'+me,true,!on);render()}
-function fsComment(id,t){var x=FS[id];t=(t||'').trim().slice(0,160);if(!x||!me||!t)return;var cid='c'+Date.now().toString(36),v={m:me,x:t,at:Date.now()};x.c=Object.assign({},x.c||{});x.c[cid]=v;FSO.push({id:id,k:'c',s:cid,v:v,t:Date.now()});fsOpen[id]=true;fsPut(id+'/c/'+cid,v);render()}
+function fsComment(id,t){var x=FS[id];t=(t||'').trim().slice(0,1000);if(!x||!me||!t)return;var cid='c'+Date.now().toString(36),v={m:me,x:t,at:Date.now()};x.c=Object.assign({},x.c||{});x.c[cid]=v;FSO.push({id:id,k:'c',s:cid,v:v,t:Date.now()});fsOpen[id]=true;fsPut(id+'/c/'+cid,v);render()}
 document.addEventListener('input',function(e){if(e.target&&e.target.id==='fsText'&&focus)focus.draft=e.target.value});
 /* ---------- prayer tracker ---------- */
 var PRN=['الفجر','الظهر','العصر','المغرب','العشاء'],PRQ=[["وَامُرَ اَهْلَكَ بِالصَّلَوٰةِ وَاصْطَبِرْ عَلَيْهَاۖ", "طه"], ["حَٰفِظُواْ عَلَى اَ۬لصَّلَوَٰتِ وَالصَّلَوٰةِ اِ۬لْوُسْط۪ىٰ", "البقرة"], ["إِنَّ اَ۬لصَّلَوٰةَ تَنْه۪ىٰ عَنِ اِ۬لْفَحْشَآءِ وَالْمُنكَرِۖ", "العنكبوت"], ["قَدَ اَفْلَحَ اَ۬لْمُومِنُونَۖ اَ۬لذِينَ هُمْ فِے صَلَاتِهِمْ خَٰشِعُونَ", "المؤمنون"], ["وَاسْتَعِينُواْ بِالصَّبْرِ وَالصَّلَوٰةِۖ", "البقرة"]],PRH=[["الصلاةُ نور", "رواه مسلم"], ["أرِحْنا بها يا بلال", "رواه أبو داود"], ["وجُعِلَت قُرّةُ عيني في الصلاة", "رواه النسائي"], ["أحبُّ العمل إلى الله الصلاةُ على وقتها", "متفق عليه"], ["إنّ أولَ ما يُحاسَبُ به العبدُ يومَ القيامة من عمله صلاتُه", "رواه الترمذي"]];
@@ -1558,7 +1558,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vFocus()+vFeed()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 57</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 58</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
@@ -1573,7 +1573,7 @@ root.addEventListener('click',function(e){
   if(act==='fstart'){fStart(+v);return}if(act==='fend'){fEnd();return}if(act==='fshare'){fDone(true);return}
   if(act==='fsback'){if(focus){var t0=document.getElementById('fsText');if(t0)focus.draft=t0.value;focus.compose=true;sheet=null;render()}return}
   if(act==='fsresume'){if(focus){focus.compose=false;sheet='fsum';render()}return}
-  if(act==='fsay'){var q=v.split(':'),ra=JD[+q[0]]&&JD[+q[0]][+q[1]];if(focus&&ra){var at=ra[2].replace(/[\s\u00A0]*[\u0660-\u0669]+\s*$/,'').trim();var ins='﴿'+at+'﴾ ['+Q.names[ra[0]-1]+': '+ra[1]+']';focus.draft=((focus.draft||'').trim()?focus.draft.trim()+'\n':'')+ins;if(focus.draft.length>600)focus.draft=focus.draft.slice(0,600);focus.compose=false;sheet='fsum';render()}return}if(act==='fskip'){fDone(false);return}
+  if(act==='fsay'){var q=v.split(':'),ra=JD[+q[0]]&&JD[+q[0]][+q[1]];if(focus&&ra){var at=ra[2].replace(/[\s\u00A0]*[\u0660-\u0669]+\s*$/,'').trim();var ins='﴿'+at+'﴾ ['+Q.names[ra[0]-1]+': '+ra[1]+']';focus.draft=((focus.draft||'').trim()?focus.draft.trim()+'\n':'')+ins;if(focus.draft.length>1500)focus.draft=focus.draft.slice(0,1500);focus.compose=false;sheet='fsum';render()}return}if(act==='fskip'){fDone(false);return}
   if(act==='fsr'){fsReact(v);return}if(act==='fsc'){fsOpen[v]=!fsOpen[v];render();var ci=document.getElementById('fsc_'+v);if(ci)ci.focus();return}
   if(act==='fsdel'){var fx=FS[v];if(fx&&(fx.m===me||amOwner())){delete FS[v];delete FSP[v];fsSave();FSO.push({id:v,del:true,t:Date.now()});fsPut(v,null,true);render()}return}
   if(act==='fscdel'){var pp=v.split('|'),fy=FS[pp[0]];if(fy&&fy.c&&fy.c[pp[1]]&&(fy.c[pp[1]].m===me||amOwner())){fy.c=Object.assign({},fy.c);delete fy.c[pp[1]];FSO.push({id:pp[0],k:'c',s:pp[1],del:true,t:Date.now()});fsPut(pp[0]+'/c/'+pp[1],null,true);render()}return}
