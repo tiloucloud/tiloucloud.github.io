@@ -588,7 +588,7 @@ html.big .pk{width:80px;height:80px;font-size:32px}html.big .lk-pad{grid-templat
 .pfr.nok{display:flex;justify-content:space-between;padding:12px 16px;opacity:.6}
 
 .wel-vids{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
-.wel-vids .wel-vid{padding:8px;gap:8px;align-items:center}
+.wel-vids .wel-vid{padding:8px;gap:8px;align-items:center}.wel-vids .wel-vid:last-child:nth-child(odd){grid-column:1/-1}
 .wel-vids .wv-th{width:44px;height:72px;border-radius:10px}
 .wel-vids .wv-th i{font-size:17px;background:radial-gradient(circle,rgba(240,211,132,.95) 0 13px,transparent 14px)}
 .wel-vids .wv-tx b{font-size:14px;line-height:1.35}.wel-vids .wv-tx small{font-size:11.5px;line-height:1.3;display:block}
@@ -1132,10 +1132,10 @@ function vWelcome(){
   return '<div class="wel"><div class="wel-in">'+
     '<div class="wel-top"><img class="wel-ic" src="icon2-192.png" alt=""><h1>ختمة العائلة</h1><p>'+esc(K.name)+'</p>'+AYAH_HTML+'</div>'+
     '<div class="wel-meta num"><span>'+K.days+' يوماً</span><span>'+pagesN(daily())+' كل يوم</span><span>اليوم '+Math.max(1,dayNo())+'</span></div>'+
-    (famVid()?'<div class="wel-vids"><button class="wel-vid" data-act="vid" data-v="intro" aria-label="شاهد فيديو ختمتنا"><span class="wv-th"><img src="fam-intro.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>فيديو ختمتنا</b><small>40 ثانية</small></span></button>'+
+    (famVid()?'<div class="wel-vids">'+'<button class="wel-vid wv-new" data-act="vid" data-v="gintro" aria-label="شاهد فيديو التعريف بالتطبيق"><span class="wv-th"><img src="gen-intro.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>تعرّف على ختمة العائلة</b><small>جديد: الجلسة المركّزة والمجلس · 45 ثانية</small></span></button>'+'<button class="wel-vid wv-new" data-act="vid" data-v="gstart" aria-label="شاهد كيف تبدأ ختمة عائلتك"><span class="wv-th"><img src="gen-start.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>كيف تبدأ ختمة عائلتك؟ 🔗</b><small>لمن يريد ختمة لعائلته · 37 ثانية</small></span></button>'+
       '<button class="wel-vid" data-act="vid" data-v="pin" aria-label="شاهد شرح الرمز السري"><span class="wv-th"><img src="fam-pin.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>لا يقرأ أحدٌ باسمك 🔒</b><small>شرح بالخطوات · دقيقة ونصف</small></span></button>'+
-      '<button class="wel-vid wv-new" data-act="vid" data-v="upd" aria-label="شاهد فيديو التحديث"><span class="wv-th"><img src="fam-upd.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>تحديث: القائمة محفوظة 🔒</b><small>لماذا صارت الإضافة بيد صاحب الختمة · دقيقة</small></span></button>'+
-      '<button class="wel-vid wv-new" data-act="vid" data-v="join" aria-label="شاهد كيف ينضم من لم يدخل بعد"><span class="wv-th"><img src="fam-join.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>كيف ينضمّ من لم يدخل بعد؟ 🔗</b><small>الصق الرمز وانضم · دقيقة</small></span></button></div>':'<div class="wel-vids"><button class="wel-vid" data-act="vid" data-v="gintro" aria-label="شاهد فيديو التعريف بالتطبيق"><span class="wv-th"><img src="gen-intro.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>تعرّف على ختمة العائلة</b><small>40 ثانية</small></span></button>'+'<button class="wel-vid" data-act="vid" data-v="gstart" aria-label="شاهد كيف تبدأ ختمة عائلتك"><span class="wv-th"><img src="gen-start.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>كيف تبدأ ختمة عائلتك؟ 🔗</b><small>أنشئ، ادعُ أهلك، واقرؤوا · 45 ثانية</small></span></button></div>')+
+      '<button class="wel-vid" data-act="vid" data-v="upd" aria-label="شاهد فيديو التحديث"><span class="wv-th"><img src="fam-upd.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>تحديث: القائمة محفوظة 🔒</b><small>لماذا صارت الإضافة بيد صاحب الختمة · دقيقة</small></span></button>'+
+      '<button class="wel-vid" data-act="vid" data-v="join" aria-label="شاهد كيف ينضم من لم يدخل بعد"><span class="wv-th"><img src="fam-join.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>كيف ينضمّ من لم يدخل بعد؟ 🔗</b><small>الصق الرمز وانضم · دقيقة</small></span></button></div>':'<div class="wel-vids"><button class="wel-vid" data-act="vid" data-v="gintro" aria-label="شاهد فيديو التعريف بالتطبيق"><span class="wv-th"><img src="gen-intro.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>تعرّف على ختمة العائلة</b><small>45 ثانية</small></span></button>'+'<button class="wel-vid" data-act="vid" data-v="gstart" aria-label="شاهد كيف تبدأ ختمة عائلتك"><span class="wv-th"><img src="gen-start.jpg" alt=""><i>▶</i></span><span class="wv-tx"><b>كيف تبدأ ختمة عائلتك؟ 🔗</b><small>أنشئ، ادعُ أهلك، واقرؤوا · 37 ثانية</small></span></button></div>')+
     prLine()+'<div class="wel-msg">'+esc(fill(s.b))+'</div>'+
     '<button class="gbtn wel-go" data-act="enter">'+I('book')+(m?'ادخل يا '+esc(m.name)+' وابدأ':'ادخل وابدأ')+'</button>'+
   '</div></div>';
@@ -1558,7 +1558,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vFocus()+vFeed()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 56</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 57</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
