@@ -20,6 +20,7 @@ if(!code){['kf_code','ad_code','tk_code'].some(function(k){var c=ls0(k);if(c&&CO
 (function(){var o=ls('hq_code');if(code&&o&&o!==code){ls('hq_home',null);ls('hq_mine',null);ls('hq_me',null)}})();
 var HU=(location.hash.match(/[#&]u=([A-Za-z0-9_-]{1,40})/)||[])[1]||'';
 var SHARE=/[#&]share\b/.test(location.hash);
+var OPEN0=(location.hash.match(/[#&]o=([A-Za-z0-9_-]{1,40})/)||[])[1]||null;
 if(code)ls('hq_code',code);if(code&&HU)ls('hq_me',HU);
 if(location.hash)history.replaceState(null,'',location.pathname);
 var M=jget('hq_M_'+code,[]),H=jget('hq_H_'+code,{}),FN=ls('hq_fn_'+code)||'',OWN='',loaded=M.length>0;
@@ -30,7 +31,7 @@ function inherit(p){if(ls0(p+'_code')!==code)return;
 if(code&&!HU){inherit('kf');inherit('ad');inherit('tk')}
 var seen=jget('hq_seen',{});
 var pinBuf='',pinFirst='',pinErr='',pinFails=0,pinWait=0,pinChange=false;
-var TAB=ls('hq_tab')||'home',SUBF='',OPEN=null,sheet=null,draft=null,dirty=false,pending=0,toast='',sending=false,qrFor=null;
+var TAB=ls('hq_tab')||'home',SUBF='',OPEN=OPEN0,sheet=null,draft=null,dirty=false,pending=0,toast='',sending=false,qrFor=null;
 var FSZ=[1,1.15,1.3,1.5],FL=parseInt(ls('hq_fs'),10);if(!(FL>=0&&FL<=3))FL=0;
 function applyFs(){var z=FSZ[FL];document.documentElement.style.zoom=z===1?'':String(z)}applyFs();
 
@@ -44,7 +45,7 @@ function subs(){var s=H.subs;return Array.isArray(s)&&s.length?s.filter(Boolean)
 function subCol(s){var i=subs().indexOf(s);return PAL[(i<0?PAL.length-1:i)%PAL.length]}
 function cache(){ls('hq_M_'+code,JSON.stringify(M));ls('hq_fn_'+code,FN);ls('hq_H_'+code,JSON.stringify(H))}
 function arr(o){return Object.keys(o||{}).map(function(k){var x=o[k]||{};x.id=k;return x})}
-function items(){return arr(H.items).filter(function(x){return x.c}).sort(function(a,b){return b.c-a.c})}
+function items(){return arr(H.items).filter(fresh).sort(function(a,b){return b.c-a.c})}
 
 /* ---------- sync (same Firebase REST scheme as the other family apps) ---------- */
 function url(p){return DB+'/k/'+code+p+'.json'}
@@ -59,7 +60,7 @@ function pull(){if(!code||!DB)return;
     for(id in km){x=km[id];if(x&&x.name)ms.push({id:id,name:String(x.name),i:+x.i||0,k:x.k||'',h:x.h?'1':'',x:x.x?'1':''})}
     for(id in lm){x=lm[id];if(x&&x.name&&!km[id])ms.push({id:id,name:String(x.name),i:1000+(+x.i||0),k:x.k||'',h:x.h?'1':'',x:x.x?'1':'',l:1})}
     ms.sort(function(a,b){return a.i-b.i});
-    M=ms;H=h;OWN=h.own||R[1]||(famVid()?'mmwf6wd6v':'');FN=h.name||R[2]||FN||'';loaded=true;cache();soft()}).catch(function(){})}
+    M=ms;H=h;OWN=h.own||R[1]||(famVid()?'mmwf6wd6v':'');FN=h.name||R[2]||FN||'';loaded=true;cache();purgeOld();soft()}).catch(function(){})}
 function busy(){var a=document.activeElement;return sheet||(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'))}
 function soft(){if(busy()){dirty=true;return}render()}
 document.addEventListener('focusout',function(){setTimeout(function(){if(dirty&&!busy()){dirty=false;render()}},50)});
@@ -116,8 +117,8 @@ function pinKey(k){
       if(h===m.k){unlocked=id;pinFails=0;pinBuf='';render()}
       else{pinFails++;pinBuf='';pinErr='الرمز غير صحيح';if(pinFails>=5){pinFails=0;pinWait=Date.now()+30000;setTimeout(render,30100)}render()}})},120)}
 document.addEventListener('visibilitychange',function(){
-  if(document.hidden){hidAt=Date.now();return}
-  pull();if(hidAt&&Date.now()-hidAt>10*60000&&unlocked){unlocked=null;pinBuf='';if(kidDevice()&&me!==home){me=home;ls('hq_me',me)}render()}});
+  if(document.hidden){hidAt=Date.now();if(TM&&TM.ph==='s'&&TM.k===me){TM.out=(TM.out||0)+1;saveTM()}return}
+  pull();tick();if(TM&&TM.ph==='s'&&TM.k===me&&Date.now()-hidAt>3000){render();flash(G('أهلاً بعودتكِ، أكملي حصتكِ 💪','أهلاً بعودتك، أكمل حصتك 💪'))}if(hidAt&&Date.now()-hidAt>10*60000&&unlocked){unlocked=null;pinBuf='';if(kidDevice()&&me!==home){me=home;ls('hq_me',me)}render()}});
 
 /* ---------- files ---------- */
 var FC='hq-files';
@@ -189,6 +190,8 @@ function kidHome(){var k=me,L=items().filter(function(x){return forKid(x,k)}),F=
   var ms=arr(H.msgs).filter(function(x){return x.c&&forKid(x,k)}).sort(function(a,b){return b.c-a.c}).slice(0,3);
   var hr=new Date().getHours();
   return '<section class="hello"><small>'+(hr<12?'صباح الخير':hr<18?'مساء الخير':'مساء النور')+'</small><h2>مرحباً يا '+esc(nm(k))+'</h2></section>'+
+    (TAB==='home'?vTimer():(TM&&TM.k===me&&TM.ph==='s'?vTimer():''))+(TAB==='home'?vNotif(true):'')+
+    (TAB==='home'&&!ls('hq_th')?'<section class="card stack"><b>🎨 '+G('اختاري','اختر')+' خلفية '+G('تحبينها','تحبها')+'</b>'+vThemes()+'</section>':'')+
     (TAB==='home'&&hw.length?'<button class="card hw" data-act="tab" data-v="hw"><span class="ic o" aria-hidden="true">✅</span><span class="rx"><b>'+(hw.length===1?'عندك واجب واحد':hw.length===2?'عندك واجبان':'عندك '+hw.length+(hw.length<=10?' واجبات':' واجباً'))+'</b><small>اضغط لتراها</small></span></button>':'')+
     chips()+
     (TAB==='hw'?'<h3 class="gh">الواجبات</h3>'+(F.filter(function(x){return x.ty==='h'}).length?'<ul class="ls">'+F.filter(function(x){return x.ty==='h'}).sort(function(a,b){return isDone(a,k)-isDone(b,k)}).map(function(x){return kRow(x,k)}).join('')+'</ul>':'<p class="empty">لا واجبات هنا، بارك الله فيك</p>'):
@@ -239,7 +242,11 @@ function vFam(){var me0=mem(me),K=kids(),A=adults();
   var ms=arr(H.msgs).filter(function(x){return x.c}).sort(function(a,b){return b.c-a.c}).slice(0,6);
   return '<section class="card stack"><h2 class="ctitle sm">رسالة إلى '+(K.length===1?esc(K[0].name):'التلاميذ')+'</h2><form class="form" data-form="msg"><input id="msgIn" maxlength="200" autocomplete="off" placeholder="مثلاً: أحسنتِ في واجب الأمس"><button class="btn" type="submit">أرسل</button></form>'+
     (ms.length?ms.map(function(x){return vMsg(x,null)}).join(''):'')+'</section>'+
-    '<section class="card stack"><h2 class="ctitle sm">التلاميذ</h2>'+(K.length?K.map(function(m){return '<div class="mrow"><span class="av k">'+esc(m.name.slice(0,1))+'</span><b>'+esc(m.name)+'</b><button class="pill go" data-act="qr" data-v="'+m.id+'">📲 جهّز جهازه</button><button class="pill" data-act="unkid" data-v="'+m.id+'" aria-label="ليس تلميذاً">✕</button></div>'}).join(''):'<p class="sub">لا تلاميذ بعد.</p>')+
+    vNotif(false)+'<section class="card stack"><h2 class="ctitle sm">التلاميذ</h2>'+(K.length?K.map(function(m){var c=cfgFor(m.id),o=function(L,v,u){return L.map(function(n){return '<option value="'+n+'"'+(n===v?' selected':'')+'>'+(n?n+' '+u:'بلا استراحة')+'</option>'}).join('')};
+      return '<div class="kbox"><div class="mrow"><span class="av k">'+esc(m.name.slice(0,1))+'</span><b>'+esc(m.name)+'</b><button class="pill go" data-act="qr" data-v="'+m.id+'">📲 جهّز جهازه</button><button class="pill" data-act="unkid" data-v="'+m.id+'" aria-label="ليس تلميذاً">✕</button></div>'+
+      '<div class="seg"><button type="button" class="'+(c.g==='f'?'on':'')+'" data-act="kg" data-k="'+m.id+'" data-v="f">بنت</button><button type="button" class="'+(c.g==='m'?'on':'')+'" data-act="kg" data-k="'+m.id+'" data-v="m">ولد</button></div>'+
+      '<div class="two"><label><span>مدة الحصة</span><select data-kc="st" data-k="'+m.id+'">'+o([15,20,25,30,40,45,60],c.st,'دقيقة')+'</select></label><label><span>الاستراحة بعدها</span><select data-kc="br" data-k="'+m.id+'">'+o([0,5,10,15,20,30],c.br,'دقائق')+'</select></label></div>'+
+      '<label class="chk"><input type="checkbox" data-kc="lk" data-k="'+m.id+'"'+(c.lk?' checked':'')+'> اقفل التطبيق أثناء الاستراحة</label></div>'}).join(''):'<p class="sub">لا تلاميذ بعد.</p>')+
     '<form class="form" data-form="kid"><input id="kidIn" maxlength="30" autocomplete="off" placeholder="اسم التلميذ"><button class="btn" type="submit">أضف</button></form>'+
     (A.length>1?'<p class="sub">أو اختر من أفراد العائلة:</p><div class="chips">'+A.filter(function(m){return m.id!==me}).map(function(m){return '<button class="chip" data-act="mkkid" data-v="'+m.id+'">+ '+esc(m.name)+'</button>'}).join('')+'</div>':'')+'</section>'+
     (qrFor?vQR():'')+
@@ -302,8 +309,9 @@ function vSet(){var m=mem(me),kid=isKid(me);
       '<button class="btn ghost" data-act="adm">🔒 دخول وليّ الأمر</button>':
       (m?'<button class="btn ghost" data-act="me" data-v="">👤 لستُ '+esc(m.name)+'؟ بدّل الاسم</button>':'')+
       (m&&(me===home||unlocked===me||mine.indexOf(me)>=0)?'<button class="btn ghost" data-act="pinchg">🔑 '+(m.k?'تغيير رمزي السري':'اختر رمزي السري')+'</button>':'')+
-      (kidDevice()&&me!==home?'<button class="btn ghost" data-act="me" data-v="'+esc(home)+'">↩ رجوع إلى حساب '+esc(nm(home))+'</button>':''))+
-    '<p class="sub">مجاني، بلا إعلانات وبلا غرباء. <a href="privacy.html">الخصوصية</a> · الإصدار '+ver()+'</p></div></div>'}
+      (kidDevice()&&me!==home?'<button class="btn ghost" data-act="me" data-v="'+esc(home)+'">↩ رجوع إلى حساب '+esc(nm(home))+'</button>'+(TM?'<button class="btn ghost" data-act="tclear">⏹ أوقف حصة '+esc(nm(home))+' أو استراحته</button>':''):''))+
+    '<h3 class="ctitle sm">🎨 الخلفية</h3>'+vThemes()+(pushOK()&&!nOn?'<button class="btn ghost" data-act="notif">🔔 فعّل الإشعارات</button>':'')+
+    '<p class="sub">تُحذف الدروس تلقائياً بعد 40 يوماً لتوفير المساحة.</p><p class="sub">مجاني، بلا إعلانات وبلا غرباء. <a href="privacy.html">الخصوصية</a> · الإصدار '+ver()+'</p></div></div>'}
 function vAdm(){return '<div class="ov" data-act="ovx"><div class="sht stack" role="dialog" aria-label="دخول وليّ الأمر"><div class="sh2"><h2 class="ctitle">دخول وليّ الأمر</h2><button class="ib" data-act="close" aria-label="إغلاق">✕</button></div><p class="sub">اختر اسمك، ثم اكتب رمزك السري.</p><div class="chips">'+
   adults().map(function(m){return '<button class="chip big" data-act="me" data-v="'+m.id+'">'+esc(m.name)+'</button>'}).join('')+'</div></div></div>'}
 function ver(){return (document.querySelector('script[src*="app.js"]')||{src:''}).src.split('v=')[1]||''}
@@ -311,16 +319,92 @@ function nav(kid){var T=kid?[['home','📚','دروسي'],['hw','✅','واجب�
   var hw=kid?items().filter(function(x){return x.ty==='h'&&forKid(x,me)&&!isDone(x,me)}).length:0;
   return '<nav class="bn">'+T.map(function(x){var c=x[0]==='hw'?hw:0;return '<button class="'+(TAB===x[0]?'on':'')+'" data-act="tab" data-v="'+x[0]+'"'+(TAB===x[0]?' aria-current="page"':'')+'><span>'+x[1]+(c?'<em>'+c+'</em>':'')+'</span>'+x[2]+'</button>'}).join('')+'</nav>'}
 
+/* ---------- 40-day cleanup (also done daily by the server) ---------- */
+var KEEP=40*864e5,purged=false;
+function fresh(x){return x&&x.c&&Date.now()-x.c<KEEP}
+function purgeOld(){if(purged||!loaded)return;purged=true;var lim=Date.now()-KEEP,keep={};
+  arr(H.items).forEach(function(x){if(x.c&&x.c<lim){if(mem(me)&&!isKid(me)){(x.f||[]).forEach(function(f){wq('/hqf/'+f.id,'DELETE')});wq('/hq/items/'+x.id,'DELETE')}}else(x.f||[]).forEach(function(f){keep[f.id]=1})});
+  arr(H.msgs).forEach(function(g){if(g.c&&g.c<lim&&mem(me)&&!isKid(me))wq('/hq/msgs/'+g.id,'DELETE')});
+  Object.keys(seen).forEach(function(i){if(!(H.items&&H.items[i]))delete seen[i]});ls('hq_seen',JSON.stringify(seen));
+  if(window.caches)caches.open(FC).then(function(c){return c.keys().then(function(ks){ks.forEach(function(r){var f=r.url.split('/__f/')[1];if(f&&!keep[f])c.delete(r)})})}).catch(function(){});
+  fetch(DB+'/pidx/'+code+'.json',{method:'PUT',body:'true'}).catch(function(){})}
+
+/* ---------- notifications (same Web Push scheme as مهام العائلة) ---------- */
+var VAPID='__VAPID__',nOn=ls('hq_sub')!=null,nBusy=false,nErr='';
+function pushOK(){return 'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window}
+function b64u(s){var p='='.repeat((4-s.length%4)%4),r=atob((s+p).replace(/-/g,'+').replace(/_/g,'/')),o=new Uint8Array(r.length);for(var i=0;i<r.length;i++)o[i]=r.charCodeAt(i);return o}
+function hkey(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return 's'+h.toString(36)+s.length.toString(36)}
+function enableNotif(){
+  if(!pushOK()||nBusy)return;nBusy=true;nErr='';render();
+  Notification.requestPermission().then(function(p){if(p!=='granted')throw new Error('لم يُمنح إذن الإشعارات. فعّله من إعدادات الهاتف ← التطبيقات ← حقيبتي ← الإشعارات.');return navigator.serviceWorker.ready})
+  .then(function(reg){return reg.pushManager.getSubscription().then(function(x){return x||reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID)})})})
+  .then(function(sub){var j=sub.toJSON(),k=hkey(j.endpoint);
+    return fetch(url('/hq/subs/'+k),{method:'PUT',body:JSON.stringify({e:j.endpoint,k:j.keys,m:me||'',t:Date.now()})}).then(function(r){if(!r.ok)throw new Error('تعذّر الحفظ، تحقّق من الاتصال.');ls('hq_sub',k);nOn=true;fetch(DB+'/pidx/'+code+'.json',{method:'PUT',body:'true'}).catch(function(){})})})
+  .catch(function(e){nErr=(e&&e.message&&/[؀-ۿ]/.test(e.message))?e.message:'تعذّر تفعيل الإشعارات على هذا الجهاز.'}).then(function(){nBusy=false;render()})}
+function syncSubMember(){var k=ls('hq_sub');if(k&&code&&DB)fetch(url('/hq/subs/'+k+'/m'),{method:'PUT',body:JSON.stringify(me||'')}).catch(function(){})}
+function vNotif(kid){if(!pushOK()||nOn)return '';var den=window.Notification&&Notification.permission==='denied';
+  return '<section class="card stack ncard"><b>🔔 '+(kid?'إشعار بصوت عند وصول درس جديد':'إشعار بصوت عندما ينهي التلميذ درسه')+'</b>'+
+    (den?'<p class="sub">الإشعارات ممنوعة على هذا الجهاز. فعّلها من إعدادات الهاتف ← التطبيقات ← حقيبتي ← الإشعارات، ثم اضغط الزر.</p>':'')+
+    '<button class="btn" data-act="notif"'+(nBusy?' disabled':'')+'>'+(nBusy?'جارٍ التفعيل…':'فعّل الإشعارات')+'</button>'+(nErr?'<p class="err">'+esc(nErr)+'</p>':'')+'</section>'}
+
+/* ---------- gender, themes ---------- */
+function cfgFor(k){var c=(H.cfg&&H.cfg[k])||{};return {st:+c.st||30,br:c.br==null?10:+c.br,lk:c.lk==null?1:+c.lk,g:c.g==='m'?'m':c.g==='f'?'f':''}}
+function G(f,m,k){return cfgFor(k||me).g==='m'?m:f}
+var THEMES=[['paper','ورق دافئ','الكل'],['rose','وردي وزهور','بنت'],['lilac','بنفسجي ونجوم','بنت'],['sky','سماء وطائرات','ولد'],['space','الفضاء','ولد'],['garden','حديقة','الكل']];
+function curTheme(){var t=ls('hq_th');if(t)return t;var m=mem(me);if(m&&isKid(me)){var g=cfgFor(me).g;return g==='m'?'sky':g==='f'?'rose':'paper'}return 'paper'}
+function applyTheme(){var t=curTheme();if(document.documentElement.dataset.th!==t){document.documentElement.dataset.th=t;var mt=document.querySelector('meta[name=theme-color]'),c={paper:'#0F5F57',rose:'#B03A64',lilac:'#6B3FA0',sky:'#1F5C99',space:'#1B2440',garden:'#3F6B1F'}[t];if(mt&&c)mt.content=c}}
+function vThemes(){var t=curTheme();return '<div class="thg">'+THEMES.map(function(x){return '<button class="thb'+(t===x[0]?' on':'')+'" data-act="theme" data-v="'+x[0]+'" aria-pressed="'+(t===x[0])+'"><span class="tp" data-th="'+x[0]+'"></span><b>'+x[1]+'</b><small>'+x[2]+'</small></button>'}).join('')+'</div>'}
+
+/* ---------- focus timer ---------- */
+var TM=jget('hq_tm',null),AC=null,hidT=0;
+function saveTM(){ls('hq_tm',TM?JSON.stringify(TM):null)}
+function ac(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}return AC}
+function chime(kind){var a=ac();if(!a)return;var S={warn:[[880,.18,0],[880,.18,.3]],end:[[523,.22,0],[659,.22,.22],[784,.22,.44],[1047,.5,.66],[523,.22,1.4],[659,.22,1.62],[784,.22,1.84],[1047,.6,2.06]],bell:[[988,.5,0],[784,.5,.45],[659,.8,.9]]}[kind]||[];
+  S.forEach(function(s){var o=a.createOscillator(),g=a.createGain(),t=a.currentTime+s[2];o.type='sine';o.frequency.value=s[0];g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.45,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+s[1]);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+s[1]+.05)});
+  try{navigator.vibrate&&navigator.vibrate(kind==='warn'?[150,100,150]:[400,150,400,150,600])}catch(e){}}
+function mmss(ms){var s=Math.max(0,Math.ceil(ms/1000));return pad(Math.floor(s/60))+':'+pad(s%60)}
+function startStudy(min){ac();var c=cfgFor(me),n=Date.now();TM={k:me,ph:'s',s:n,d:min*60000,e:n+min*60000,b:c.br*60000,lk:c.lk,out:0,w:0};saveTM();render();window.scrollTo(0,0)}
+function endStudy(){var n=Date.now();if(TM.b>0){TM.ph='b';TM.e=n+TM.b}else TM.ph='d';TM.sd=n;saveTM();chime('end');render()}
+var ACT={f:['ساعدي في ترتيب غرفتك 🧸','اشربي كأس ماء وتمدّدي قليلاً 💧','ساعدي أمك أو جدتك في المطبخ 🍽️','اقرئي صفحات من قصة تحبينها 📖','ارسمي شيئاً جميلاً 🎨','العبي لعبة حركية مع إخوتك 🤸‍♀️','اسقي النباتات 🌱','رتّبي حقيبتك ليوم غد 🎒','توضّئي وصلّي إن حان وقت الصلاة 🕌'],
+  m:['ساعد في ترتيب غرفتك 🧸','اشرب كأس ماء وتمدّد قليلاً 💧','ساعد أمك أو جدتك في المطبخ 🍽️','اقرأ صفحات من قصة تحبها 📖','ارسم شيئاً جميلاً 🎨','العب لعبة حركية مع إخوتك ⚽','اسقِ النباتات 🌱','رتّب حقيبتك ليوم غد 🎒','توضّأ وصلِّ إن حان وقت الصلاة 🕌']};
+function activity(){var L=ACT[cfgFor(me).g==='m'?'m':'f'];return L[Math.floor((TM&&TM.s||0)/60000)%L.length]}
+function vTimer(){var c=cfgFor(me);
+  if(!TM||TM.k!==me)return '<section class="card stack tcard"><div class="tch"><span class="ic o" aria-hidden="true">⏱️</span><div class="rx"><b>حصة مذاكرة مركّزة</b><small>'+G('اختاري','اختر')+' المدة، ثم '+G('ركّزي','ركّز')+' في '+G('درسك','درسك')+' حتى يرنّ المنبّه</small></div></div>'+
+    '<div class="tdur">'+[15,20,30,45].concat(c.st>45||[15,20,30,45].indexOf(c.st)<0?[c.st]:[]).sort(function(a,b){return a-b}).map(function(n){return '<button class="'+(n===c.st?'on':'')+'" data-act="tstart" data-v="'+n+'"><b>'+n+'</b><small>دقيقة</small></button>'}).join('')+'</div>'+
+    (c.br>0?'<p class="sub">بعدها استراحة '+c.br+' دقائق لنشاط في البيت'+(c.lk?'، ويُقفَل التطبيق خلالها':'')+'.</p>':'')+'</section>';
+  if(TM.ph!=='s')return '';
+  var rem=TM.e-Date.now(),C=2*Math.PI*88;
+  return '<section class="card tbig" aria-live="off"><svg viewBox="0 0 200 200" class="ring" aria-hidden="true"><circle cx="100" cy="100" r="88" class="rb"/><circle cx="100" cy="100" r="88" class="rf" id="tmr" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-rem/TM.d)).toFixed(1)+'"/></svg>'+
+    '<div class="tin"><b class="tmv" role="timer">'+mmss(rem)+'</b><small>'+G('ركّزي','ركّز')+' في '+G('درسك','درسك')+' 💪</small></div>'+
+    '<p class="twarn" id="twarn"'+(TM.w?'':' hidden')+'>⏰ بقيت دقيقة، ثم '+(TM.b>0?'يُغلق التطبيق لوقت نشاط في البيت':'تنتهي الحصة')+'</p>'+
+    (TM.out?'<p class="sub c">'+G('خرجتِ','خرجتَ')+' من التطبيق '+TM.out+(TM.out===1?' مرة':' مرات')+' خلال الحصة</p>':'')+
+    '<button class="lnk" data-act="tend">'+G('أنهيتُ قبل الوقت','أنهيتُ قبل الوقت')+'</button></section>'}
+function vBreak(){var rem=TM.e-Date.now();
+  if(TM.ph==='b')return '<div class="brk"><div class="bin"><p class="bbig">🎉</p><h2>انتهت الحصة، '+G('أحسنتِ','أحسنتَ')+'!</h2><p>الآن وقت نشاط في البيت:</p><p class="bact">'+esc(activity())+'</p>'+
+    '<p class="sub">'+(TM.lk?'يُفتح التطبيق من جديد بعد':'الاستراحة')+'</p><b class="tmv bt" role="timer">'+mmss(rem)+'</b>'+
+    (TM.lk?'<button class="lnk" data-act="adm">وليّ الأمر</button>':'<button class="btn ghost" data-act="tclear">رجوع إلى الدروس</button>')+'</div></div>';
+  return '<div class="brk"><div class="bin"><p class="bbig">🔔</p><h2>انتهت الاستراحة</h2><p>'+G('مرحباً بعودتكِ','مرحباً بعودتك')+'. هل '+G('تبدئين','تبدأ')+' حصة جديدة؟</p>'+
+    '<button class="btn big" data-act="tstart" data-v="'+cfgFor(me).st+'">ابدأ حصة '+cfgFor(me).st+' دقيقة</button><button class="btn ghost" data-act="tclear">لاحقاً</button></div></div>'}
+function tick(){if(!TM)return;var n=Date.now(),rem=TM.e-n;
+  if(TM.ph==='s'){
+    if(rem<=60000&&!TM.w&&rem>0){TM.w=1;saveTM();chime('warn');var w=document.getElementById('twarn');if(w)w.hidden=false;else flash('⏰ بقيت دقيقة على نهاية الحصة')}
+    if(rem<=0){endStudy();return}
+  }else if(TM.ph==='b'&&rem<=0){TM.ph='d';saveTM();chime('bell');render();return}
+  document.querySelectorAll('.tmv').forEach(function(el){el.textContent=mmss(rem)});
+  var r=document.getElementById('tmr');if(r&&TM.ph==='s'){var C=2*Math.PI*88;r.setAttribute('stroke-dashoffset',(C*(1-rem/TM.d)).toFixed(1))}}
+setInterval(tick,1000);
+
 /* ---------- render ---------- */
 function render(){
   if(!code){root.innerHTML=vJoin();return}
   applyFs();readDraft();
   if(gate()!=='open'){root.innerHTML=vLock();return}
-  var m=mem(me),kid=m&&isKid(me),body;
+  var m=mem(me),kid=m&&isKid(me),body;applyTheme();
+  if(kid&&TM&&TM.k===me&&(TM.ph==='b'||TM.ph==='d')){root.innerHTML=vBreak()+(sheet==='adm'?vAdm():'');return}
   if(m&&kid&&TAB==='fam')TAB='home';if(m&&!kid&&TAB==='hw')TAB='home';
   if(m&&OPEN&&H.items&&H.items[OPEN]){var x=H.items[OPEN];x.id=OPEN;
     if(kid&&!seen[OPEN]){seen[OPEN]=1;ls('hq_seen',JSON.stringify(seen))}
-    root.innerHTML=vItem(x)+(toast?'<div class="toast" role="status">'+esc(toast)+'</div>':'');fillAtt();return}
+    root.innerHTML=vItem(x)+(kid&&TM&&TM.k===me&&TM.ph==='s'?'<div class="tmini" role="timer">⏱️ <b class="tmv">'+mmss(TM.e-Date.now())+'</b></div>':'')+(toast?'<div class="toast" role="status">'+esc(toast)+'</div>':'');fillAtt();return}
   OPEN=null;
   if(!m)body=vWho();else if(kid)body=kidHome();else body=TAB==='fam'?vFam():parentHome();
   var sub=m?(kid?(FN||'عائلتي'):(FN||'عائلتي')+' · '+nm(me)):'دروس الأستاذ، من العائلة فقط';
@@ -346,7 +430,7 @@ document.addEventListener('click',function(e){
   if(a==='claim'){pinChange=true;pinBuf='';pinFirst='';pinErr='';render();return}
   if(a==='pinchg'){if(me===home||unlocked===me||mine.indexOf(me)>=0){sheet=null;pinChange=true;pinBuf='';pinFirst='';pinErr='';render();window.scrollTo(0,0)}return}
   if(a==='pinx'){pinChange=false;pinBuf='';pinFirst='';pinErr='';render();return}
-  if(a==='me'){pinBuf='';pinFirst='';pinErr='';pinChange=false;unlocked=null;sheet=null;OPEN=null;TAB='home';me=v||null;ls('hq_me',me);render();window.scrollTo(0,0);return}
+  if(a==='me'){pinBuf='';pinFirst='';pinErr='';pinChange=false;unlocked=null;sheet=null;OPEN=null;TAB='home';me=v||null;ls('hq_me',me);syncSubMember();render();window.scrollTo(0,0);return}
   if(a==='leave'){code='';ls('hq_code',null);me=null;ls('hq_me',null);render();return}
   if(a==='open'){OPEN=v;render();window.scrollTo(0,0);return}
   if(a==='back'){OPEN=null;render();return}
@@ -355,6 +439,12 @@ document.addEventListener('click',function(e){
   if(a==='done'){var x=H.items&&H.items[v];if(!x)return;x.dn=x.dn||{};if(x.dn[me]){delete x.dn[me];wq('/hq/items/'+v+'/dn/'+me,'DELETE')}else{x.dn[me]=Date.now();wq('/hq/items/'+v+'/dn/'+me,'PUT',x.dn[me]);try{navigator.vibrate&&navigator.vibrate([20,40,30])}catch(z){}}cache();render();return}
   if(a==='love'){var g=H.msgs&&H.msgs[v];if(!g)return;g.r=g.r||{};if(g.r[me]){delete g.r[me];wq('/hq/msgs/'+v+'/r/'+me,'DELETE')}else{g.r[me]=Date.now();wq('/hq/msgs/'+v+'/r/'+me,'PUT',g.r[me])}cache();render();return}
   if(a==='idel'){var y=H.items&&H.items[v];if(!y||!confirm('حذف «'+ttl(y)+'» من حقيبة التلميذ؟'))return;(y.f||[]).forEach(function(f){wq('/hqf/'+f.id,'DELETE')});delete H.items[v];wq('/hq/items/'+v,'DELETE');cache();OPEN=null;render();return}
+  if(a==='notif'){sheet=null;enableNotif();return}
+  if(a==='theme'){ls('hq_th',v);applyTheme();render();return}
+  if(a==='tstart'){startStudy(+v||30);return}
+  if(a==='tend'){if(TM&&TM.ph==='s')endStudy();return}
+  if(a==='tclear'){TM=null;saveTM();render();return}
+  if(a==='kg'){var kk=t.dataset.k;H.cfg=H.cfg||{};H.cfg[kk]=H.cfg[kk]||{};H.cfg[kk].g=v;wq('/hq/cfg/'+kk+'/g','PUT',v);cache();render();return}
   if(a==='new'){newDraft();render();return}
   if(a==='close'){readDraft();sheet=null;draft=null;render();return}
   if(a==='frm'){readDraft();draft.files.splice(+v,1);render();return}
@@ -367,7 +457,7 @@ document.addEventListener('click',function(e){
   if(a==='invite'){var u=location.origin+'/haqibati/#a='+code,txt='السلام عليكم، هذا تطبيق «حقيبتي» لنرسل منه دروس الأستاذ للأولاد. ثبّته ثم افتح هذا الرابط واختر اسمك:\n'+u;
     if(navigator.share)navigator.share({title:'حقيبتي',text:txt}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');return}
 });
-document.addEventListener('change',function(e){var t=e.target;if((t.id==='fIn'||t.id==='cIn')&&t.files&&t.files.length)addFiles(t.files)});
+document.addEventListener('change',function(e){var t=e.target;if(t.dataset&&t.dataset.kc){var k=t.dataset.k,f=t.dataset.kc,v=f==='lk'?(t.checked?1:0):+t.value;H.cfg=H.cfg||{};H.cfg[k]=H.cfg[k]||{};H.cfg[k][f]=v;wq('/hq/cfg/'+k+'/'+f,'PUT',v);cache();return}if((t.id==='fIn'||t.id==='cIn')&&t.files&&t.files.length)addFiles(t.files)});
 document.addEventListener('submit',function(e){
   var f=e.target.dataset.form;if(!f)return;e.preventDefault();var g=function(i){var x=document.getElementById(i);return (x&&x.value||'').trim()};
   if(f==='send'){if(!sending)send();return}

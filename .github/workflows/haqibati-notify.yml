@@ -1,0 +1,40 @@
+name: Haqibati notifications and cleanup
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # every 5 minutes (GitHub may delay a few minutes)
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: 'yes = only print what would be sent'
+        required: false
+        default: 'no'
+
+concurrency:
+  group: haqibati-notify
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: haqibati-push
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Install
+        working-directory: haqibati-push
+        run: npm install --no-audit --no-fund
+      - name: Send
+        working-directory: haqibati-push
+        env:
+          DB: https://khatma-16d1b-default-rtdb.firebaseio.com
+          SITE: https://tiloucloud.github.io/haqibati/
+          VAPID_PUBLIC: BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc
+          VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
+          DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
+          DRY_RUN: ${{ github.event.inputs.dry == 'yes' && '1' || '' }}
+        run: node send.js

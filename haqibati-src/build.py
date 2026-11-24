@@ -4,7 +4,8 @@ SRC = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(SRC)
 OUT = os.path.join(REPO, 'haqibati')
 DB = sys.argv[1] if len(sys.argv) > 1 else 'https://khatma-16d1b-default-rtdb.firebaseio.com'
-VER = 1
+VER = 2
+VAPID = 'BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc'
 
 os.makedirs(OUT, exist_ok=True)
 AD = os.path.join(REPO, 'adhkar')
@@ -17,7 +18,7 @@ shutil.rmtree(OUT + '/pdf', ignore_errors=True); shutil.copytree(f'{SRC}/vendor/
 shutil.copy(f'{SRC}/vendor/qr.js', OUT + '/qr.js')
 fonts = ''.join(x for x in re.findall(r"@font-face\{[^}]*\}", open(AD + '/app.css').read()) if 'warsh' not in x)
 open(OUT + '/app.css', 'w').write(fonts + '\n' + open(SRC + '/app.css').read())
-open(OUT + '/app.js', 'w').write(open(SRC + '/app.js').read().replace('__DB__', DB))
+open(OUT + '/app.js', 'w').write(open(SRC + '/app.js').read().replace('__DB__', DB).replace('__VAPID__', VAPID))
 open(OUT + '/index.html', 'w').write(f'''<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>حقيبتي</title><meta name="description" content="دروس الأستاذ وواجباته تصل إلى التلميذ عبر عائلته فقط، دون واتساب ودون غرباء.">
@@ -52,5 +53,9 @@ if(u.pathname.indexOf('/haqibati/pdf/')===0){e.respondWith(caches.open('hq-pdf')
 var nav=e.request.mode==='navigate'||u.pathname.endsWith('/')||u.pathname.endsWith('index.html');
 if(nav){e.respondWith(fetch(e.request).catch(function(){return caches.match(e.request,{ignoreSearch:true})}));return}
 e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request)}))});
+self.addEventListener('push',function(e){var d={};try{d=e.data?e.data.json():{}}catch(x){d={title:'حقيبتي',body:e.data?e.data.text():''}}
+e.waitUntil(self.registration.showNotification(d.title||'حقيبتي',{body:d.body||'',icon:'icon-192.png',badge:'icon-192.png',dir:'rtl',lang:'ar',tag:d.tag||'hq',renotify:true,silent:false,vibrate:[300,120,300],data:{url:d.url||'./'}}))});
+self.addEventListener('notificationclick',function(e){e.notification.close();var u=new URL((e.notification.data&&e.notification.data.url)||'./',self.registration.scope).href;
+e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(function(L){for(var i=0;i<L.length;i++){if(L[i].url.indexOf(self.registration.scope)===0&&'focus' in L[i]){L[i].navigate(u).catch(function(){});return L[i].focus()}}return self.clients.openWindow(u)}))});
 ''' % (VER, json.dumps(files)))
 print('built', OUT, 'v%d' % VER, 'db', DB)
