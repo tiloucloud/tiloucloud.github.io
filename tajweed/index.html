@@ -115,6 +115,11 @@ p{margin:6px 0 10px}
 .memo .s{font:calc(var(--q)*.72)/1.9 var(--mushaf)}
 .memo small{display:block;color:var(--muted);font-size:13.5px}
 .ex{display:block;width:100%;text-align:center;background:var(--surface);border:1px solid var(--line);border-inline-start:5px solid var(--c);border-radius:16px;padding:8px 12px;margin:10px 0;box-shadow:var(--shadow)}
+.exf{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.rec{display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--c);background:color-mix(in srgb,var(--c) 10%,transparent);color:var(--c);font:700 13.5px var(--body)}
+.rec svg{width:15px;height:15px}
+.rec.on{background:var(--c);color:#fff}
+.ex{cursor:pointer}
 .ex .ayah{font-size:calc(var(--q)*.92)}
 .why{display:none;font-size:15px;margin-top:6px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--c) 10%,transparent);text-align:start}
 .ex.open .why{display:block}
@@ -173,7 +178,7 @@ p{margin:6px 0 10px}
 <script>
 (function(){
 'use strict';
-var V='0.8',DB='https://khatma-16d1b-default-rtdb.firebaseio.com';
+var V='0.9',RECIT='https://everyayah.com/data/warsh/warsh_ibrahim_aldosary_128kbps/',DB='https://khatma-16d1b-default-rtdb.firebaseio.com';
 /* recorded audio clips available in a/ */
 var AV='p0 p1 p2 p3 p4 p5 p6 qok qno'.split(' ');
 (function(){var i;for(i=0;i<28;i++)AV.push('l'+i);for(i=0;i<19;i++)AV.push('e'+i);for(i=0;i<12;i++)AV.push('r'+i)})();
@@ -190,17 +195,17 @@ var LK=Object.keys(LN);
 var LESSON={
  iz:{why:'حروف الحلق بعيدة عن مخرج النون، فلا يمكن إدخال النون فيها، فتبقى النون ظاهرة.',
   memo:{w:'أَحَخَعَغِهَ',s:'أَخِي هَاكَ عِلْماً حَازَهُ غَيْرُ خَاسِرٍ',t:'أوائل كلمات الجملة هي حروف الإظهار الستة'},
-  ex:[['أَ⟨نْعَ⟩مْتَ عَلَيْهِمْ','الفاتحة','نون ساكنة بعدها عين في الكلمة نفسها'],['وَا⟨نْحَ⟩رْ','الكوثر','نون ساكنة بعدها حاء'],['مِ⟨نْ خَ⟩وْفٍ','قريش','نون ساكنة بعدها خاء في كلمة أخرى'],['عَلِي⟨مٌ حَ⟩كِيمٌ','','تنوين بعده حاء']],
+  ex:[['أَ⟨نْعَ⟩مْتَ عَلَيْهِمْ','الفاتحة','نون ساكنة بعدها عين في الكلمة نفسها','001007'],['وَا⟨نْحَ⟩رْ','الكوثر','نون ساكنة بعدها حاء','108002'],['مِ⟨نْ خَ⟩وْفٍ','قريش','نون ساكنة بعدها خاء في كلمة أخرى','106004'],['عَلِي⟨مٌ حَ⟩كِيمٌ','النساء','تنوين بعده حاء','004026']],
   note:'<b>خاص بورش:</b> إذا جاءت بعد النون الساكنة همزةٌ في أول الكلمة التالية، تُنقل حركة الهمزة إلى النون وتسقط الهمزة، مثل «مَنْ ءَامَنَ» تُقرأ «مَنَ امَنَ»، فلا إظهار هنا. لذلك مثال الهمزة يكون داخل الكلمة، مثل «وَيَنْأَوْنَ».'},
  ig:{why:'تُدغم النون في الحرف التالي فيصير حرفاً مشدّداً، وتبقى الغُنّة بمقدار حركتين.',memo:{w:'يَنْمُو',t:'كلمة تجمع حروف الإدغام بغُنّة'},
-  ex:[['فَمَ⟨ن يَ⟩عْمَلْ','الزلزلة','نون ساكنة بعدها ياء'],['يَوْمَئِذٍ⟨ نَّ⟩اعِمَةٌ','الغاشية','تنوين بعده نون'],['حَبْلٌ مِّ⟨ن مَّ⟩سَدٍ','المسد','نون ساكنة بعدها ميم'],['مِن دُونِهِ مِ⟨ن وَ⟩الٍ','الرعد','نون ساكنة بعدها واو']],
+  ex:[['فَمَ⟨ن يَ⟩عْمَلْ','الزلزلة','نون ساكنة بعدها ياء','099007'],['يَوْمَئِذٍ⟨ نَّ⟩اعِمَةٌ','الغاشية','تنوين بعده نون','088008'],['حَبْلٌ مِّ⟨ن مَّ⟩سَدٍ','المسد','نون ساكنة بعدها ميم','111005'],['مِن دُونِهِ مِ⟨ن وَ⟩الٍ','الرعد','نون ساكنة بعدها واو','013011']],
   note:'<b>استثناء:</b> إذا اجتمعت النون مع الياء أو الواو في كلمة واحدة فلا إدغام بل إظهار، وذلك في أربع كلمات: الدُّنْيَا، بُنْيَانٌ، قِنْوَانٌ، صِنْوَانٌ.'},
  ib:{why:'تُدغم النون إدغاماً كاملاً في اللام أو الراء، فتذهب النون وغُنّتها، ويُشدَّد الحرف التالي.',
-  ex:[['هُدً⟨ى لِّ⟩لْمُتَّقِينَ','البقرة','تنوين بعده لام'],['مِّ⟨ن رَّ⟩بِّهِمْ','البقرة','نون ساكنة بعدها راء'],['وَيْ⟨لٌ لِّ⟩كُلِّ هُمَزَةٍ','الهمزة','تنوين بعده لام'],['غَفُو⟨رٌ رَّ⟩حِيمٌ','','تنوين بعده راء']]},
+  ex:[['هُدً⟨ى لِّ⟩لْمُتَّقِينَ','البقرة','تنوين بعده لام','002002'],['مِّ⟨ن رَّ⟩بِّهِمْ','البقرة','نون ساكنة بعدها راء','002005'],['وَيْ⟨لٌ لِّ⟩كُلِّ هُمَزَةٍ','الهمزة','تنوين بعده لام','104001'],['غَفُو⟨رٌ رَّ⟩حِيمٌ','البقرة','تنوين بعده راء','002173']]},
  iq:{why:'إذا جاءت الباء بعد النون الساكنة أو التنوين، تُقلب النون ميماً مخفاةً مع غُنّة. وفي المصحف توضع فوقها ميم صغيرة.',
-  ex:[['لَيُ⟨نبَ⟩ذَنَّ','الهمزة','نون ساكنة بعدها باء في الكلمة نفسها'],['مِ⟨ن بَ⟩عْدِ','','نون ساكنة بعدها باء في كلمة أخرى'],['سَمِي⟨عٌ بَ⟩صِيرٌ','','تنوين بعده باء']]},
+  ex:[['لَيُ⟨نبَ⟩ذَنَّ','الهمزة','نون ساكنة بعدها باء في الكلمة نفسها','104004'],['مِ⟨ن بَ⟩عْدِ','البقرة','نون ساكنة بعدها باء في كلمة أخرى','002027'],['سَمِي⟨عٌ بَ⟩صِيرٌ','الحج','تنوين بعده باء','022061']]},
  ik:{why:'تُنطق النون بين الإظهار والإدغام، مع غُنّة بمقدار حركتين، ويتهيّأ اللسان لمخرج الحرف التالي.',memo:{s:'صِفْ ذَا ثَنَا كَمْ جَادَ شَخْصٌ قَدْ سَمَا ۝ دُمْ طَيِّباً زِدْ فِي تُقًى ضَعْ ظَالِمَا',t:'أوائل كلمات البيت هي حروف الإخفاء (من تحفة الأطفال)'},
-  ex:[['إِنَّا أَ⟨نزَ⟩لْنَاهُ','القدر','نون ساكنة بعدها زاي'],['مِ⟨ن شَ⟩رِّ مَا خَلَقَ','الفلق','نون ساكنة بعدها شين'],['نَارً⟨ا ذَ⟩اتَ لَهَبٍ','المسد','تنوين بعده ذال'],['مَا⟨ءً ثَ⟩جَّاجًا','النبأ','تنوين بعده ثاء']]}
+  ex:[['إِنَّا أَ⟨نزَ⟩لْنَاهُ','القدر','نون ساكنة بعدها زاي','097001'],['مِ⟨ن شَ⟩رِّ مَا خَلَقَ','الفلق','نون ساكنة بعدها شين','113002'],['نَارً⟨ا ذَ⟩اتَ لَهَبٍ','المسد','تنوين بعده ذال','111003'],['مَا⟨ءً ثَ⟩جَّاجًا','النبأ','تنوين بعده ثاء','078014']]}
 };
 var OFF={};(function(){var o=0;ORDER.forEach(function(k){OFF[k]=o;o+=LESSON[k].ex.length})})();
 var QUIZ=[
@@ -260,7 +265,7 @@ function checkBadges(){var e=earned(),nw=[];BADGES.forEach(function(b){if(e[b.id
 var TTS='speechSynthesis' in window,player=null,voice=null,cur='',curKey='';
 function pickV(){try{var v=speechSynthesis.getVoices().filter(function(v){return /^ar/i.test(v.lang)});voice=v[0]||null}catch(e){}}
 if(TTS){pickV();try{speechSynthesis.onvoiceschanged=pickV}catch(e){}}
-function stop(){if(player){try{player.pause()}catch(e){}player=null}if(TTS)try{speechSynthesis.cancel()}catch(e){}var b=document.querySelectorAll('.listen.on');for(var i=0;i<b.length;i++){b[i].classList.remove('on');b[i].innerHTML=SPK(1)+'استمع للشرح'}}
+function stop(){if(player){try{player.pause()}catch(e){}player=null}document.querySelectorAll('.rec.on').forEach(function(x){x.classList.remove('on')});if(TTS)try{speechSynthesis.cancel()}catch(e){}var b=document.querySelectorAll('.listen.on');for(var i=0;i<b.length;i++){b[i].classList.remove('on');b[i].innerHTML=SPK(1)+'استمع للشرح'}}
 function onBtn(btn){if(btn){btn.classList.add('on');btn.innerHTML=SPK(1)+'إيقاف'}}
 function offBtn(btn){if(btn){btn.classList.remove('on');btn.innerHTML=SPK(1)+'استمع للشرح'}}
 function playSeq(keys,btn,fallback){stop();if(!snd)return;var ks=keys.filter(function(k){return AV.indexOf(k)>=0});if(ks.length<keys.length){if(fallback)tts(fallback,btn);return}var i=0;onBtn(btn);(function next(){if(i>=ks.length){player=null;offBtn(btn);return}var a=new Audio('a/'+ks[i++]+'.mp3');player=a;a.onended=function(){if(player===a)next()};a.onerror=function(){if(player===a){player=null;offBtn(btn)}};a.play().catch(function(){offBtn(btn)})})()}
@@ -328,7 +333,7 @@ function vLesson(){
   '<div class="sec"><h3>حروفه</h3></div><div class="letters c-'+k+'">'+r.L.map(function(l){return lt(l)}).join('')+'</div><p class="tip">المس الحرف لتسمع اسمه</p>'+
   (m?'<div class="memo c-'+k+'">'+(m.w?'<div class="w">'+m.w+'</div>':'')+(m.s?'<div class="s">'+m.s+'</div>':'')+'<small>'+m.t+'</small></div>':'')+
   '<div class="sec"><h3>أمثلة</h3></div><p class="tip">المس المثال لترى السبب وتسمعه</p>'+
-  L.ex.map(function(e,j){return '<button class="ex c-'+k+'" data-a="ex" data-v="e'+(OFF[k]+j)+'" data-say="'+esc(e[2]+'، إذن: '+r.n)+'"><p class="ayah">'+mark(e[0],k)+'</p>'+(e[1]?'<div class="src">سورة '+e[1]+'</div>':'')+'<div class="why">'+e[2]+' ← <b style="color:var(--c)">'+r.n+'</b></div></button>'}).join('')+
+  L.ex.map(function(e,j){return '<div class="ex c-'+k+'" role="button" tabindex="0" data-a="ex" data-v="e'+(OFF[k]+j)+'" data-say="'+esc(e[2]+'، إذن: '+r.n)+'"><p class="ayah">'+mark(e[0],k)+'</p><div class="exf">'+(e[1]?'<span class="src">سورة '+e[1]+'</span>':'')+(e[3]?'<button class="rec" data-a="rec" data-v="'+e[3]+'">'+svg('<path d="M8 5v14l11-7z" fill="currentColor"/>')+'تلاوة الآية</button>':'')+'</div><div class="why">'+e[2]+' ← <b style="color:var(--c)">'+r.n+'</b></div></div>'}).join('')+
   (L.note?'<div class="note">'+L.note+'</div>':'');
   cur=r.n+'. '+r.s+'. '+L.why;
  }
@@ -407,6 +412,7 @@ document.addEventListener('click',function(e){
  if(a==='enter'){var nm=document.getElementById('nm');if(nm&&nm.value.trim()){S.name=nm.value.trim();save()}touchDay();save();go(F.code&&!F.me?'fam':'home');return}
  if(a.indexOf('nav-')===0){var t=a.slice(4);if(t==='set'){vSettings();return}go({home:'home',idx:'index',fam:'fam'}[t]);return}
  if(a==='listen'){if(b.classList.contains('on')){stop();return}playSeq([curKey],b,cur);return}
+ if(a==='rec'){var was=b.classList.contains('on');stop();document.querySelectorAll('.rec.on').forEach(function(x){x.classList.remove('on')});if(was)return;var au=new Audio(RECIT+v+'.mp3');player=au;b.classList.add('on');au.onended=au.onerror=function(){b.classList.remove('on')};au.play().catch(function(){b.classList.remove('on');toast('تعذّر تشغيل التلاوة، تحقّق من الإنترنت')});return}
  if(a==='ex'){b.classList.toggle('open');if(b.classList.contains('open'))playSeq([v],null,b.dataset.say);return}
  if(a==='start'){var f=0;while(f<PAGES.length-1&&S.pg[f])f++;st.p=f;go('lesson');return}
  if(a==='goto'){st.p=+v;go('lesson');return}
