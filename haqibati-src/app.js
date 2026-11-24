@@ -117,7 +117,8 @@ function pinKey(k){
       if(h===m.k){unlocked=id;pinFails=0;pinBuf='';render()}
       else{pinFails++;pinBuf='';pinErr='الرمز غير صحيح';if(pinFails>=5){pinFails=0;pinWait=Date.now()+30000;setTimeout(render,30100)}render()}})},120)}
 document.addEventListener('visibilitychange',function(){
-  if(document.hidden){hidAt=Date.now();if(TM&&TM.ph==='s'&&TM.k===me){TM.out=(TM.out||0)+1;saveTM()}return}
+  if(document.hidden){hidAt=Date.now();if(Date.now()-extAt<4000){extAway=true;return}if(TM&&TM.ph==='s'&&TM.k===me){TM.out=(TM.out||0)+1;saveTM()}return}
+  if(extAway){extAway=false;pull();tick();return}
   pull();tick();if(TM&&TM.ph==='s'&&TM.k===me&&Date.now()-hidAt>3000){render();flash(G('أهلاً بعودتكِ، أكملي حصتكِ 💪','أهلاً بعودتك، أكمل حصتك 💪'))}if(hidAt&&Date.now()-hidAt>10*60000&&unlocked){unlocked=null;pinBuf='';if(kidDevice()&&me!==home){me=home;ls('hq_me',me)}render()}});
 
 /* ---------- files ---------- */
@@ -190,7 +191,7 @@ function kidHome(){var k=me,L=items().filter(function(x){return forKid(x,k)}),F=
   var ms=arr(H.msgs).filter(function(x){return x.c&&forKid(x,k)}).sort(function(a,b){return b.c-a.c}).slice(0,3);
   var hr=new Date().getHours();
   return '<section class="hello"><small>'+(hr<12?'صباح الخير':hr<18?'مساء الخير':'مساء النور')+'</small><h2>مرحباً يا '+esc(nm(k))+'</h2></section>'+
-    (TAB==='home'?vTimer():(TM&&TM.k===me&&TM.ph==='s'?vTimer():''))+(TAB==='home'?vNotif(true):'')+
+    (TAB==='home'?vTimer():(TM&&TM.k===me&&TM.ph==='s'?vTimer():''))+(TAB==='home'&&cfgFor(k).tt?'<a class="card ttb" href="'+esc(cfgFor(k).tt)+'" target="_blank" rel="noopener" data-ext="1"><span class="ic" aria-hidden="true">📺</span><span class="rx"><b>دروس الدعم الرسمية</b><small>منصة TelmidTICE للوزارة · '+G('ادخلي','ادخل')+' برمز مسار</small></span><span aria-hidden="true">←</span></a>':'')+(TAB==='home'?vNotif(true):'')+
     (TAB==='home'&&!ls('hq_th')?'<section class="card stack"><b>🎨 '+G('اختاري','اختر')+' خلفية '+G('تحبينها','تحبها')+'</b>'+vThemes()+'</section>':'')+
     (TAB==='home'&&hw.length?'<button class="card hw" data-act="tab" data-v="hw"><span class="ic o" aria-hidden="true">✅</span><span class="rx"><b>'+(hw.length===1?'عندك واجب واحد':hw.length===2?'عندك واجبان':'عندك '+hw.length+(hw.length<=10?' واجبات':' واجباً'))+'</b><small>اضغط لتراها</small></span></button>':'')+
     chips()+
@@ -246,7 +247,9 @@ function vFam(){var me0=mem(me),K=kids(),A=adults();
       return '<div class="kbox"><div class="mrow"><span class="av k">'+esc(m.name.slice(0,1))+'</span><b>'+esc(m.name)+'</b><button class="pill go" data-act="qr" data-v="'+m.id+'">📲 جهّز جهازه</button><button class="pill" data-act="unkid" data-v="'+m.id+'" aria-label="ليس تلميذاً">✕</button></div>'+
       '<div class="seg"><button type="button" class="'+(c.g==='f'?'on':'')+'" data-act="kg" data-k="'+m.id+'" data-v="f">بنت</button><button type="button" class="'+(c.g==='m'?'on':'')+'" data-act="kg" data-k="'+m.id+'" data-v="m">ولد</button></div>'+
       '<div class="two"><label><span>مدة الحصة</span><select data-kc="st" data-k="'+m.id+'">'+o([15,20,25,30,40,45,60],c.st,'دقيقة')+'</select></label><label><span>الاستراحة بعدها</span><select data-kc="br" data-k="'+m.id+'">'+o([0,5,10,15,20,30],c.br,'دقائق')+'</select></label></div>'+
-      '<label class="chk"><input type="checkbox" data-kc="lk" data-k="'+m.id+'"'+(c.lk?' checked':'')+'> اقفل التطبيق أثناء الاستراحة</label></div>'}).join(''):'<p class="sub">لا تلاميذ بعد.</p>')+
+      '<label class="chk"><input type="checkbox" data-kc="lk" data-k="'+m.id+'"'+(c.lk?' checked':'')+'> اقفل التطبيق أثناء الاستراحة</label>'+
+      '<label><span>📺 رابط دروس الدعم (TelmidTICE) <small>(اختياري)</small></span><input type="url" dir="ltr" data-kc="tt" data-k="'+m.id+'" value="'+esc(c.tt)+'" placeholder="https://telmidtice.men.gov.ma/..."></label>'+
+      '<p class="sub">افتح telmidtice.men.gov.ma، واختر «السادس ابتدائي» أو مستوى '+esc(m.name)+'، ثم انسخ رابط الصفحة والصقه هنا. يظهر له زر يفتحها، وهو الموقع الخارجي الوحيد المسموح له.</p></div>'}).join(''):'<p class="sub">لا تلاميذ بعد.</p>')+
     '<form class="form" data-form="kid"><input id="kidIn" maxlength="30" autocomplete="off" placeholder="اسم التلميذ"><button class="btn" type="submit">أضف</button></form>'+
     (A.length>1?'<p class="sub">أو اختر من أفراد العائلة:</p><div class="chips">'+A.filter(function(m){return m.id!==me}).map(function(m){return '<button class="chip" data-act="mkkid" data-v="'+m.id+'">+ '+esc(m.name)+'</button>'}).join('')+'</div>':'')+'</section>'+
     (qrFor?vQR():'')+
@@ -348,7 +351,8 @@ function vNotif(kid){if(!pushOK()||nOn)return '';var den=window.Notification&&No
     '<button class="btn" data-act="notif"'+(nBusy?' disabled':'')+'>'+(nBusy?'جارٍ التفعيل…':'فعّل الإشعارات')+'</button>'+(nErr?'<p class="err">'+esc(nErr)+'</p>':'')+'</section>'}
 
 /* ---------- gender, themes ---------- */
-function cfgFor(k){var c=(H.cfg&&H.cfg[k])||{};return {st:+c.st||30,br:c.br==null?10:+c.br,lk:c.lk==null?1:+c.lk,g:c.g==='m'?'m':c.g==='f'?'f':''}}
+function cfgFor(k){var c=(H.cfg&&H.cfg[k])||{};return {st:+c.st||30,br:c.br==null?10:+c.br,lk:c.lk==null?1:+c.lk,g:c.g==='m'?'m':c.g==='f'?'f':'',tt:TT_RE.test(c.tt||'')?c.tt:''}}
+var TT_RE=/^https:\/\/telmidtice\.men\.gov\.ma(\/[^\s"'<>]*)?$/,extAt=0,extAway=false;
 function G(f,m,k){return cfgFor(k||me).g==='m'?m:f}
 var THEMES=[['paper','ورق دافئ','الكل'],['rose','وردي وزهور','بنت'],['lilac','بنفسجي ونجوم','بنت'],['sky','سماء وطائرات','ولد'],['space','الفضاء','ولد'],['garden','حديقة','الكل']];
 function curTheme(){var t=ls('hq_th');if(t)return t;var m=mem(me);if(m&&isKid(me)){var g=cfgFor(me).g;return g==='m'?'sky':g==='f'?'rose':'paper'}return 'paper'}
@@ -419,6 +423,7 @@ function addMember(name,local,kidFlag){var id=rid('m'),i=M.length;var o={name:na
   if(local){H.mem=H.mem||{};H.mem[id]=o;wq('/hq/mem/'+id,'PUT',o)}else wq('/members/'+id,'PUT',o);
   if(kidFlag)wq('/hq/kids/'+id,'PUT',true);cache();return id}
 document.addEventListener('click',function(e){
+  if(e.target.closest('[data-ext]'))extAt=Date.now();
   var t=e.target.closest('[data-act]');if(!t)return;var a=t.dataset.act,v=t.dataset.v;
   if(a==='ovx'){if(e.target===t){readDraft();if(sheet!=='new'){sheet=null}render()}return}
   if(a==='tab'){TAB=v;ls('hq_tab',v);OPEN=null;render();window.scrollTo(0,0);return}
@@ -457,7 +462,7 @@ document.addEventListener('click',function(e){
   if(a==='invite'){var u=location.origin+'/haqibati/#a='+code,txt='السلام عليكم، هذا تطبيق «حقيبتي» لنرسل منه دروس الأستاذ للأولاد. ثبّته ثم افتح هذا الرابط واختر اسمك:\n'+u;
     if(navigator.share)navigator.share({title:'حقيبتي',text:txt}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');return}
 });
-document.addEventListener('change',function(e){var t=e.target;if(t.dataset&&t.dataset.kc){var k=t.dataset.k,f=t.dataset.kc,v=f==='lk'?(t.checked?1:0):+t.value;H.cfg=H.cfg||{};H.cfg[k]=H.cfg[k]||{};H.cfg[k][f]=v;wq('/hq/cfg/'+k+'/'+f,'PUT',v);cache();return}if((t.id==='fIn'||t.id==='cIn')&&t.files&&t.files.length)addFiles(t.files)});
+document.addEventListener('change',function(e){var t=e.target;if(t.dataset&&t.dataset.kc){var k=t.dataset.k,f=t.dataset.kc,v=f==='lk'?(t.checked?1:0):f==='tt'?t.value.trim():+t.value;if(f==='tt'&&v&&!TT_RE.test(v)){flash('الرابط يجب أن يبدأ بـ https://telmidtice.men.gov.ma');return}if(f==='tt'&&v)flash('حُفظ رابط دروس الدعم');H.cfg=H.cfg||{};H.cfg[k]=H.cfg[k]||{};H.cfg[k][f]=v;wq('/hq/cfg/'+k+'/'+f,'PUT',v);cache();return}if((t.id==='fIn'||t.id==='cIn')&&t.files&&t.files.length)addFiles(t.files)});
 document.addEventListener('submit',function(e){
   var f=e.target.dataset.form;if(!f)return;e.preventDefault();var g=function(i){var x=document.getElementById(i);return (x&&x.value||'').trim()};
   if(f==='send'){if(!sending)send();return}

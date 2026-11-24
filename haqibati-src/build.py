@@ -4,7 +4,7 @@ SRC = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(SRC)
 OUT = os.path.join(REPO, 'haqibati')
 DB = sys.argv[1] if len(sys.argv) > 1 else 'https://khatma-16d1b-default-rtdb.firebaseio.com'
-VER = 2
+VER = 3
 VAPID = 'BK9pSZwhnJPm5ignUy7GkbfL49n9_lZbgnHEq6K5TeOaT5zDzkJp5RF0DbjShH-zWK-lDdx2SqQjcBrLsHDPNQc'
 
 os.makedirs(OUT, exist_ok=True)

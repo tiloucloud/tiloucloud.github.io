@@ -164,3 +164,5 @@ body{background:var(--bg) var(--pat,none);background-attachment:fixed}
 .bt{font-size:54px;color:var(--brand);font-variant-numeric:tabular-nums;direction:ltr}
 .kbox{display:flex;flex-direction:column;gap:10px;padding:12px;border:1px solid var(--line);border-radius:16px}
 .ncard{border-color:var(--brand);background:var(--brand-s)}
+
+.ttb{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);border-color:#9CC3EA;background:#EEF5FC}.ttb .ic{background:#D7E7F7}
