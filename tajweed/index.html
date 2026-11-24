@@ -178,9 +178,9 @@ p{margin:6px 0 10px}
 <script>
 (function(){
 'use strict';
-var V='0.10',RECIT='https://everyayah.com/data/warsh/warsh_ibrahim_aldosary_128kbps/',DB='https://khatma-16d1b-default-rtdb.firebaseio.com';
+var V='0.11',RECIT='https://everyayah.com/data/warsh/warsh_ibrahim_aldosary_128kbps/',DB='https://khatma-16d1b-default-rtdb.firebaseio.com';
 /* recorded audio clips available in a/ */
-var AV='p0 p1 p2 p3 p4 p5 p6 qok qno'.split(' ');
+var AV='intro p0 p1 p2 p3 p4 p5 p6 qok qno'.split(' ');
 (function(){var i;for(i=0;i<28;i++)AV.push('l'+i);for(i=0;i<19;i++)AV.push('e'+i);for(i=0;i<12;i++)AV.push('r'+i)})();
 var R={
  iz:{n:'الإظهار',s:'تُنطق النون واضحةً بلا غُنّة زائدة',L:['ء','ه','ع','ح','غ','خ']},
@@ -297,7 +297,7 @@ function vHome(){
  '<div class="mushaf"><p class="ayah">وَرَتِّلِ الْقُرْءَانَ تَرْتِيلًا</p><div class="src">سورة المزمل</div></div>'+
  '<p style="margin-top:14px">'+listenBtn()+'</p></div>'+
  '<div class="card"><h3>ما التجويد؟</h3><p>التجويد هو إعطاء كل حرف حقّه ومستحقّه عند تلاوة القرآن الكريم، وتعلّمه يحفظ اللسان من الخطأ في كلام الله.</p>'+
- '<p class="muted" style="margin:0">في كل درس: شرح قصير بالصوت، وأمثلة ملوّنة، وتمرين يصحّح لك ويعلّل الجواب. وتستطيع منافسة أفراد عائلتك وجمع النقاط والأوسمة.</p></div>'+
+ '<p class="muted" style="margin:0">في كل درس: شرح قصير بالصوت، وأمثلة ملوّنة، وتمرين يبيّن لك الصواب ويعلّل الجواب. وتستطيع منافسة أفراد عائلتك وجمع النقاط والأوسمة.</p></div>'+
  '<div class="card"><div style="display:flex;align-items:center;gap:10px"><h3 style="flex:1">تقدّمك</h3><b style="font:700 20px var(--display);color:var(--gold)">'+npts(points())+'</b></div>'+
  '<div class="meter"><i style="width:'+Math.round(pd/PAGES.length*100)+'%"></i></div><p class="muted" style="margin:0;font-size:14px">الدرس الأول: '+pd+' من '+PAGES.length+' صفحات · أفضل نتيجة في التمرين '+S.q+' من '+QUIZ.length+'</p></div>'+
  '<button class="btn" data-a="start">'+(started?'تابع الدرس الأول':'ابدأ الدرس الأول')+'</button>'+
@@ -319,8 +319,8 @@ function vLesson(){
  var step='<p class="step">الدرس الأول · '+(st.p+1)+' من '+PAGES.length+'</p>';
  if(k==='intro'){
   h='<div class="band zel"><h2>ما النون الساكنة والتنوين؟</h2><div class="mushaf"><p class="ayah">عَلِيمٌ = عَلِيمُ<span class="hl c-iz">نْ</span></p><div class="src">التنوين يُنطق نوناً ساكنة</div></div></div>'+step+'<p class="center">'+listenBtn()+'</p>'+
-  '<p><b>النون الساكنة</b> نونٌ عليها سكون، مثل «مِنْ» و«أَنْعَمْتَ».</p><p><b>التنوين</b> نونٌ ساكنة تُنطق في آخر الاسم ولا تُكتب، وعلامته حركتان: ـً ـٍ ـٌ.</p>'+
-  '<div class="note"><b>القاعدة الذهبية:</b> الحرف الذي يأتي <b>بعد</b> النون هو الذي يحدّد كيف ننطقها. لذلك نتعلّم حروف كل حكم.</div>';
+  '<p><b>النون الساكنة</b> نونٌ عليها سكون، مثل «مِنْ» و«أَنْعَمْتَ».</p><p><b>التنوين</b> نونٌ ساكنة تُنطق في نهاية الكلمة ولا تُكتب، وعلامته حركتان: ـً ـٍ ـٌ.</p>'+
+  '<div class="note"><b>القاعدة الذهبية:</b> الحرف الذي يأتي <b>بعد</b> النون هو الذي يحدّد كيف ننطقها. لذلك نتعلّم حروف كل واحد من هذه الأحكام.</div>';
   cur='النون الساكنة نون عليها سكون. والتنوين نون ساكنة تنطق في آخر الاسم ولا تكتب. والقاعدة الذهبية: الحرف الذي يأتي بعد النون هو الذي يحدد كيف ننطقها.';
  }else if(k==='sum'){
   h='<div class="band zel"><h2>الخلاصة</h2><p>انظر إلى الحرف بعد النون الساكنة أو التنوين</p></div>'+step+'<p class="center">'+listenBtn()+'</p>'+
