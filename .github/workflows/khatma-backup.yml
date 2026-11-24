@@ -1,0 +1,40 @@
+name: Family data backup
+
+on:
+  schedule:
+    - cron: '23 2 * * *'   # every night, ~02:23 UTC
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'backup = save a copy now, restore = bring one family back'
+        required: true
+        default: 'backup'
+      code:
+        description: 'restore only: the family code (hidden in the logs)'
+        required: false
+      date:
+        description: 'restore only: the backup day, YYYY-MM-DD'
+        required: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Hide the family code
+        if: ${{ github.event.inputs.code != '' && github.event.inputs.code != null }}
+        env:
+          CODE: ${{ github.event.inputs.code }}
+        run: echo "::add-mask::$CODE"
+      - name: Run
+        working-directory: khatma-push
+        env:
+          DB: https://khatma-16d1b-default-rtdb.firebaseio.com
+          DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
+          MODE: ${{ github.event.inputs.mode || 'backup' }}
+          CODE: ${{ github.event.inputs.code }}
+          DATE: ${{ github.event.inputs.date }}
+        run: node backup.js
