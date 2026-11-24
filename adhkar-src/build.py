@@ -2,7 +2,7 @@ import sys, os, shutil, json
 SRC = os.path.dirname(os.path.abspath(__file__))
 DB = sys.argv[1]
 OUT = sys.argv[2] if len(sys.argv) > 2 else '/home/claude/adhkar_site'
-VER = 35
+VER = 36
 shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT + '/fonts')
 K = '/home/claude/tiloucloud.github.io/khatma'
 for f in os.listdir(K + '/fonts'): shutil.copy(f'{K}/fonts/{f}', f'{OUT}/fonts/{f}')

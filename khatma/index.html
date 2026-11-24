@@ -753,7 +753,7 @@ function sync(){
     if(!r||!r.members){
       if(seed&&seed.members){S={v:3,khatma:seed.khatma,members:seed.members};seed=null}
       if(!S.members.length){prev={khatma:S.khatma,members:{}};return}
-      return fetch(url(),{method:'PUT',body:JSON.stringify(toR())}).then(function(x){if(!x.ok)throw 0;prev=toR();cache();render()});
+      return fetch(url(),{method:'PATCH',body:JSON.stringify(toR())}).then(function(x){if(!x.ok)throw 0;prev=toR();cache();render()});
     }
     if(prev&&edits!==e0)return;
     var before=JSON.stringify(S),lm=me?mem(me):null,lp=lm?lm.p:0,lk=S&&S.khatma?S.khatma.start+'|'+(S.khatma.r||0):'';
@@ -1552,7 +1552,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vFocus()+vFeed()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 54</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 55</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
@@ -1646,6 +1646,11 @@ root.addEventListener('submit',function(e){
     var jin=e.target.querySelector('input'),jerr=e.target.nextElementSibling,jv=jin.value.trim(),jm=/k=([A-Za-z0-9_-]{6,64})/.exec(jv)||/^([A-Za-z0-9_-]{6,64})$/.exec(jv);
     if(!jm){if(jerr)jerr.textContent='لم أجد رمز العائلة في ما لصقته. انسخ الرابط كاملاً من رسالة واتساب.';return}
     if(jm[1]===code){sheet=null;render();return}
+    if(jin.dataset.ok!==jm[1]){var jb=CFG.db.replace(/\/+$/,'')+'/k/'+jm[1],jbtn=e.target.querySelector('button'),jf=e.target;if(jerr)jerr.textContent='جارٍ التحقق من الرمز…';if(jbtn)jbtn.disabled=true;
+      Promise.all([fetch(jb+'/members.json?shallow=true',{cache:'no-store'}),fetch(jb+'/ad/info.json',{cache:'no-store'})]).then(function(R){if(!R[0].ok||!R[1].ok)throw 0;return Promise.all([R[0].json(),R[1].json()])}).then(function(R){if(jbtn)jbtn.disabled=false;
+        if(R[0]){jin.dataset.ok=jm[1];if(jerr)jerr.textContent='';if(jf.requestSubmit)jf.requestSubmit();else jbtn.click();return}
+        if(jerr)jerr.textContent=R[1]?'⚠️ هذا رابط «أذكار العائلة» وليس رابط الختمة. اطلب رابط «ختمة العائلة» من أهلك: يجدونه في «إدارة الختمة».':'⚠️ لم نجد ختمة بهذا الرمز. تأكد أنك نسخت الرابط كاملاً من رسالة واتساب.'})
+      .catch(function(){if(jbtn)jbtn.disabled=false;if(jerr)jerr.textContent='تعذّر التحقق من الرمز. تحقق من الاتصال ثم حاول مرة أخرى.'});return}
     code=jm[1];try{localStorage.setItem('kf_code',code);localStorage.removeItem('kf_me');localStorage.removeItem('kf_home')}catch(_){}me=null;unlocked=null;home='';sheet=null;prev=null;welcome=true;render();sync();
   }else if(f==='create'){
     var cn=document.getElementById('cMe').value.trim(),ck=document.getElementById('cName').value.trim()||'ختمتنا العائلية',cd=+document.getElementById('cDays').value||60;

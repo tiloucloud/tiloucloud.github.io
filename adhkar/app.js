@@ -20,13 +20,14 @@ function rid(){return 'm'+Date.now().toString(36)+Math.random().toString(36).sli
 function newCode(){var a='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789',b=new Uint8Array(16),o='';try{crypto.getRandomValues(b)}catch(e){for(var i=0;i<16;i++)b[i]=Math.random()*256}for(var k=0;k<16;k++)o+=a[b[k]%a.length];return o}
 
 /* ---------- state ---------- */
-var code=(location.hash.match(/[#&]a=([A-Za-z0-9_-]{12,64})/)||[])[1]||ls('ad_code')||'';
-(function(){var o=ls('ad_code');if(code&&o&&o!==code){ls('ad_home',null);ls('ad_mine',null);ls('ad_me',null)}})();
+var HCODE=(location.hash.match(/[#&]a=([A-Za-z0-9_-]{12,64})/)||[])[1]||'',code=ls('ad_code')||'',JW=null;
 var SEED=null;try{var sd=(location.hash.match(/[#&]seed=([A-Za-z0-9+\/=_-]+)/)||[])[1];if(sd)SEED=JSON.parse(decodeURIComponent(escape(atob(sd.replace(/-/g,'+').replace(/_/g,'/')))))}catch(e){}
 var SEED=null;try{var sd=(location.hash.match(/[#&]seed=([A-Za-z0-9_-]+)/)||[])[1];if(sd)SEED=JSON.parse(decodeURIComponent(escape(atob(sd.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-sd.length%4)%4)))))}catch(e){}
 var RQ={};
 var HU=(location.hash.match(/[#&]u=([A-Za-z0-9_-]{1,40})/)||[])[1]||'',HH=/[#&]hh=1/.test(location.hash);
-if(code)ls('ad_code',code);if(code&&HU){ls('ad_me',HU);if(HH&&!ls('ad_home')){ls('ad_home',HU);var mm0=jget('ad_mine',[]);if(mm0.indexOf(HU)<0){mm0.push(HU);ls('ad_mine',JSON.stringify(mm0))}}}
+if(HCODE&&HCODE!==code){if(SEED||/[#&]l=1/.test(location.hash)){switchCode(HCODE)}else{JW={c:HCODE,k:'chk',u:HU,hh:HH};HU=''}}
+function switchCode(c){var o=ls('ad_code');if(o&&o!==c){ls('ad_home',null);ls('ad_mine',null);ls('ad_me',null)}code=c;ls('ad_code',c)}
+if(code&&HU){ls('ad_me',HU);if(HH&&!ls('ad_home')){ls('ad_home',HU);var mm0=jget('ad_mine',[]);if(mm0.indexOf(HU)<0){mm0.push(HU);ls('ad_mine',JSON.stringify(mm0))}}}
 if(location.hash)history.replaceState(null,'',location.pathname);
 var S=jget('ad_S_'+code,null)||{info:{name:'',start:iso(today())},members:[]},DONE=jget('ad_D_'+code,{}),PEND={};
 var me=ls('ad_me')||null,home=ls('ad_home')||'',linked=false,OWN='',rqMsg='',rqKind='add',mine=jget('ad_mine',[]),unlocked=null,hidAt=0;
@@ -171,12 +172,28 @@ document.addEventListener('visibilitychange',function(){
 function hdr(){return '<header class="top"><div class="brand"><img class="appic" src="icon-192.png" alt=""><div><h1>أذكار العائلة</h1><p>'+esc(S.info.name)+'</p></div></div>'+
   '<button class="ib fsb" data-act="big" aria-label="حجم الخط: المستوى '+(FL+1)+' من 4. اضغط للتغيير"><b>أ</b><span class="fsd">'+[0,1,2,3].map(function(i){return '<i'+(i<=FL?' class="on"':'')+'></i>'}).join('')+'</span></button></header>'+
   '<p class="tnf"><span class="ab">﴿</span><span class="aw">أَلَا بِذِكْرِ اِ۬للَّهِ تَطْمَئِنُّ اُ۬لْقُلُوبُۖ</span><span class="ab">﴾</span></p>'}
+function doJoin(c,u,hh){JW=null;switchCode(c);if(u){ls('ad_me',u);if(hh&&!ls('ad_home')){ls('ad_home',u);var mm=jget('ad_mine',[]);if(mm.indexOf(u)<0){mm.push(u);ls('ad_mine',JSON.stringify(mm))}}}
+  me=ls('ad_me')||null;home=ls('ad_home')||'';mine=jget('ad_mine',[]);unlocked=null;linked=false;OWN='';RQ={};
+  S={info:{name:'',start:iso(today())},members:[]};DONE={};view='home';welcome=true;render();window.scrollTo(0,0);pull()}
+function checkJoin(){if(!JW)return;var j=JW,b=DB+'/k/'+j.c;j.k='chk';render();
+  Promise.all([fetch(b+'/ad/info.json',{cache:'no-store'}),fetch(b+'/members.json?shallow=true',{cache:'no-store'})]).then(function(R){if(!R[0].ok||!R[1].ok)throw 0;return Promise.all([R[0].json(),R[1].json()])}).then(function(R){
+    if(JW!==j)return;
+    if(R[0]&&R[0].name!=null){doJoin(j.c,j.u,j.hh);return}
+    j.k=R[1]?'kh':'none';render()}).catch(function(){if(JW===j){j.k='net';render()}})}
+function vJoinWarn(){var j=JW,back=code?'العودة إلى مجموعتي':'رجوع',h='<div class="wrap">'+hdr()+'<section class="card stack jw">';
+  if(j.k==='chk')return h+'<p class="sub" role="status">جارٍ التحقق من الرابط…</p></section></div>';
+  if(j.k==='kh')h+='<h2 class="ctitle">⚠️ هذا رابط «ختمة العائلة»</h2><p>الرابط أو الرمز الذي أدخلته خاص بالختمة، وليس بمجموعة أذكار. لو أكملت به ستكون في مجموعة أذكار فارغة، ولن ترى أهلك ولن يروا تقدّمك.</p>'+
+    '<p class="sub">اطلب رابط «أذكار العائلة» من أحد أهلك: يجده في «⚙️ إدارة العائلة» ← «🔗 رابط دعوة العائلة». أو ابحث في واتساب عن رسالة فيها <span dir="ltr">tiloucloud.github.io/adhkar</span>.</p>'+
+    '<button class="btn" data-act="jback">'+back+'</button>'+(j.c?'<button class="lnk" data-act="jgo">ليس لعائلتي مجموعة أذكار، أكمل بأسماء الختمة</button>':'');
+  else if(j.k==='none')h+='<h2 class="ctitle">⚠️ لم نجد مجموعة بهذا الرمز</h2><p class="sub">تأكد أنك نسخت الرابط كاملاً من رسالة واتساب، فالرمز دقيق في الحروف الكبيرة والصغيرة.</p><button class="btn" data-act="jback">'+back+'</button>';
+  else h+='<h2 class="ctitle">تعذّر التحقق من الرابط</h2><p class="sub">تحقق من الاتصال بالإنترنت ثم حاول مرة أخرى.</p><button class="btn" data-act="jretry">حاول مرة أخرى</button><button class="lnk" data-act="jback">'+back+'</button>';
+  return h+'</section></div>'}
 function vJoin(){
-  return '<div class="wrap">'+hdr().replace('<p></p>','<p>للعائلة</p>')+'<section class="card stack"><h2 class="ctitle">ابدأ أذكار عائلتك</h2><p class="sub">أنشئ مجموعة لعائلتك، ثم أرسل رابطها لأهلك، فيذكر كلٌّ منكم أذكاره، وتتنافسون في المداومة.</p>'+
+  return '<div class="wrap">'+hdr().replace('<p></p>','<p>للعائلة</p>')+'<section class="card stack"><h2 class="ctitle">انضم إلى عائلتك</h2><p class="sub">إن أرسل لك أحد أهلك رابط «أذكار العائلة» أو رمزها، فالصقه هنا. تجده في رسالة واتساب التي فيها <span dir="ltr">tiloucloud.github.io/adhkar</span>.</p>'+
+    '<form class="form" data-form="join"><input id="joinIn" dir="ltr" autocomplete="off" placeholder="الرابط أو الرمز" aria-label="رابط العائلة أو رمزها"><button class="btn" type="submit">انضم</button></form><p class="sub" id="joinErr"></p></section>'+
+    '<section class="card stack"><h2 class="ctitle">أو أنشئ مجموعة جديدة</h2><p class="sub warn">⚠️ إن كانت لعائلتك مجموعة من قبل، فلا تنشئ مجموعة جديدة؛ انضم إليها برابطها في الأعلى.</p><p class="sub">أنشئ مجموعة لعائلتك، ثم أرسل رابطها لأهلك، فيذكر كلٌّ منكم أذكاره، وتتنافسون في المداومة.</p>'+
     '<form class="stack" data-form="create"><label>اسمك<input id="cMe" maxlength="24" required autocomplete="off" placeholder="مثلاً: أبو محمد"></label>'+
-    '<label>اسم المجموعة<input id="cName" maxlength="40" value="أذكار عائلتنا" required></label><button class="btn" type="submit">أنشئ المجموعة</button></form></section>'+
-    '<section class="card stack"><h2 class="ctitle">انضم إلى عائلتك</h2><p class="sub">إن أرسل لك أحد أهلك الرابط أو الرمز، فالصقه هنا.</p>'+
-    '<form class="form" data-form="join"><input id="joinIn" dir="ltr" autocomplete="off" placeholder="الرابط أو الرمز" aria-label="رابط العائلة أو رمزها"><button class="btn" type="submit">انضم</button></form><p class="sub" id="joinErr"></p></section></div>';
+    '<label>اسم المجموعة<input id="cName" maxlength="40" value="أذكار عائلتنا" required></label><button class="btn" type="submit">أنشئ المجموعة</button></form></section>'+'</div>';
 }
 function vWelcome(){
   var m=mem(me),g=famGoal(),pct=g[1]?Math.min(100,Math.round(g[0]/g[1]*100)):0;
@@ -322,6 +339,7 @@ function vCeleb(){if(!celeb)return '';var c=celeb;
 function fitWel(){var e=root.querySelector('.wel-in');if(!e)return;e.style.zoom='';var room=window.innerHeight-32,h=e.offsetHeight;if(h>room&&h>0)e.style.zoom=String(Math.max(.6,room/h))}
 window.addEventListener('resize',function(){if(welcome)fitWel()});
 function render(){
+  if(JW){root.innerHTML=vJoinWarn();return}
   if(!code){root.innerHTML=vJoin();return}
   if(welcome){document.documentElement.style.zoom='';root.innerHTML=vWelcome();fitWel();return}
   applyFs();
@@ -343,6 +361,9 @@ document.addEventListener('click',function(e){
   if(a==='rqk'){var tx=document.getElementById('rqText');rqKind=v;rqMsg='';sheet='fam';render();return}
   if(a==='vid'){var o=document.createElement('div');o.className='vov';o.innerHTML='<div class="vbx"><button class="vx" data-act="vclose" aria-label="إغلاق">✕</button><video src="'+t.dataset.v+'.mp4" poster="'+t.dataset.v+'.jpg" controls autoplay playsinline></video></div>';document.body.appendChild(o);return}
   if(a==='vclose'){var ov=document.querySelector('.vov');if(ov){var vv=ov.querySelector('video');vv&&vv.pause();ov.remove()}return}
+  if(a==='jback'){JW=null;render();window.scrollTo(0,0);return}
+  if(a==='jgo'){if(JW)doJoin(JW.c,JW.u,JW.hh);return}
+  if(a==='jretry'){checkJoin();return}
   if(a==='enter'){welcome=false;render();window.scrollTo(0,0);return}
   if(a==='rhide'){if(!canManage())return;var hm=mem(v);if(hm){hm.x=hm.x?'':'1';putMember(hm);cache();render()}return}
   if(a==='redit'){if(!canManage())return;editId=editId===v?null:v;render();return}
@@ -365,15 +386,17 @@ document.addEventListener('click',function(e){
   if(a==='reset'){ls(progKey(),null);pi=0;render();window.scrollTo(0,0);return}
   if(a==='cel'){celeb=null;render();return}
   if(a==='big'){FL=(FL+1)%4;ls('ad_fs',String(FL));applyFs();render();return}
-  if(a==='invite'){var url=location.origin+location.pathname.replace(/index\.html$/,'')+'#a='+code,txt='أحبتي، انضموا إلى «أذكار العائلة» لنتنافس في المداومة على الأذكار:\n'+url;
+  if(a==='invite'){var url=location.origin+location.pathname.replace(/index\.html$/,'')+'#a='+code+(linked?'&l=1':''),txt='أحبتي، انضموا إلى «أذكار العائلة» لنتنافس في المداومة على الأذكار:\n'+url;
     if(navigator.share)navigator.share({title:'أذكار العائلة',text:txt}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');return}
   if(a==='del'){if(!canManage())return;var x=mem(v);if(x&&confirm('حذف '+x.name+' من العائلة؟')){S.members=S.members.filter(function(y){return y.id!==v});delMember(v);if(me===v){me=null;ls('ad_me',null)}cache();sheet='fam';render()}return}
 });
 document.addEventListener('submit',function(e){
   var f=e.target.dataset.form;if(!f)return;e.preventDefault();
   if(f==='join'){var s=(document.getElementById('joinIn').value||'').trim(),m=s.match(/[#&]a=([A-Za-z0-9_-]{12,64})/)||s.match(/^([A-Za-z0-9_-]{12,64})$/);
+    if(/\/khatma|[?#&]k=/i.test(s)){JW={c:(s.match(/[?#&]k=([A-Za-z0-9_-]{6,64})/)||[])[1]||(m?m[1]:''),k:'kh'};render();return}
     if(!m){document.getElementById('joinErr').textContent='الرابط أو الرمز غير صحيح';return}
-    code=m[1];ls('ad_code',code);S={info:{name:'',start:iso(today())},members:[]};DONE={};welcome=true;render();pull();return}
+    if(m[1]===code){JW=null;render();return}
+    JW={c:m[1],k:'chk'};render();checkJoin();return}
   if(f==='create'){var n=document.getElementById('cMe').value.trim(),fn=document.getElementById('cName').value.trim()||'أذكار عائلتنا';if(!n)return;
     var id=rid();code=newCode();ls('ad_code',code);S={info:{name:fn,start:iso(today()),own:id},members:[{id:id,name:n,i:0,k:'',h:'1'}]};OWN=id;DONE={};
     me=id;ls('ad_me',id);setHome(id);welcome=false;cache();pushAll();render();return}
@@ -386,7 +409,7 @@ document.addEventListener('submit',function(e){
 if(!me&&code&&ls0('kf_code')===code&&ls0('kf_me')){me=ls0('kf_me');ls('ad_me',me)}
 if(!home&&code&&ls0('kf_code')===code&&ls0('kf_home')){home=ls0('kf_home');ls('ad_home',home);if(mine.indexOf(home)<0){mine.push(home);ls('ad_mine',JSON.stringify(mine))}}
 if(me&&!home&&code&&!linked){setHome(me)}
-render();pull();
+render();pull();if(JW)checkJoin();
 if('serviceWorker' in navigator){var hadCtl=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange',function(){if(hadCtl&&!window.__rl){window.__rl=1;location.reload()}});
   navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(r){try{r.update()}catch(e){}}).catch(function(){})}
