@@ -181,7 +181,7 @@ p{margin:6px 0 10px}
 <script>
 (function(){
 'use strict';
-var V='0.14',RECIT='https://everyayah.com/data/warsh/warsh_ibrahim_aldosary_128kbps/',DB='https://khatma-16d1b-default-rtdb.firebaseio.com';
+var V='0.15',RECIT='https://everyayah.com/data/warsh/warsh_ibrahim_aldosary_128kbps/',DB='https://khatma-16d1b-default-rtdb.firebaseio.com';
 /* recorded audio clips available in a/ */
 var AV='intro p0 p1 p2 p3 p4 p5 p6 qok qno'.split(' ');
 (function(){var i;for(i=0;i<28;i++)AV.push('l'+i);for(i=0;i<19;i++)AV.push('e'+i);for(i=0;i<12;i++)AV.push('r'+i)})();
@@ -197,7 +197,7 @@ var LN={'ء':'همزة','ه':'هاء','ع':'عين','ح':'حاء','غ':'غين',
 var LK=Object.keys(LN);
 var LESSON={
  iz:{why:'حروف الحلق بعيدة عن مخرج النون، فلا يمكن إدخال النون فيها، فتبقى النون ظاهرة.',
-  memo:{w:'أَحَخَعَغِهَ',s:'أَخِي هَاكَ عِلْماً حَازَهُ غَيْرُ خَاسِرٍ',t:'أوائل كلمات الجملة هي حروف الإظهار الستة'},
+  memo:{s:'أَخِي هَاكَ عِلْماً حَازَهُ غَيْرُ خَاسِرٍ',w:'أَحَخَعَغِهَ',sp:'أَ حَ خَ عَ غِ هَ',t:'أوائل كلمات الجملة، وحروف الكلمة، هي حروف الإظهار الستة'},
   ex:[['أَ⟨نْعَ⟩مْتَ عَلَيْهِمْ','الفاتحة','نون ساكنة بعدها عين في الكلمة نفسها','001007'],['وَا⟨نْحَ⟩رْ','الكوثر','نون ساكنة بعدها حاء','108002'],['مِ⟨نْ خَ⟩وْفٍ','قريش','نون ساكنة بعدها خاء في كلمة أخرى','106004'],['عَلِي⟨مٌ حَ⟩كِيمٌ','النساء','تنوين بعده حاء','004026']],
   note:'<b>خاص بورش:</b> إذا جاءت بعد النون الساكنة همزةٌ في أول الكلمة التالية، تُنقل حركة الهمزة إلى النون وتسقط الهمزة، مثل «مَنْ ءَامَنَ» تُقرأ «مَنَ امَنَ»، فلا إظهار هنا. لذلك مثال الهمزة يكون داخل الكلمة، مثل «وَيَنْأَوْنَ».'},
  ig:{why:'تُدغم النون في الحرف التالي فيصير حرفاً مشدّداً، وتبقى الغُنّة بمقدار حركتين.',memo:{w:'يَنْمُو',t:'كلمة تجمع حروف الإدغام بغُنّة'},
@@ -322,8 +322,8 @@ function vLesson(){
  var step='<p class="step">الدرس الأول · '+(st.p+1)+' من '+PAGES.length+'</p>';
  if(k==='intro'){
   h='<div class="band zel"><h2>ما النون الساكنة والتنوين؟</h2><div class="mushaf"><p class="ayah">عَلِيمٌ = عَلِيمُ<span class="hl c-iz">نْ</span></p><div class="src">التنوين يُنطق نوناً ساكنة</div></div></div>'+step+'<p class="center">'+listenBtn()+'</p>'+
-  '<p><b>النون الساكنة</b> نونٌ عليها سكون، مثل «مِنْ» و«أَنْعَمْتَ».</p><p><b>التنوين</b> نونٌ ساكنة تُنطق في نهاية الكلمة ولا تُكتب، وعلامته حركتان: ـً ـٍ ـٌ.</p>'+
-  '<div class="note"><b>القاعدة الذهبية:</b> الحرف الذي يأتي <b>بعد</b> النون هو الذي يحدّد كيف ننطقها. لذلك نتعلّم حروف كل واحد من هذه الأحكام.</div>';
+  '<p><b>النون الساكنة:</b> نونٌ عليها سكون، مثل «مِنْ».</p><p><b>والتنوين:</b> نونٌ ساكنة تُنطق في نهاية الكلمة ولا تُكتب، وعلامته حركتان: ـً ـٍ ـٌ.</p>'+
+  '<div class="note"><b>القاعدة الذهبية:</b> الحرف الذي يأتي <b>بعد</b> النون هو الذي يحدّد كيف ننطقها. لذلك نتعلّم حروف كل واحد من هذه الأحكام.</div><p class="tip">الصوت يقرأ النص المكتوب في هذه الصفحة</p>';
   cur='النون الساكنة نون عليها سكون. والتنوين نون ساكنة تنطق في آخر الاسم ولا تكتب. والقاعدة الذهبية: الحرف الذي يأتي بعد النون هو الذي يحدد كيف ننطقها.';
  }else if(k==='sum'){
   h='<div class="band zel"><h2>الخلاصة</h2><p>انظر إلى الحرف بعد النون الساكنة أو التنوين</p></div>'+step+'<p class="center">'+listenBtn()+'</p>'+
@@ -334,7 +334,7 @@ function vLesson(){
   var r=R[k],L=LESSON[k],m=L.memo;
   h='<div class="rhead c-'+k+'"><h2>'+r.n+'</h2><p>'+r.s+'</p></div>'+step+'<p class="center">'+listenBtn()+'</p><p>'+L.why+'</p>'+
   '<div class="sec"><h3>حروفه</h3></div><div class="letters c-'+k+'">'+r.L.map(function(l){return lt(l)}).join('')+'</div><p class="tip">المس الحرف لتسمع اسمه</p>'+
-  (m?'<div class="memo c-'+k+'">'+(m.w?'<div class="w">'+m.w+'</div>':'')+(m.s?'<div class="s">'+m.s+'</div>':'')+'<small>'+m.t+'</small></div>':'')+
+  (m?'<div class="memo c-'+k+'">'+(m.s?'<div class="s">'+m.s+'</div>':'')+(m.w?'<div class="w">'+m.w+'</div>':'')+(m.sp?'<small>تُقرأ: '+m.sp+'</small>':'')+'<small>'+m.t+'</small></div>':'')+
   '<div class="sec"><h3>أمثلة</h3></div><p class="tip">المس المثال لترى السبب وتسمعه</p>'+
   L.ex.map(function(e,j){return '<div class="ex c-'+k+'" role="button" tabindex="0" data-a="ex" data-v="e'+(OFF[k]+j)+'" data-say="'+esc(e[2]+'، إذن: '+r.n)+'"><p class="ayah">'+mark(e[0],k)+'</p><div class="exf">'+(e[1]?'<span class="src">سورة '+e[1]+'</span>':'')+(e[3]?'<button class="rec" data-a="rec" data-v="'+e[3]+'">'+svg('<path d="M8 5v14l11-7z" fill="currentColor"/>')+'تلاوة الآية</button>':'')+'</div><div class="why">'+e[2]+' ← <b style="color:var(--c)">'+r.n+'</b></div></div>'}).join('')+
   (L.note?'<div class="note">'+L.note+'</div>':'');
@@ -349,7 +349,7 @@ function vQuiz(){
  app.innerHTML='<div class="qhead zel"><div class="meter" style="margin-top:0"><i style="width:'+((st.qi+(p?1:0))/st.qs.length*100)+'%"></i></div>السؤال '+(st.qi+1)+' من '+st.qs.length+': ما حكم الموضع المسطَّر؟'+
  '<div class="mushaf"><p class="ayah">'+t.replace('⟨','<span style="text-decoration:underline 3px var(--gold);text-underline-offset:12px">').replace('⟩','</span>')+'</p></div></div>'+
  '<div class="opts">'+ORDER.map(function(o){return '<button class="opt c-'+o+' '+(p?(o===k?'ok':o===p?'no':''):'')+'" data-a="pick" data-v="'+o+'"'+(p?' disabled':'')+'>'+R[o].n+'</button>'}).join('')+'</div>'+
- (p?'<div class="fb c-'+k+'"><div class="h '+(p===k?'y">'+st.cheer:'n">ليست هذه، الصواب: '+R[k].n)+'</div><span class="why2"><b>التعليل:</b> '+w+' فالحكم: <b style="color:var(--c)">'+R[k].n+'</b>.</span></div>':'');
+ (p?'<div class="fb c-'+k+'"><div class="h '+(p===k?'y">إجابةٌ صحيحة! <small style="font:600 14px var(--body);color:var(--muted)">'+st.cheer+'</small>':'n">ليست هذه. <small style="font:600 14px var(--body);color:var(--muted)">الصواب: '+R[k].n+'</small>')+'</div><span class="why2"><b>التعليل:</b> '+w+' فالحكم: <b style="color:var(--c)">'+R[k].n+'</b>.</span></div>':'');
  setBar(p?'<button class="btn" data-a="qn">'+(st.qi+1<st.qs.length?'السؤال التالي':'النتيجة')+'</button>':'<button class="btn ghost" data-a="nav-idx">الفهرس</button>');
 }
 function vResult(){
