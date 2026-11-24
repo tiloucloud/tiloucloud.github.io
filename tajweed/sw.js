@@ -1,4 +1,4 @@
-var C='tj-v09';
+var C='tj-v10';
 var SHELL=['./','warsh.woff2','manifest.webmanifest','icon-192.png','fonts/reem-kufi-arabic-700.woff2','fonts/ibm-plex-sans-arabic-arabic-400.woff2','fonts/ibm-plex-sans-arabic-arabic-600.woff2','fonts/ibm-plex-sans-arabic-arabic-700.woff2','fonts/bism.woff2'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(SHELL)}).then(function(){return self.skipWaiting()}))});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(x){return x!==C}).map(function(x){return caches.delete(x)}))}).then(function(){return self.clients.claim()}))});
