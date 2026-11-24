@@ -79,6 +79,7 @@ p{margin:6px 0 10px}
 .bar .btn.ghost{background:#ffffff14;color:#fff;border:1px solid #ffffff40;box-shadow:none;width:auto;flex:0 0 auto}
 /* welcome */
 .welcome{min-height:100svh;margin:0 calc(-1*max(4vw,14px));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px max(6vw,18px) calc(28px + env(safe-area-inset-bottom));gap:4px}
+.wicon{width:min(48vw,200px);aspect-ratio:1;border-radius:22%;box-shadow:0 14px 34px #0008,0 0 0 2px #e8c66f66}
 .star{width:min(44vw,180px);aspect-ratio:1;filter:drop-shadow(0 10px 24px #0008);animation:spin 80s linear infinite}
 @keyframes spin{to{rotate:360deg}}
 .bism{font:min(calc((100vw - 40px)/11.6),40px)/2.4 Bism,serif;color:var(--gold-l);white-space:nowrap;margin:12px 0 0}
@@ -181,7 +182,7 @@ p{margin:6px 0 10px}
 <script>
 (function(){
 'use strict';
-var V='0.15',RECIT='https://everyayah.com/data/warsh/warsh_ibrahim_aldosary_128kbps/',DB='https://khatma-16d1b-default-rtdb.firebaseio.com';
+var V='0.16',RECIT='https://everyayah.com/data/warsh/warsh_ibrahim_aldosary_128kbps/',DB='https://khatma-16d1b-default-rtdb.firebaseio.com';
 /* recorded audio clips available in a/ */
 var AV='intro p0 p1 p2 p3 p4 p5 p6 qok qno'.split(' ');
 (function(){var i;for(i=0;i<28;i++)AV.push('l'+i);for(i=0;i<19;i++)AV.push('e'+i);for(i=0;i<12;i++)AV.push('r'+i)})();
@@ -288,7 +289,7 @@ function toast(t){var o=document.querySelector('.toast');if(o)o.remove();var d=d
 
 function vWelcome(){
  var n=S.name;
- app.innerHTML='<section class="welcome zel">'+STAR+'<p class="bism" aria-label="بسم الله الرحمن الرحيم">﷽</p><h2>تجويد العائلة</h2><p class="sub">تعلّم أحكام التجويد برواية ورش عن نافع</p>'+
+ app.innerHTML='<section class="welcome zel"><img class="wicon" src="icon-512.png" alt="تجويد العائلة">'+'<p class="bism" aria-label="بسم الله الرحمن الرحيم">﷽</p><h2>تجويد العائلة</h2><p class="sub">تعلّم أحكام التجويد برواية ورش عن نافع</p>'+
  (n?'<p class="hi">مرحباً بعودتك يا '+esc(n)+'</p>':'<input id="nm" maxlength="24" placeholder="اكتب اسمك هنا" aria-label="اسمك" autocomplete="given-name">')+
  '<button class="btn" data-a="enter">'+(n?'متابعة التعلّم':'هيا نبدأ')+'</button><p class="ver" style="color:#b9d3cb">الإصدار '+V+'</p></section>';
  setBar('');
