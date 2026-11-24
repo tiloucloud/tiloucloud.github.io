@@ -110,7 +110,7 @@ footer a{color:var(--muted)}
       <li>اضغطوا الزر الذهبي أعلاه، ثم <b>«قبول الدعوة»</b> <span dir="ltr">(Accept invite)</span> إن ظهرت لكم.<br><small style="color:var(--muted)">افتحوه بحساب Gmail المسجّل في متجر Play على هاتفكم.</small></li>
       <li>اضغطوا الزر الأزرق <b>«تنزيل التطبيق التجريبي»</b> <span dir="ltr">(Download test app)</span>، ثم <b>«تثبيت»</b>.<br><small style="color:var(--muted)">سيظهر اسمه مؤقتاً بالإنجليزية com.tiloucloud.khatma، وهو تطبيقنا نفسه.</small></li>
       <li>افتحوا التطبيق، واكتبوا في خانة <b>«انضم إلى ختمة عائلتك»</b> رمز العائلة، ثم اضغطوا <b>«انضم»</b> واختاروا أسماءكم.
-        <div class="code"><span dir="ltr" id="fc">oKMYXZpyakFfp7EX</span><button type="button" id="cp">نسخ الرمز</button></div>
+        <div class="code"><span dir="ltr" id="fc">—</span><button type="button" id="cp">نسخ الرمز</button></div>
         <small style="color:var(--muted)">انسخوا الرمز من هنا والصقوه في التطبيق، فهو دقيق في الحروف الكبيرة والصغيرة.</small></li>
     </ol>
     <p class="ios"><b>لمن يملك iPhone:</b> افتحوا <span dir="ltr">tiloucloud.github.io/khatma</span> في Safari، والصقوا رمز العائلة نفسه، ثم زر المشاركة ← «إضافة إلى الشاشة الرئيسية».</p>
@@ -120,6 +120,10 @@ footer a{color:var(--muted)}
 </main>
 <footer><a href="privacy.html">سياسة الخصوصية</a></footer>
 <script>
+/* the family code comes only from the link's #k=… part, which never reaches any server and is never written in this public page */
+(function(){var m=/[#&]k=([A-Za-z0-9_-]{6,40})/.exec(location.hash),fc=document.getElementById('fc'),cp=document.getElementById('cp');
+  if(m){fc.textContent=m[1];var a=document.createElement('a');a.href='./#k='+m[1];a.className='btn';a.textContent='افتحوا التطبيق وانضمّوا مباشرة';a.style.cssText='display:block;text-align:center;margin:10px 0 4px;padding:12px;border-radius:14px;background:#0f4d3c;color:#fff;font-weight:700;text-decoration:none';fc.parentNode.parentNode.insertBefore(a,fc.parentNode.nextSibling)}
+  else{fc.textContent='افتحوا الرابط كما أرسله لكم صاحب الختمة ليظهر الرمز هنا';fc.removeAttribute('dir');fc.style.fontSize='15px';cp.style.display='none'}})();
 document.getElementById('cp').onclick=function(){var b=this,t=document.getElementById('fc').textContent;
 function ok(){b.textContent='تم النسخ ✓';setTimeout(function(){b.textContent='نسخ الرمز'},2000)}
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fb)}else fb();
