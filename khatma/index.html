@@ -547,7 +547,13 @@ html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
 .rbar>div{gap:5px}
 .focus .fdur{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.focus .fdur .btn{padding:4px 6px;flex-direction:column;gap:0;line-height:1.2}.fwk{font-size:13.5px;color:var(--muted)}
 .fbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 12px;background:var(--primary);color:#fff;font-size:14px}.fbar .btn{background:#fff;color:var(--primary);border-color:#fff;min-height:32px}
-.feed .fi{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:6px}.feed .fh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.feed .fdel{margin-inline-start:auto}.fq{white-space:pre-line;margin:0;padding:8px 12px;border-inline-start:3px solid var(--primary);background:var(--line);border-radius:10px;line-height:1.8}.fa{display:flex;gap:8px;flex-wrap:wrap}.fr{font-size:12.5px}.fc{display:grid;gap:6px;font-size:14px;padding:8px 10px;border-radius:12px;background:var(--bg,#f6f1e4)}.fc p{margin:0;line-height:1.7}
+.feed .fi{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:6px}
+/* long pasted text (links, unbroken words) must wrap, never widen the page */
+.feed,.feed .fi,.fq,.fc,.fc p,.fsum,.fsum label{min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+.feed .fi>*{min-width:0}.feed .fi,.fc{grid-template-columns:minmax(0,1fr)}.fc .form input{width:0;min-width:0}
+/* 16px+ inputs stop phones from zooming in when typing */
+.fc input,#fsText,.fsum textarea{font-size:16px}
+.fc .form{display:flex;gap:8px;align-items:center}.fc .form input{flex:1 1 auto}.feed .fh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.feed .fdel{margin-inline-start:auto}.fq{white-space:pre-line;margin:0;padding:8px 12px;border-inline-start:3px solid var(--primary);background:var(--line);border-radius:10px;line-height:1.8}.fa{display:flex;gap:8px;flex-wrap:wrap}.fr{font-size:12.5px}.fc{display:grid;gap:6px;font-size:14px;padding:8px 10px;border-radius:12px;background:var(--bg,#f6f1e4)}.fc p{margin:0;line-height:1.7}
 .sunan .sub{margin-top:-4px}.sn-f{font-size:15px;line-height:1.9;padding:10px 12px;border-radius:14px;background:var(--bg,#f6f1e4);border:1px solid var(--line)}.sn-f small{display:block;font-size:12px;color:var(--muted)}.sn-ok{width:100%}
 .pr-pv{text-align:center;font-size:12px;color:var(--muted,#5d6e67);margin-top:4px}
 .prd{display:inline-flex;gap:4px}.prd i{width:10px;height:10px;border-radius:50%;border:1.5px solid #c9a24a}.prd i.on{background:#c9a24a}
@@ -1552,7 +1558,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vFocus()+vFeed()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 55</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 56</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
