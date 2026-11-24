@@ -545,6 +545,12 @@ html.big .wv-tx b{font-size:20px}html.big .wv-tx small{font-size:15px}
 .pr-m{text-align:center;margin-top:8px;font-size:14px;color:var(--em,#0a3b31);font-weight:600}
 .asbar{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:6px 12px;color:#f3eedd;font-size:14px}.asbar .as-t{flex:1}.asbar .as-s{display:flex;align-items:center;gap:6px}.asbar .as-s b{min-width:1.2em;text-align:center;color:var(--gold-l)}.asbar .ib{width:34px;height:34px}.asbar .ib[disabled]{opacity:.4}
 .rbar>div{gap:5px}
+#fring{position:relative;flex:0 0 auto;width:74px;height:74px;border-radius:50%;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25);display:grid;place-items:center}
+#fring svg{position:absolute;inset:0;width:100%;height:100%}#fring .fr-t{fill:none;stroke:#ffe1c2;stroke-width:9}#fring .fr-p{fill:none;stroke:#ff6a00;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1s linear;filter:drop-shadow(0 0 4px rgba(255,106,0,.6))}
+#fring b{position:relative;font-size:19px;font-weight:800;color:#c2410c;line-height:1;margin-top:6px}#fring small{position:absolute;top:15px;font-size:10px;color:#9a3412}
+#fring.last .fr-p{stroke:#e11d48}#fring.last b{color:#e11d48}#fring.last{animation:frp 1s ease-in-out infinite}@keyframes frp{50%{transform:scale(1.07)}}
+@media (prefers-reduced-motion:reduce){#fring.last{animation:none}}
+.fbar-t{padding:8px 12px}.fbar-t .fb-l{flex:1;display:grid;gap:2px}.fbar-t .fb-l b{font-size:15px}.fbar-t .fb-l small{font-size:12px;opacity:.85}
 .focus .fdur{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.focus .fdur .btn{padding:4px 6px;flex-direction:column;gap:0;line-height:1.2}.fwk{font-size:13.5px;color:var(--muted)}
 .fbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 12px;background:var(--primary);color:#fff;font-size:14px}.fbar .btn{background:#fff;color:var(--primary);border-color:#fff;min-height:32px}
 .feed .fi{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:6px}
@@ -894,12 +900,23 @@ function fsList(days){var lim=Date.now()-days*864e5;return Object.keys(FS).map(f
 function fsCnt(o){return o?Object.keys(o).filter(function(k){return o[k]}).length:0}
 function fmtClock(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
 function fStart(min){var m=mem(me);if(!m)return;focus={min:min,t0:Date.now(),end:Date.now()+min*6e4,n:0};var ra=resumeAt(m);goPage(ra.pg,ra.ay);clearInterval(fT);fT=setInterval(fTick,1000)}
-function fTick(){if(!focus)return clearInterval(fT);var left=(focus.end-Date.now())/1000,el=document.getElementById('fclock');if(el)el.textContent=fmtClock(left);wlPing();
+/* round, bright countdown clock floating over the mushaf during a focus session */
+var FR_C=2*Math.PI*40;
+function fRing(){var r=document.getElementById('fring');if(r&&!r.closest('.fbar')){r.remove();r=null}
+  if(!focus||focus.used||focus.compose||!reading){if(r)r.remove();return null}
+  if(!r){r=document.createElement('div');r.id='fring';r.setAttribute('role','timer');r.setAttribute('aria-live','off');
+    r.innerHTML='<svg viewBox="0 0 100 100" aria-hidden="true"><circle class="fr-t" cx="50" cy="50" r="40"/><circle class="fr-p" cx="50" cy="50" r="40" stroke-dasharray="'+FR_C+'" transform="rotate(-90 50 50)"/></svg><b class="num"></b><small>بقي</small>';
+    var fb=document.querySelector('.fbar');if(!fb)return null;fb.insertBefore(r,fb.firstChild)}
+  var left=Math.max(0,(focus.end-Date.now())/1000),tot=focus.min*60;
+  r.querySelector('.fr-p').style.strokeDashoffset=String(FR_C*(1-left/tot));
+  r.querySelector('b').textContent=fmtClock(left);r.classList.toggle('last',left<=60);
+  r.setAttribute('aria-label','بقي '+fmtClock(left)+' من الجلسة');return r}
+function fTick(){if(!focus)return clearInterval(fT);var left=(focus.end-Date.now())/1000,el=document.getElementById('fclock');if(el)el.textContent=fmtClock(left);fRing();wlPing();
   if(left<=0){clearInterval(fT);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}fEnd()}}
-function fEnd(){if(!focus)return;clearInterval(fT);if(focus.used){focus.compose=false;sheet='fsum';render();return}focus.used=Math.max(1,Math.round((Math.min(Date.now(),focus.end)-focus.t0)/6e4));
+function fEnd(){if(!focus)return;clearInterval(fT);var _r=document.getElementById('fring');if(_r)_r.remove();if(focus.used){focus.compose=false;sheet='fsum';render();return}focus.used=Math.max(1,Math.round((Math.min(Date.now(),focus.end)-focus.t0)/6e4));
   if(Date.now()-focus.t0<45e3){focus=null;if(reading)closeReader();return}
   sheet='fsum';render()}
-function fDone(share){var f=focus,x='';focus=null;sheet=null;
+function fDone(share){var f=focus,x='';focus=null;sheet=null;fRing();
   if(share&&f&&code&&CFG.db){var ta=document.getElementById('fsText');x=(ta?ta.value:(f.draft||'')).trim().slice(0,1500);
     var id='f'+Date.now().toString(36)+(me||''),v={m:me,min:f.used,pg:f.n,at:Date.now(),x:x};
     FS[id]=v;FSP[id]={c:code,v:v};fsSave();
@@ -1549,7 +1566,7 @@ function barsHTML(){
     '<button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر">أ<small>أ</small></button>'+
     '<button class="ib'+(tjOn?' on':'')+'" data-act="open" data-v="tjs" aria-label="ألوان التجويد">'+I('pal')+'</button>'+
     '<button class="ib'+(AS.on?' on':'')+'" data-act="as" aria-pressed="'+AS.on+'" aria-label="تمرير تلقائي">'+I('play')+'</button>'+
-    '<button class="ib" data-act="open" data-v="idx" aria-label="فهرس المصحف">'+I('list')+'</button></div>'+asBar()+(focus?(focus.compose?'<div class="fbar"><span>✍️ اضغط رقم الآية في آخرها لتضيفها إلى فائدتك</span><button class="btn sm" data-act="fsresume">أكمل المشاركة</button></div>':'<div class="fbar"><span>⏳ جلسة مركّزة · بقي <b id="fclock" class="num">'+fmtClock((focus.end-Date.now())/1000)+'</b></span><button class="btn sm" data-act="fend">أنهيت</button></div>'):'')+'</div>';
+    '<button class="ib" data-act="open" data-v="idx" aria-label="فهرس المصحف">'+I('list')+'</button></div>'+asBar()+(focus?(focus.compose?'<div class="fbar"><span>✍️ اضغط رقم الآية في آخرها لتضيفها إلى فائدتك</span><button class="btn sm" data-act="fsresume">أكمل المشاركة</button></div>':'<div class="fbar fbar-t"><span class="fb-l"><b>جلسة ورد مركّزة</b><small>القرآن وحده الآن، والباقي ينتظر 🤍</small></span><button class="btn sm" data-act="fend">أنهيت</button></div>'):'')+'</div>';
   var wb='';
   if(m&&m.p<LAST){var dn2=dayNo(),done=dn2>0&&m.p>=targetAt(dn2),T=done?Math.min(LAST,targetAt(dn2+1)):Math.max(targetAt(dn2),m.p+1),left=T-m.p,ra=resumeAt(m);
     wb='<div class="wbar"><div><span><small>'+(done?(left>0?'أتممتَ وِرد اليوم ✓ · وِرد الغد':'سبقتَ بوِرد الغد'):'وِرد اليوم')+'</small><b class="num">'+(left>0?'بقي '+pagesN(left)+' · حتى ص '+T:'بارك الله فيك')+'</b></span>'+
@@ -1577,7 +1594,7 @@ function goPage(pg,ay){
   if(ay)showAyah(ay,0);
 }
 function showAyah(id,k){var el=document.getElementById('a'+id);if(!el){if(k<20)setTimeout(function(){showAyah(id,k+1)},150);return}var b=el.closest('.pbody');if(b){var r=el.getBoundingClientRect(),rb=b.getBoundingClientRect();b.scrollTop+=r.top-rb.top-rb.height/3}el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}
-function closeReader(){asStop();reading=0;want=0;wantT=0;sheet=null;filledSig={};document.body.classList.remove('reading');render();window.scrollTo(0,0)}
+function closeReader(){asStop();reading=0;fRing();want=0;wantT=0;sheet=null;filledSig={};document.body.classList.remove('reading');render();window.scrollTo(0,0)}
 window.addEventListener('resize',function(){if(reading){var p=reading;filledSig={};jumpTo(p);refill(true)}});
 document.addEventListener('keydown',function(e){if(!reading||sheet)return;if(e.key==='ArrowLeft')goPage(reading+1);else if(e.key==='ArrowRight')goPage(reading-1)});
 function render(){
@@ -1589,7 +1606,7 @@ function render(){
   root.innerHTML='<div class="wrap"><header class="top"><div class="brand"><img class="appic" src="icon2-192.png" alt=""><div><h1>ختمة العائلة</h1><p>'+esc(S.khatma.name)+'</p></div></div>'+
     '<div class="hright"><div class="when num">'+(h?'<b>'+esc(h)+'</b>':'')+'اليوم '+dayNo()+' من '+S.khatma.days+'</div><button class="ib bigbtn'+(big?' on':'')+'" data-act="big" aria-pressed="'+big+'" aria-label="خط كبير لضعاف النظر" title="خط كبير">أ<small>أ</small></button></div></header>'+AYAH_HTML+''+
     (code?vRqNote()+vSolo()+vWird()+vFocus()+vFeed()+vSunan()+vBadges()+vPray()+vKids()+vInstall()+vQuick()+vRace()+vMsgs()+vJuz()+vAdmin()+vNotif()+vBeta():vJoin()+vSunan()+vInstall())+
-    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 60</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
+    '<p class="foot" style="--fc:'+(code&&CFG.db&&online?'var(--ok)':'var(--muted)')+'">'+(code&&CFG.db?(online?'متصل: تُحفظ قراءتك لكل العائلة.<span class="ver">الإصدار 61</span>':'غير متصل الآن: تُحفظ قراءتك هنا وتُرسل عند عودة الاتصال.'):'أنشئ ختمة جديدة لعائلتك، أو انضم إلى ختمتهم برابطها.')+'</p></div>'+vSheet();
   if(!sheet)setTimeout(checkBadges,500);
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dpr=e;if(!reading&&!sheet)render()});
